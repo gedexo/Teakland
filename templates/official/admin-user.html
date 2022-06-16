@@ -1,0 +1,98 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <!-- test -->
+               
+              <!--  -->
+            <div class="bg-design">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Add User </h4>
+                       
+                        <form id="userForm" class="forms-sample row">
+                            {% csrf_token %}
+                            <input type="number" id="editId" hidden>
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="">First Name</label>
+                                <input type="text" name="first_name" class="form-control form-input">
+                            </div>
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="">Last Name</label>
+                                <input type="text" name="last_name" class="form-control form-input" >
+                            </div>
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="">Email</label>
+                                <input type="email" name="email" class="form-control form-input">
+                            </div>
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="">Password</label>
+                                <input type="text" name="password" id="password" class="form-control form-input">
+                            </div>
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="">Confirm Password</label>
+                                <input type="password" name="confirmpassword" class="form-control form-input">
+                            </div>
+
+                            <div class=" col-12 text-center ">
+
+                                <button id="btnSubmit" type="submit"
+                                    class="btn btn-success btn-color-green mr-2">Add</button>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="userTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Full name</th>
+                                                <th>Email</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/official-user-account.js' %}"></script>
+{% endblock %}

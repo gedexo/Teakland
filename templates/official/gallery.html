@@ -1,0 +1,70 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+  <!-- partial:partials/_sidebar.html -->
+  {% include 'official/partials/sidebar.html' %}
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row grid-margin">
+        <div class="col-lg-12">
+          <div class="card bg-design">
+            <div class="card-body">
+              <h4 class="card-title">Door Images</h4>
+              <p class="card-text">
+                Click on any image to open in lightbox gallery
+              </p>
+              <div id="doorGallery" class="row lightGallery">
+                
+              </div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Kattla Images</h4>
+              <p class="card-text">
+                Click on any image to open in lightbox gallery
+              </p>
+              <div id="kattlaGallery" class="row lightGallery">
+                
+              </div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Window Images</h4>
+              <p class="card-text">
+                Click on any image to open in lightbox gallery
+              </p>
+              <div id="windowGallery" class="row lightGallery">
+                
+              </div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Sizes Images</h4>
+              <p class="card-text">
+                Click on any image to open in lightbox gallery
+              </p>
+              <div id="customKattlaGallery" class="row lightGallery">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      
+      
+    </div>
+  
+    </div>
+
+    <!--  -->
+    
+    {% endblock %}
+    {% block javascript %}
+
+    <script src="{% static 'official/js/helper.js' %}"></script>
+    <script src="{% static 'official/js/gallery.js' %}"></script>
+
+    {% endblock %}

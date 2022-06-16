@@ -1,0 +1,232 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="row">
+                        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                            <h3 class="font-weight-bold">Products</h3>
+                        </div>
+
+                        <!-- <div class="col-12 col-xl-4">
+                     <div class="justify-content-end d-flex">
+                      <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                        <a href="#" class="btn btn-sm btn-light bg-white back-btn-addcustomer" > <i class="fa-solid fa-left-long"></i>
+                         back
+                        </a>
+                      
+                      </div>
+                     </div>
+                    </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="bg-design">
+                <div class="card">
+                    <div class="card-body">
+
+
+                        <form id="windowAddForm" enctype="multipart/form-data" class="forms-sample row">
+                            {% csrf_token %}
+                            <input type="number" id="editId" hidden>
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleSelectGender">Row material:</label>
+                                <select class="form-control" name="rowmaterial" id="rowMaterials">
+                                    <option selected disabled>--select--</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleInputName1">Box:</label>
+                                <input type="number" name="box" min="0" class="form-control custom-form-cntrl"
+                                    id="" placeholder="">
+                            </div>
+
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleInputName1">labour Charge:</label>
+                                <input type="number" name="labour_charge" min="0" class="form-control custom-form-cntrl"
+                                    id="" placeholder="">
+                            </div>
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleInputName1">Factory Price(per sqft):</label>
+                                <input type="number" name="factory_price" min="0" class="form-control custom-form-cntrl"
+                                    id="" placeholder="">
+                            </div>
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="exampleInputName1">Price(per sqft):</label>
+                                <input type="number" name="price" min="0" class="form-control custom-form-cntrl"
+                                    id="" placeholder="">
+                            </div>
+                            <div class="form-check col-lg-4 col-12 form-check-flat form-check-primary">
+                                <label class="form-check-label">
+                                    <input type="checkbox" value="True" name="design" id="design"
+                                        class="form-check-input">
+                                    Design
+                                </label>
+                            </div>
+                            <div class="form-check col-lg-4 col-12 form-check-flat form-check-primary">
+                                <label class="form-check-label">
+                                    <input type="checkbox" value="True" name="shutter" id="shutter"
+                                        class="form-check-input">
+                                    Shutter
+                                </label>
+                            </div>
+                            <!-- image section  -->
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Image One</label>
+                                    <input type="file" name="image_one" class="file-upload-default">
+                                    <div class="input-group col-xs-12">
+                                        <input type="text" class="form-control file-upload-info" disabled
+                                            placeholder="Upload Image">
+                                        <span class="input-group-append">
+                                            <button class="file-upload-browse btn btn-primary"
+                                                type="button">Upload</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Image Two</label>
+                                    <input type="file" name="image_two" class="file-upload-default">
+                                    <div class="input-group col-xs-12">
+                                        <input type="text" class="form-control file-upload-info" disabled
+                                            placeholder="Upload Image">
+                                        <span class="input-group-append">
+                                            <button class="file-upload-browse btn btn-primary"
+                                                type="button">Upload</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Image Three</label>
+                                    <input type="file" name="image_three" class="file-upload-default">
+                                    <div class="input-group col-xs-12">
+                                        <input type="text" class="form-control file-upload-info" disabled
+                                            placeholder="Upload Image">
+                                        <span class="input-group-append">
+                                            <button class="file-upload-browse btn btn-primary"
+                                                type="button">Upload</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- section end -->
+
+                            <div class="text-center col-12">
+
+                                <button type="submit" id="btnSubmit"
+                                    class="btn btn-success mr-2 btn-color-green">Add</button>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="windowTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Row Material</th>
+                                                <th>Box</th>
+                                                <th>Labour Charge</th>
+                                                <th>Factory Price</th>
+                                                <th>Price</th>
+                                                <th>Shutter</th>
+                                                <th>Design</th>
+                                                <th>Images</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- image modal -->
+
+    <div class="modal fade" id="windowProductImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i
+                            class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item"> 
+                            <div class="card">
+                                <img id="windowImageOneView" class="cr-img" alt="">
+                            </div>                      
+                        </div>
+
+                        <div class="item"> 
+                            <div class="card">
+                                <img id="windowImageTwoView" class="cr-img" alt="">
+                            </div>
+                        </div>
+
+                        <div class="item"> 
+                            <div class="card">
+                                <img id="windowImageThreeView" class="cr-img" alt="">
+                            </div>                        
+                        </div>
+
+                      </div>
+                </div>
+
+            </div>
+
+            
+
+        </div>
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/window.js' %}"></script>
+<script src="{% static 'official/js/product-images.js' %}"></script>
+<script src="../../static/web/carousel/owl-carousel.js"></script>
+{% endblock %}

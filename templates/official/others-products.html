@@ -1,0 +1,113 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="row">
+                        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                            <h3 class="font-weight-bold">Products</h3>
+                        </div>
+
+                        <!-- <div class="col-12 col-xl-4">
+                     <div class="justify-content-end d-flex">
+                      <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                        <a href="#" class="btn btn-sm btn-light bg-white back-btn-addcustomer" > <i class="fa-solid fa-left-long"></i>
+                         back
+                        </a>
+                      
+                      </div>
+                     </div>
+                    </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="bg-design">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="othersProductForm" class="forms-sample row">
+                            {% csrf_token %}
+                            <input type="number" id="editId" hidden>
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleSelectGender">Row material:</label>
+                                <select class="form-control" name="rowmaterial" id="rowMaterials">
+                                    <option selected disabled>--select--</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleInputName1">Name:</label>
+                                <input type="text" name="name" class="form-control custom-form-cntrl" id=""
+                                    placeholder="">
+                            </div>
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleInputName1">Cost Price:</label>
+                                <input type="number" name="price_cost" min="0" class="form-control custom-form-cntrl" id=""
+                                    placeholder="">
+                            </div>
+
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleInputName1">Sales Price:</label>
+                                <input type="number" name="sales_rate" min="0" class="form-control custom-form-cntrl"
+                                    id="" placeholder="">
+                            </div>
+                            <div class="text-center col-12">
+                                <button type="submit" id="btnSubmit"
+                                    class="btn btn-success mr-2 btn-color-green">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="othersTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Row Material</th>
+                                                <th>Cost Price</th>
+                                                <th>Sales Price</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/other-products.js' %}"></script>
+{% endblock %}

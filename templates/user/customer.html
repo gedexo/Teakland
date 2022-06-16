@@ -1,0 +1,193 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'user/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                  <div class="row">
+                    <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                      <h3 class="font-weight-bold">Add Customer</h3>
+                    </div>
+                    <div class="col-6 col-xl-4">
+                     <div class="justify-content-end d-flex">
+                      <div class="dropdown previous-btn-div flex-md-grow-1 flex-xl-grow-0">
+                        
+                      
+                      </div>
+                     </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="bg-design">
+                <div class="card" id="formDiv">
+                    <div class="card-body pt-5">
+                        
+                        <form class="forms-sample row" id="customerAddForm">
+                            <input type="number" id="editId" hidden>
+
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="">Customer Name:</label>
+                                
+                                <input type="text"  class="form-control form-input" name="name">
+                            </div>
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="exampleInputName1">Contact No</label>
+                                
+                                <input type="tel" name="contact_no" class="form-control form-input">
+                            </div>
+
+
+
+
+                            <div class="form-group col-lg-2 col-12">
+                                <label for="exampleSelectGender">Source :</label>
+                                <select class="form-control form-input" name="source" id="source">                                       
+                                    <option selected disabled>--select--</option> 
+                                    <option value="offline">Offline</option>                         
+                                    <option value="online">Online</option> 
+                                    <option value="field">Field</option>
+                                    <option value="showroom/factory">Showroom/factory</option>                        
+                                  </select>
+                            </div>
+                            <div class="form-group col-lg-2 col-12">
+                                <label for="exampleSelectGender">Type :</label>
+                                <select class="form-control form-input" name="type" id="type" >  
+                                    <option selected disabled>--select--</option> 
+                                    <option value="carpenter">Carpenter</option>                         
+                                    <option value="normal house customer">Normal house customer</option>                         
+                                    <option value="engineer">Engineer</option>                         
+                                    <option value="shop">Shop</option>                         
+                                    <option value="commission agent">Commission agent</option>                         
+                                  </select>
+                            </div>
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleSelectGender">Created By :</label>
+                            
+                                <select class="form-control form-input" name="created_by" id="salesMan">                                       
+                                    <option selected disabled>--select--</option>                          
+                                  </select>
+                            </div>
+
+
+                            <div class="form-group col-lg-3 col-12">
+                                <label for="exampleSelectGender">Dealt By :</label>
+
+                                <select class="form-control form-input" name="dealt_by" id="salesMan" >  
+                                    <option selected disabled>--select--</option>                          
+                                  </select>
+                            </div>
+
+                            <div class="form-group col-lg-6 col-12">
+                                <label for="exampleTextarea1">Address:</label>
+                                
+                                <textarea type="text" name="address" class="form-control form-input" rows="4"></textarea>
+                            </div>
+
+                            <div class="form-group col-lg-6 col-12" id="remarkDiv">
+                                <label for="exampleTextarea1">Remark:</label>
+                                
+                                <textarea type="text" name="remark" class="form-control form-input" rows="4"></textarea>
+                            </div>
+                            <div class=" col-12 text-center ">
+
+                                <button type="submit" id="btnSubmit" class="btn btn-success btn-color-green mr-2">Add</button>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                       
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table  id="customerTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Source</th>
+                                                <th>Type</th>
+                                                <th>Created By</th>
+                                                <th>Dealt By</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Remark</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+<!-- Feedback modal -->
+
+<div class="modal fade" id="feedBackModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Feedback:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="feedBackForm">
+                    {% csrf_token %}             
+                    <div class="row">
+                        <div class="col-lg-12 select-box-pad">
+                            <label for="" class="label-text-3">Feedback:</label>
+                            <textarea type="text" name="feedback" rows="10" cols="3" class="form-control form-input"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="btnCustomer" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =================modal section end ============ -->
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
+{% block js %}
+
+<script src="{% static 'user/js/helper.js' %}"></script>
+<script src="{% static 'user/js/customer.js' %}"></script>
+
+{% endblock %}

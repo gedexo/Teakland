@@ -1,0 +1,127 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+  <!-- partial:partials/_sidebar.html -->
+  {% include 'user/partials/sidebar.html' %}
+
+
+
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-12 grid-margin">
+          <div class="row">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+              <h3 class="font-weight-bold">Products</h3>
+            </div>
+            <div class="col-6 col-xl-4">
+              <div class="justify-content-end d-flex">
+                <div class="dropdown previous-btn-div flex-md-grow-1 flex-xl-grow-0">
+                  
+
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-12 col-xl-4">
+                         <div class="justify-content-end d-flex">
+                          <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                            <a href="#" class="btn btn-sm btn-light bg-white back-btn-addcustomer" > <i class="fa-solid fa-left-long"></i>
+                             back
+                            </a>
+                          
+                          </div>
+                         </div>
+                        </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="bg-design">
+
+        <div class="card">
+          <div class="card-body">
+
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table id="kattlaTable" class="table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Row Material</th>
+                        <th>Type</th>
+                        <th>Labour Charge</th>
+                        <th>Price</th>
+                        <th>No of boxes</th>
+                        <th>Open/Closed</th>
+                        <th>Images</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+ <!-- image modal -->
+
+ <div class="modal fade" id="kattlaProductImageModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+ aria-hidden="true">
+ <div class="modal-dialog">
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i
+           class="fa-solid fa-xmark"></i></button>
+     </div>
+     <div class="modal-body">
+       <div class="owl-carousel owl-theme">
+         <div class="item">
+           <div class="card">
+             <img id="kattlaImageOneView" class="cr-img" alt="">
+           </div>
+         </div>
+
+         <div class="item">
+           <div class="card">
+             <img id="kattlaImageTwoView" class="cr-img" alt="">
+           </div>
+         </div>
+
+         <div class="item">
+           <div class="card">
+             <img id="kattlaImageThreeView" class="cr-img" alt="">
+           </div>
+         </div>
+
+       </div>
+     </div>
+
+   </div>
+
+
+
+ </div>
+</div>
+  </div>
+
+</div>
+
+
+{% endblock %}
+{% block js %}
+
+<script src="{% static 'user/js/helper.js' %}"></script>
+<script src="{% static 'user/js/kattla.js' %}"></script>
+<script src="{% static 'user/js/product-images.js' %}"></script>
+<script src="../../static/web/carousel/owl-carousel.js"></script>
+{% endblock %}

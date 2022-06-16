@@ -1,0 +1,137 @@
+{% load static %}
+ <!-- partial:partials/_sidebar.html -->
+ <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboard">
+          <i class="fa fa-solid fa-grip  menu-icon"></i>
+          <span class="menu-title">Dashboard</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements1" aria-expanded="false" aria-controls="form-elements">
+          <i class="fa fa-solid fa-users menu-icon"></i>
+          <span class="menu-title">Customer</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="form-elements1">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/customer/?category=enquiry">Enquiries</a></li>                
+            <li class="nav-item"><a class="nav-link" href="/customer/">For quotations</a></li>
+                    
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/rowmaterial">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">Rawmaterial</span>
+          <i class="menu-arrow"></i>
+        </a>
+       
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/joint-type">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">Joint Type</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+
+     
+
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+          <i class="icon-columns menu-icon"></i>
+          <span class="menu-title">Products</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="form-elements">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/kattila/">kattila</a></li>                
+            <li class="nav-item"><a class="nav-link" href="/doors/">Door</a></li>
+            <li class="nav-item"><a class="nav-link" href="/window/">Window</a></li>
+            <li class="nav-item"><a class="nav-link" href="/custom-kattila/">Sizes</a></li>  
+            <li class="nav-item"><a class="nav-link" href="/others/">Others</a></li>          
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/quotations/">
+          <i class=" fa fa-solid fa-calculator menu-icon"></i>
+          <span class="menu-title">Quotation</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="form-elements" href="#jobcard-elements">
+          <i class="fa fa-solid fa-address-card menu-icon"></i>
+          <span class="menu-title">Job Card</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="jobcard-elements">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/jobcard">New</a></li>                
+            <li class="nav-item"><a class="nav-link" href="/delivered-jobcards/">Delivered</a></li>                
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="/invoice/" aria-expanded="false" aria-controls="icons">
+          <i class="fa fa-solid fa-file-invoice-dollar menu-icon"></i>
+          <span class="menu-title">Invoice</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="/expences/" aria-expanded="false" aria-controls="auth">
+          <i class="fa fa-solid fa-wallet menu-icon"></i>
+          <span class="menu-title">Expense</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="fa fa-solid fa-clipboard-list menu-icon"></i>
+          <span class="menu-title">Reports</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <!-- ---------bg-chnage lis -->
+      <!-- <li class="nav-item bg-li">
+        <a class="nav-link"  href="/web/add-user" >
+          <i class="fa fa-solid fa-users menu-icon"></i>
+          <span class="menu-title">Users</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li> -->
+      <li class="nav-item bg-li">
+        <a class="nav-link" href="/salesman/">
+          <i class="fa-solid fa-user-tie menu-icon"></i>
+          <span class="menu-title">Salesman</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+
+      <!-- <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-tractor menu-icon"></i>
+          <span class="menu-title">Factory</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li> -->
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/gallery/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-images  menu-icon"></i>
+          <span class="menu-title">Gallery</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>

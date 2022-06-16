@@ -1,0 +1,149 @@
+{% extends 'factory/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+  <!-- partial:partials/_sidebar.html -->
+  {% include 'factory/partials/sidebar.html' %}
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-12 grid-margin">
+          <div class="row">
+            <h3>Welcome <span id="userName"></span></h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="row ">
+        <div class="col-lg-12">
+          <div class="row no-gutters gx-5 jobcard-row-pad">
+            <div class="col mx-4">
+              <div class="jobcard-box1">
+                <a onclick="jobCardStatus('open')">
+                  <div class="text-center">
+
+                    <span class="margin-none invoice-pad">Open</span>
+
+                    <hr class="margin-none line-width">
+
+                    <span class="margin-none month-font" id="jobCardOpen">0</span>
+                    <h4 class="head4-size margin-none"></h4>
+                    <!-- <hr class="margin-none line-width"> -->
+                    <!-- <span class="margin-none">Total</span>
+                                        <h3 class="head4-size margin-none">70,018</h3> -->
+                  </div>
+                </a>
+
+              </div>
+            </div>
+            <div class="col mx-4">
+              <div class="jobcard-box3">
+                <a onclick="jobCardStatus('onprocess')">
+
+                  <div class="text-center">
+                    <span class="margin-none invoice-pad">On Process</span>
+                    <hr class="margin-none line-width">
+                    <span class="margin-none month-font" id="jobCardOnProcess">0</span>
+                    <h4 class="head4-size margin-none"></h4>
+                    <!-- <hr class="margin-none line-width"> -->
+                    <!-- <span class="margin-none">Total</span>
+                                        <h3 class="head4-size margin-none">70,018</h3> -->
+                  </div>
+                </a>
+
+              </div>
+            </div>
+
+            <div class="col mx-4">
+              <div class="jobcard-box2">
+                <a onclick="jobCardStatus('pending')">
+                  <div class="text-center">
+                    <span class="margin-none invoice-pad">Pending</span>
+                    <hr class="margin-none line-width">
+                    <span class="margin-none month-font" id="jobCardPending">0</span>
+                    <h4 class="head4-size margin-none"></h4>
+                    <!-- <hr class="margin-none line-width"> -->
+                    <!-- <span class="margin-none">Total</span>
+                                        <h3 class="head4-size margin-none">70,018</h3> -->
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="col mx-4">
+              <div class="jobcard-box4">
+                <a onclick="jobCardStatus('completed')">
+                <div class="text-center">
+                  <span class="margin-none invoice-pad">Completed</span>
+                  <hr class="margin-none line-width">
+                  <span class="margin-none month-font" id="jobCardCompleted">0</span>
+                  <h4 class="head4-size margin-none"></h4>
+                  <!-- <hr class="margin-none line-width"> -->
+                  <!-- <span class="margin-none">Total</span>
+                                        <h3 class="head4-size margin-none">70,018</h3> -->
+                </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="col mx-4">
+              <div class="invoice-box5">
+                <a onclick="jobCardStatus('delivered')">
+                <div class="text-center">
+                  <span class="margin-none invoice-pad">Delivered</span>
+                  <hr class="margin-none line-width">
+                  <span class="margin-none month-font" id="jobCardDelivered">0</span>
+                  <h4 class="head4-size margin-none"></h4>
+                  <!-- <hr class="margin-none line-width"> -->
+                  <!-- <span class="margin-none">Total</span>
+                                        <h3 class="head4-size margin-none">70,018</h3> -->
+                </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table id="jobCardTable" class="table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Jobcard Number</th>
+                      <th>Quotation Number</th>
+                      <th>Estimate Amount</th>
+                      <th>Branch</th>
+                      <th>Expected Date</th>
+                      <th>Status</th>
+                      <th>View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'factory/js/helper.js' %}"></script>
+<script src="{% static 'factory/js/jobcard.js' %}"></script>
+<script src="{% static 'factory/js/quotation-images.js.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+  <!-- partial:partials/_sidebar.html -->
+  {% include 'official/partials/sidebar.html' %}
+
+
+
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-12 grid-margin">
+          <div class="row">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+              <h3 class="font-weight-bold">Products</h3>
+            </div>
+            <!-- <div class="col-12 col-xl-4">
+                         <div class="justify-content-end d-flex">
+                          <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                            <a href="#" class="btn btn-sm btn-light bg-white back-btn-addcustomer" > <i class="fa-solid fa-left-long"></i>
+                             back
+                            </a>
+                          
+                          </div>
+                         </div>
+                        </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="bg-design">
+        <div class="card">
+          <div class="card-body">
+            <!-- <h4 class="card-title">Add Jointtype</h4> -->
+
+            <form id="doorsAddForm" enctype="multipart/form-data" class="forms-sample row">
+              {% csrf_token %}
+              <input type="number" id="editId" hidden>
+              <div class="form-group col-lg-6 col-12">
+                <label for="exampleSelectGender">Row material:</label>
+                <select class="form-control" name="rowmaterial" id="rowMaterials">
+                  <option selected disabled>--select--</option>
+
+                </select>
+              </div>
+
+              <div class="form-group col-lg-6 col-12">
+                <label for="exampleSelectGender">Door Type :</label>
+                <select class="form-control" name="doortype" id="exampleSelectGender">
+                  <option selected disabled>--select--</option>
+                  <option value="Single door">Single Door</option>
+                  <option value="Double door">Double Door</option>
+                </select>
+              </div>
+
+              <div class="form-group col-lg-4 col-12">
+                <label for="exampleSelectGender">Joint Type :</label>
+                <select class="form-control" name="joint" id="jointType">
+                  <option selected disabled>--select--</option>
+
+                </select>
+              </div>
+
+              <div class="form-group col-lg-4 col-12">
+                <label for="exampleInputName1">Labour Charge:</label>
+                <input type="number" name="labour_charge" min="0" class="form-control custom-form-cntrl">
+              </div>
+              <div class="form-group col-lg-2 col-12">
+                <label for="exampleInputName1">Factory Price (per sqft):</label>
+                <input type="number" min="0.00" name="factory_price" class="form-control custom-form-cntrl">
+              </div>
+              <div class="form-group col-lg-2 col-12">
+                <label for="exampleInputName1">Price (per sqft):</label>
+                <input type="number" min="0" name="price" class="form-control custom-form-cntrl" >
+              </div>
+               <!-- image section  -->
+               <div class="col-lg-4">
+                <div class="form-group">
+                    <label>Image One</label>
+                    <input type="file" name="image_one" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" disabled
+                            placeholder="Upload Image">
+                        <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary"
+                                type="button">Upload</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label>Image Two</label>
+                    <input type="file" name="image_two" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" disabled
+                            placeholder="Upload Image">
+                        <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary"
+                                type="button">Upload</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label>Image Three</label>
+                    <input type="file" name="image_three" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" disabled
+                            placeholder="Upload Image">
+                        <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary"
+                                type="button">Upload</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- section end -->
+              <div class="text-center col-12">
+
+                <button id="btnSubmit" type="submit" class="btn btn-success mr-2 btn-color-green">Add</button>
+              </div>
+
+            </form>
+
+
+
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Data table</h4>
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table id="doorsTable" class="table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Row Material</th>
+                        <th>Door Type</th>
+                        <th>Joint</th>
+                        <th>Labour Charge</th>
+                        <th>Factory Price</th>
+                        <th>Price</th>
+                        <th>Images</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+     <!-- image modal -->
+
+     <div class="modal fade" id="doorProductImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i
+                          class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="modal-body">
+                  <div class="owl-carousel owl-theme">
+                      <div class="item"> 
+                          <div class="card">
+                              <img id="doorImageOneView" class="cr-img" alt="">
+                          </div>                      
+                      </div>
+
+                      <div class="item"> 
+                          <div class="card">
+                              <img id="doorImageTwoView" class="cr-img" alt="">
+                          </div>
+                      </div>
+
+                      <div class="item"> 
+                          <div class="card">
+                              <img id="doorImageThreeView" class="cr-img" alt="">
+                          </div>                        
+                      </div>
+
+                    </div>
+              </div>
+
+          </div>
+
+          
+
+      </div>
+  </div>
+
+
+  </div>
+
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/doors.js' %}"></script>
+<script src="{% static 'official/js/product-images.js' %}"></script>
+<script src="../../static/web/carousel/owl-carousel.js"></script>
+{% endblock %}

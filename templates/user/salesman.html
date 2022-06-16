@@ -1,0 +1,126 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'user/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                  <div class="row">
+                    <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                      <h3 class="font-weight-bold">Add Salesman</h3>
+                    </div>
+                    <div class="col-6 col-xl-4">
+                      <div class="justify-content-end d-flex">
+                        <div class="dropdown previous-btn-div flex-md-grow-1 flex-xl-grow-0">
+                          
+        
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="bg-design">
+                <div class="card">
+                    <div class="card-body">
+                       
+                        <form class="forms-sample row" id="salesManForm">
+                            <div class="form-group col-lg-4 col-12">
+                                <input type="number" id="editId" hidden>
+                                <label for="" class="fnt-weight">Salesman Name</label>
+                                <input type="text" class="form-control form-input" name="name">
+                            </div>
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="" class="fnt-weight">Place</label>
+                                <input type="text" class="form-control form-input" name="place">
+                            </div>
+
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="" class="fnt-weight">Email</label>
+                                <input type="email" class="form-control form-input" name="email">
+                            </div>
+
+
+                            <div class="form-group col-lg-4 col-12">
+                                <label for="" class="fnt-weight">Phone Number</label>
+                                <input type="text" class="form-control form-input" name="phone">
+                            </div>
+
+                            
+
+                          
+
+                            <div class="form-group col-lg-8 col-12">
+                                <label for="" class="fnt-weight">Address</label>
+                                <textarea class="form-control form-input" type="text" name="address" rows="4"></textarea>
+
+                            </div>
+
+                            <div class=" col-12 text-center ">
+
+                                <button id="btnSubmit" type="submit" class="btn btn-success btn-color-green mr-2">Add</button>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                      
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="salesManTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Place</th>
+                                                <th>Email</th>
+                                                <th>Phone number</th>
+                                                <th>Address</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
+{% block js %}
+
+<script src="{% static 'user/js/helper.js' %}"></script>
+<script src="{% static 'user/js/salesman.js' %}"></script>
+{% endblock %}

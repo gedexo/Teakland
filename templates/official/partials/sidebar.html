@@ -1,0 +1,165 @@
+{% load static %}
+ <!-- partial:partials/_sidebar.html -->
+ <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/official/dashboard">
+          <i class="fa fa-solid fa-grip  menu-icon"></i>
+          <span class="menu-title">Dashboard</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/official/customer">
+          <i class="fa fa-solid fa-users menu-icon"></i>
+          <span class="menu-title">Customer</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/official/rowmaterial">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">Rawmaterial</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/official/joint-type">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">Joint Type</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      
+     
+
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+          <i class="icon-columns menu-icon"></i>
+          <span class="menu-title">Products</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="form-elements">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/official/kattila">kattila</a></li>                
+            <li class="nav-item"><a class="nav-link" href="/official/doors">Door</a></li>
+            <li class="nav-item"><a class="nav-link" href="/official/window">Window</a></li>
+            <li class="nav-item"><a class="nav-link" href="/official/custom-kattla/">Sizes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/official/others/">Others</a></li>
+          </ul>
+        </div>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="#quotation-li" data-bs-toggle="collapse" aria-expanded="false" aria-controls="form-elements">
+          <i class=" fa fa-solid fa-calculator menu-icon"></i>
+          <span class="menu-title">Quotation<span class="count-badge" id="quotationsRequestCount"></span></span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="quotation-li">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/official/quotations/">New<span class="count-badge" id="quotationCount"></span></a></li>                
+            <li class="nav-item"><a class="nav-link" href="/official/quotation-delete-requests/">Delete <span class="count-badge" id="quotationsDeleteRequestCount"></span></a></li>
+          </ul>
+        </div>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" aria-expanded="false" aria-controls="form-elements" href="#jobcard-elements">
+          <i class="fa fa-solid fa-address-card menu-icon"></i>
+          <span class="menu-title">Job Card</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="jobcard-elements">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/official/jobcard/">New</a></li>                
+            <li class="nav-item"><a class="nav-link" href="/official/delivered-jobcards/">Delivered</a></li>                
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="/official/invoice/" aria-expanded="false" aria-controls="icons">
+          <i class="fa fa-solid fa-file-invoice-dollar menu-icon"></i>
+          <span class="menu-title">Invoice</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="/official/expense-category/" aria-expanded="false" aria-controls="auth">
+          <i class="fa fa-solid fa-wallet menu-icon"></i>
+          <span class="menu-title">Expense category</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="/official/bank/" aria-expanded="false" aria-controls="error">
+          <i class=" fa fa-solid fa-coins menu-icon"></i>
+          <span class="menu-title">Bank</span>
+          <i class="menu-arrow"></i>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="fa fa-solid fa-clipboard-list menu-icon"></i>
+          <span class="menu-title">Reports</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <!-- ---------bg-chnage lis -->
+      <li class="nav-item bg-li">
+        <a class="nav-link"  href="/official/add-user" >
+          <i class="fa fa-solid fa-users menu-icon"></i>
+          <span class="menu-title">Add Branches</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <!-- <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/salesman/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-user-tie menu-icon"></i>
+          <span class="menu-title">Salesman</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li> -->
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/official/official-users/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-user-tie menu-icon"></i>
+          <span class="menu-title">User</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/official/factory/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-tractor menu-icon"></i>
+          <span class="menu-title">Factory</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/official/feedback/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-regular fa-pen-to-square  menu-icon"></i>
+          <span class="menu-title">Feedback <span class="count-badge" id="feedbackCount"></span></span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/official/gallery/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-images  menu-icon"></i>
+          <span class="menu-title">Gallery</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+          <i class="fa-brands fa-searchengin menu-icon"></i>
+          <span class="menu-title">Issues</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>

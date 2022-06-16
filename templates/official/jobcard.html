@@ -1,0 +1,194 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+      
+        <div class="container-fluid page-body-wrapper">
+
+            <!-- partial:partials/_sidebar.html -->
+            {% include 'official/partials/sidebar.html' %}
+
+           
+
+
+            <div class="main-panel">
+              <div class="content-wrapper">
+                <div class="row">
+                  <div class="col-md-12 grid-margin">
+                    <div class="row">
+                    
+                    </div>
+                  </div>
+                </div>
+          
+                <div class="row ">
+                  <div class="col-lg-12">
+                    <div class="row no-gutters gx-5 jobcard-row-pad">
+                      <div class="col mx-4">
+                        <div class="jobcard-box1">
+                          <div class="text-center">
+          
+                            <span class="margin-none invoice-pad">Open</span>
+                            <hr class="margin-none line-width">
+          
+                            <span class="margin-none month-font"></span>
+                            <h4 class="head4-size margin-none" id="jobCardOpen">0</h4>
+                            <!-- <hr class="margin-none line-width"> -->
+                            <!-- <span class="margin-none">Total</span>
+                                                  <h3 class="head4-size margin-none">70,018</h3> -->
+                          </div>
+          
+                        </div>
+                      </div>
+          
+                      <div class="col mx-4">
+                        <div class="jobcard-box3">
+                          <div class="text-center">
+                            <span class="margin-none invoice-pad">On Process</span>
+                            <hr class="margin-none line-width">
+                            <span class="margin-none month-font"></span>
+                            <h4 class="head4-size margin-none" id="jobCardOnProcess">0</h4>
+                            <!-- <hr class="margin-none line-width"> -->
+                            <!-- <span class="margin-none">Total</span>
+                                                  <h3 class="head4-size margin-none">70,018</h3> -->
+                          </div>
+          
+                        </div>
+                      </div>
+          
+                      <div class="col mx-4">
+                        <div class="jobcard-box2">
+                          <div class="text-center">
+                            <span class="margin-none invoice-pad">Pending</span>
+                            <hr class="margin-none line-width">
+                            <span class="margin-none month-font"></span>
+                            <h4 class="head4-size margin-none" id="jobCardPending">0</h4>
+                            <!-- <hr class="margin-none line-width"> -->
+                            <!-- <span class="margin-none">Total</span>
+                                                  <h3 class="head4-size margin-none">70,018</h3> -->
+                          </div>
+          
+                        </div>
+                      </div>
+          
+                      <div class="col mx-4">
+                        <div class="jobcard-box4">
+                          <div class="text-center">
+                            <span class="margin-none invoice-pad">Completed</span>
+                            <hr class="margin-none line-width">
+                            <span class="margin-none month-font"></span>
+                            <h4 class="head4-size margin-none" id="jobCardCompleted">0</h4>
+                            <!-- <hr class="margin-none line-width"> -->
+                            <!-- <span class="margin-none">Total</span>
+                                                  <h3 class="head4-size margin-none">70,018</h3> -->
+                          </div>
+                        </div>
+                      </div>
+          
+                      <div class="col mx-4">
+                        <div class="invoice-box5">
+                          <div class="text-center">
+                            <span class="margin-none invoice-pad">Delivered</span>
+                            <hr class="margin-none line-width">
+                            <span class="margin-none month-font"></span>
+                            <h4 class="head4-size margin-none" id="jobCardDelivered">0</h4>
+                            <!-- <hr class="margin-none line-width"> -->
+                            <!-- <span class="margin-none">Total</span>
+                                                  <h3 class="head4-size margin-none">70,018</h3> -->
+                          </div>
+                          
+                        </div>
+                      </div>
+                     
+                    </div>
+                  </div>
+                </div>
+                <div onclick="showDropdown()" class="text-right" style="padding-top: 2rem;
+                padding-right: 2rem;">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <div id="myDropdown" class="dropdown-content">
+                
+              </div>
+                <div class="card">
+                  
+                  <div class="card-body">
+                    <div class="row">
+                      
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="table-responsive">
+                          <table id="jobcardTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Jobcard Number</th>
+                                    <th>Customer</th>
+                                    <th>Factory</th>
+                                    <th>Quotation Number</th>
+                                    <th>Created User</th>
+                                    <th>Status</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          
+          
+              </div>
+          <!-- factory modal -->
+          <div class="modal fade" id="factoryUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Jobcard and Invoice:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i
+                                class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="factoryUpdateForm">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-12 select-box-pad">
+                                    <label for="" class="label-text-3">Factory:</label>
+                                    <select name="factory" class="form-control form-input">
+                                        <option selected disabled>--select--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" id="btnCustomer" class="btn btn-primary">Send</button>
+                            </div>
+                        </form>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+          <!-- end -->
+            </div>
+          
+          </div>
+          
+          
+    
+       
+        {% endblock %}
+        {% block javascript %}
+        <script src="{% static 'official/js/helper.js' %}"></script>
+        <script src="{% static 'official/js/jobcard.js' %}"></script>
+        {% endblock %}
+
+
+
+
+
+

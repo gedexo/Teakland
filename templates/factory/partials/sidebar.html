@@ -1,0 +1,42 @@
+{% load static %}
+ <!-- partial:partials/_sidebar.html -->
+ <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link"  data-bs-toggle="collapse" aria-expanded="false" aria-controls="form-elements" href="#jobcard-elements">
+              <i class="fa fa-solid fa-address-card menu-icon"></i>
+              <span class="menu-title">Job Card<span class="count-badge" id="jobcardCount"></span></span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="jobcard-elements">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="/factory/jobcard/">New</a></li>                
+                <li class="nav-item"><a class="nav-link" href="/factory/delivered-jobcards/">Completed</a></li>                
+              </ul>
+            </div>
+          </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+          <i class="icon-columns menu-icon"></i>
+          <span class="menu-title">Products</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="form-elements">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"><a class="nav-link" href="/factory/kattla/">kattila</a></li>                
+            <li class="nav-item"><a class="nav-link" href="/factory/doors/">Door</a></li>
+            <li class="nav-item"><a class="nav-link" href="/factory/window/">Window</a></li>
+            <li class="nav-item"><a class="nav-link" href="/factory/custom-kattla/">Sizes</a></li>
+          </ul>
+        </div>
+      </li>
+      <!-- ---------bg-chnage lis -->
+      <li class="nav-item bg-li">
+        <a class="nav-link" data-toggle="collapse" href="/factory/gallery/" aria-expanded="false" aria-controls="auth">
+          <i class="fa-solid fa-images  menu-icon"></i>
+          <span class="menu-title">Gallery</span>
+          <i class="menu-arrow"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>

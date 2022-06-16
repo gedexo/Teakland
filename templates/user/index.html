@@ -1,0 +1,264 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid page-body-wrapper">
+
+  {% include 'user/partials/sidebar.html' %}
+  <!-- partial -->
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-12 grid-margin">
+          <div class="row">
+
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+              <h1 class="title-size">Welcome <span class="font-weight-bold" id="userName">..</span>
+                <span class="date-time"> <span class="time"></span> </span>
+              </h1>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="row">
+            <div class="col-lg-4 col-sm-12  col-12 mt-1 mt-sm-2">
+              <div class="quotation-box">
+                <a href="/quotations/">
+                <div class="text-center">
+                  <h5 class="qt-title">Quotation</h5>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Last 30 days</p>
+                  <span class="day" id="quotationLastMonth">0</span>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Total</p>
+                  <span class="day" id="totalQuotation">0</span>
+                </div>
+              </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-12  col-12 mt-1 mt-sm-2">
+              <div class="expense-box">
+                <a href="/income/">
+                <div class="text-center">
+                  <h5 class="qt-title">Income</h5>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Last 30 days</p>
+                  <span class="day" id="incomeLastMonth">0</span>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Total</p>
+                  <span class="day" id="income">0</span>
+                </div>
+              </a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-sm-12  col-12 mt-1 mt-sm-2">
+              <div class="income-box">
+                <a href="/expences/">
+                <div class="text-center">
+                  <h5 class="qt-title">Expense</h5>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Last 30 days</p>
+                  <span class="day" id="expenceLastMonth">0</span>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Total</p>
+                  <span class="day" id="expence">0</span>
+                </div>
+              </a>
+              </div>
+            </div>
+
+            <!-- -------table start----- -->
+            <div class=" col-lg-12 col-12 mt-4">
+              <!-- <div class="table-box ">
+                    <table class="table table-bordered table-hover dt-responsive dashboard-table-bg">
+                      <thead>
+                        <tr>
+                          <th>Branch</th>
+                          <th>Quotation</th>
+                          <th>Invoice</th>
+                          <th>Expense</th>
+                          <th>Income</th>
+
+                        </tr>
+
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Calicut</td>
+                          <td>50</td>
+                          <td>50</td>
+                          <td>50</td>
+                          <td>50</td>
+                        </tr>
+                        <tr>
+                          <td>Kochi</td>
+                          <td>50</td>
+                          <td>50</td>
+                          <td>50</td>
+                          <td>50</td>
+                        </tr>
+                        <tr>
+                          <td>trivandrum</td>
+                          <td>50</td>
+                          <td>50</td>
+                          <td>50</td>
+                          <td>50</td>
+                        </tr>
+
+                      </tbody>
+                     
+                    </table>
+                  </div> -->
+
+
+
+
+            </div>
+
+            <!-- -------bar chart -->
+            <!-- <div class="col-lg-12 col-12">
+                  <div class="chart-box">
+                    <div id="container" style="width: 100%;">
+                      <canvas id="myChart" style="display:block;height:350px;width:894px;"></canvas>
+                      <div id="js-legend" class="chart-legend"></div>
+                    </div>
+                  </div>
+                </div> -->
+
+
+          </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-12 ">
+          <div class="user-jobcard-border">
+            <div class="row">
+              <div class="col-lg-12 text-center pt-4 user-jobcard ">
+                <label for="">Job Card</label>
+              </div>
+
+
+            </div>
+
+
+            <div class="row ">
+              <div class="col-lg-1"></div>
+              <div class="col-lg-2 co-6 mt-3 ">
+                <div class="user-dashbord-box1">
+                  <a href="/jobcard/?status=open">
+                  <div class="text-center">
+                    <span class="margin-none open-font">Open</span>
+                    <hr class="margin-none line-width">
+                    <h4 class="head4-size margin-none open-content" id="jobCardOpen">0</h4>
+                  </div>
+                </a>
+                </div>
+              </div>
+              <div class="col-lg-2 co-6 mt-3 ">
+                <div class="user-dashbord-box2">
+                  <a href="/jobcard/?status=onprocess">
+                  <div class="text-center">
+                    <span class="margin-none open-font">On process</span>
+                    <hr class="margin-none line-width">
+                    <h4 class="head4-size margin-none open-content" id="jobCardOnProcess">0</h4>
+                  </div>
+                </a>
+                </div>
+              </div>
+              <div class="col-lg-2 co-6 mt-3 ">
+                <div class="user-dashbord-box3">
+                  <a href="/jobcard/?status=pending">
+                  <div class="text-center">
+                    <span class="margin-none open-font">Pending</span>
+                    <hr class="margin-none line-width">
+
+                    <h4 class="head4-size margin-none open-content" id="jobCardPending">0</h4>
+
+                  </div>
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-2 co-6 mt-3 ">
+                <div class="user-dashbord-box4">
+                  <a href="/jobcard/?status=completed">
+                  <div class="text-center">
+                    <span class="margin-none open-font">Completed</span>
+                    <hr class="margin-none line-width">
+
+                    <h4 class="head4-size margin-none open-content" id="jobCardCompleted">0</h4>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 co-6 mt-3 ">
+                <div class="user-dashbord-box5">
+                  <a href="/jobcard/?status=delivered">
+                  <div class="text-center">
+                    <span class="margin-none open-font">Delivered</span>
+                    <hr class="margin-none line-width">
+
+                    <h4 class="head4-size margin-none open-content" id="jobCardDelivered">0</h4>
+
+                  </div>
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-1"></div>
+
+            </div>
+          </div>
+        </div>
+
+<!-- =====================graph section  -->
+<!-- <div class="col-lg-12 col-12 mt-4 d-lg-block d-sm-none d-none">
+  <div class="graph">
+    <div class="row">
+      <div class="col-lg-10 col-10 pt-3">
+        <canvas id="myChart" style="display:block;height:350px;width:894px;"></canvas>.
+        <div id="js-legend" class="chart-legend"></div>
+      </div>
+      <div class="col-lg-2 col-2 dropdown-pad ">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle drop-btn" type="button" id="dropdown-arrow">
+            Last Year
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="drop-down-list">
+            <li><a class="dropdown-item" href="#">2021</a></li>
+            <li><a class="dropdown-item" href="#">2020</a></li>
+            <li><a class="dropdown-item" href="#">2019</a></li>
+
+          </ul>
+          <i class="icofont-simple-down dr-arrow " id="dropdown-arrow"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- =====================graph section end -->
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+{% block js %}
+<script src="{% static 'user/js/helper.js' %}"></script>
+<script src="{% static 'user/js/dashboard.js' %}"></script>
+<script src="{% static 'official/assets/js/chart.js' %}"></script>
+<script src="{% static 'official/assets/js/main.js' %}"></script>
+{% endblock %}

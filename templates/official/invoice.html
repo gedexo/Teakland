@@ -1,0 +1,100 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+      
+        <div class="container-fluid page-body-wrapper">
+
+            <!-- partial:partials/_sidebar.html -->
+            {% include 'official/partials/sidebar.html' %}
+
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin">
+                            <div class="row">
+                                <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                                    <h3 class="font-weight-bold">Invoice</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-design">
+        
+                        <div class="card">
+                            <div class="card-body">
+        
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table id="invoiceTable" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Invoice Number</th>
+                                                        <th>Quotation Number</th>
+                                                        <th>Created User</th>
+                                                        <th>Total Amount</th>
+                                                        <th>Recieved Cash</th>
+                                                        <th>Balance</th>
+                                                        <th>Print</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                   
+        
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<!-- payments modal -->
+<div class="modal fade" id="paymentsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content payments-table-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+          <button type="button"  id="btnClose" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table id="paymentsTable" class="table table-success table-striped">
+                <thead>
+                    <th>Date</th>
+                    <th>Payment Type</th>
+                    <th>Amount</th>
+                    <th>Recieved User</th>
+
+                </thead>
+                <tbody>
+                   
+                </tbody>
+              </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"  id="btnClose" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--  -->
+
+                </div>
+            </div>
+       
+        {% endblock %}
+        {% block javascript %}
+        <script src="{% static 'official/js/helper.js' %}"></script>
+        <script src="{% static 'official/js/invoice.js' %}"></script>
+        {% endblock %}
+
+
+
+
+
+

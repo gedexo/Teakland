@@ -1,0 +1,272 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <!-- ========================responsive design start================ -->
+
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="row">
+                        <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                            <h3 class="font-weight-bold" id="jobCardNo">  </h3>
+                        </div>
+                        <div class="col-6 col-xl-4">
+                            <div class="justify-content-end d-flex">
+                                <div class="dropdown previous-btn-div flex-md-grow-1 flex-xl-grow-0">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-design">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 " >
+                               <p><b>Quotation number:</b> <span id="quotationNo"></span></p>
+                               <p><b>Jobcard number:</b> <span id="jobcardNo"></span></p>
+                               <p><b>Created date:</b> <span id="createdDate"></span></p>
+                               <p><b>Expected Delivery date:</b> <span id="expectedDate"></span></p>
+                               <p><b>Status:</b> <span id="status"></span></p>
+                               <p><b>Payment:</b> <span id="paymentStatus"></span></p>
+                            </div>
+                            <div class="col-lg-3" id="deliveredCheckBoxDiv">
+                              
+                            </div>
+                            <div class="col-lg-3 jb-cr">
+                                <p><b>Customer Details</b></p>
+                                <hr>
+                                <p><b>Name:</b> <span id="customerName"></span></p>
+                                <p><b>Address:</b> <span id="customerAddress"></span></p>
+                                <p><b>Phone:</b> <span id="customerPhone"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="doorTitleDiv">
+                            <hr>
+                            <h3 class="jb-h1" id="doorTitle"></h3>
+                        </div>
+                        <div class="row" id="doorJobCardDiv">
+
+                           
+                        
+                        </div>
+                        <div id="windowTitleDiv">
+                            <hr>
+                            <h3 class="jb-h1" id="windowTitle"></h3>
+                        </div>
+                        <div class="row" id="windowJobCardDiv">
+
+                           
+                        
+                        </div>
+                        <div id="kattlaTitleDiv">
+                            <hr>
+                            <h3 class="jb-h1" id="kattlaTitle"></h3>
+                        </div>
+                        <div class="row" id="kattlaJobCardDiv">
+
+                           
+                        
+                        </div>
+                        <div id="sizesTitleDiv">
+                            <hr>
+                            <h3 class="jb-h1" id="sizesTitle"></h3>
+                        </div>
+                        <div class="row" id="sizesJobCardDiv">
+
+                           
+                        
+                        </div>
+
+                        <div id="othersTitleDiv">
+                            <hr>
+                            <h3 class="jb-h1" id="othersTitle"></h3>
+
+                        </div>
+                        <div class="row" id="othersJobCardDiv">
+
+                           
+                        
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+
+                                <!-- <div class="table-responsive p-3 " id="windowTableDiv">
+                                    <h3>Window</h3>
+                                    <table id="windowQuotatiionTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Box</th>
+                                                <th>Shutter</th>
+                                                <th>Design</th>
+                                                <th>Height</th>
+                                                <th>Width</th>
+                                                <th>Quantity</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Sqft</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        
+                                    </table>
+                                </div> -->
+
+                                <!-- <div class="table-responsive p-3 " id="doorTableDiv">
+                                    <h3>Door</h3>
+                                    <table id="doorsQuotationTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Joint</th>
+                                                <th>Height</th>
+                                                <th>Width</th>
+                                                <th>Quantity</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Sqft</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div> -->
+
+                                <!-- <div class="table-responsive p-3 " id="kattlaTableDiv">
+                                    <h3>Kattla</h3>
+                                    <table id="kattlaQuotatiionTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Thickness_x</th>
+                                                <th>Thickness_y</th>
+                                                <th>Height</th>
+                                                <th>Width</th>
+                                                <th>Quantity</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Qubic</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="doorTbody">
+                                        </tbody>
+                                    </table>
+                                </div> -->
+
+                                <!-- <div class="table-responsive p-3 " id="customKattlaTableDiv">
+                                    <h3>Sizes</h3>
+                                    <table id="customKattlaQuotatiionTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Length</th>
+                                                <th>Thickness_x</th>
+                                                <th>Thickness_y</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Quantity</th>
+                                                <th>Qubic</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="">
+                                        </tbody>
+                                    </table>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <!-- =======tax section start ======== -->
+                       
+                        <!-- =======tax section end======== -->
+
+                        <!-- ================ tax and subtotal section start=======  -->
+                        
+                        <!-- ================ tax and subtotal section end=======  -->
+
+                        <!-- =============Total section start======== -->
+                        
+                        <!-- =============Total section end======== -->
+
+                        <div class="row add-job-card-pad" id="printDiv">
+                            
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
+
+         <!-- Sizes modal -->
+
+         <div class="modal fade" id="jobCardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Status:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="jobCardForm">
+                            {% csrf_token %}
+                            <div class="row">
+                                <input type="number" id="jobcardId" hidden>
+                                <div class="col-lg-12 select-box-pad">
+                                    <label for="" class="label-text-3">Factory:</label>
+                                    <select class="form-control form-input" name="factory" id="factory"
+                                        aria-label="Default select example" required>
+                                    </select>
+                                </div>                         
+                            </div>                      
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" id="" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        <!-- =================modal section end ============ -->
+</div>
+
+
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/view-jobcard.js' %}"></script>
+{% endblock %}

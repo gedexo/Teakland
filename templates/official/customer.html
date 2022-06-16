@@ -1,0 +1,317 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper customer-cntnt">
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                      <h3 class="font-weight-bold">Customers</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Total Customers</h4>
+                          <p id="customerTotal"></p>
+                          <div class="d-flex justify-content-between">
+                            <p title="test" class="text-muted">Last Month Average:</p>
+                          </div>
+                          <!-- <div class="progress progress-md">
+                            <progress class="progress-bar bg-info" id="lastMonthCustomer" max="100" aria-valuemax="100"> </progress>
+                          </div> -->
+                          <div class="progress progress-md">
+                            <div class="progress-bar bg-info"  role="progressbar" id="lastMonthCustomer" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Total Amount</h4>
+                          <p id="totalPayments"></p>                      
+                          <div class="d-flex justify-content-between">
+                            <p class="text-muted">Last Month Average:</p>
+                          </div>
+                          <div class="progress progress-md">
+                            <div class="progress-bar bg-success" role="progressbar" id="lastMonthTotalPaymentsPercentage" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Recieved Amount</h4>
+                          <p id="recievedPayments"></p>                      
+                          <div class="d-flex justify-content-between">
+                            <p class="text-muted">Avg. Session:</p>
+                          </div>
+                          <div class="progress progress-md">
+                            <div class="progress-bar bg-warning" role="progressbar" id="recievedPaymentsPercentage" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Recieved Payments</h4>
+                          <p id="recievedPayments"></p>                      
+                          <div class="d-flex justify-content-between">
+                            <p class="text-muted">Avg. Session</p>
+                          </div>
+                          <div class="progress progress-md">
+                            <div class="progress-bar bg-success" id="recievedPaymentsPercentage" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div> -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-3 grid-margin stretch-card"  onmouseover="pendingQuoations()">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Pending Amount</h4>
+                          <p id="pendingPayments"></p>                      
+                          <div class="d-flex justify-content-between">
+                            <p class="text-muted">Avg. Session:</p>
+                            <p class="text-muted"></p>
+                          </div>
+                          <div class="progress progress-md">
+                            <div class="progress-bar bg-danger" role="progressbar" id="pendingPaymentsPercentage" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Pie chart <span id="customer" class="badge bg-info text-white">View</span></h4>
+                      <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Pie chart <span id="enquiryCustomer" class="badge bg-info text-white">View</span></h4>
+                        <div id="enquiryChart" style="height: 300px; width: 100%;"></div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                
+              </div>
+            <div class="bg-design">
+                <div class="card">
+                    <div class="form-group col-lg-2 col-12">
+                        <label for="exampleSelectGender"></label>
+
+                        <select class="form-control form-input" name="type" id="type" >  
+                            <option selected disabled>--select type--</option> 
+                            <option value="carpenter">Carpenter</option>                         
+                            <option value="normal house customer">Normal house customer</option>                         
+                            <option value="engineer">Engineer</option>                         
+                            <option value="shop">Shop</option>                         
+                            <option value="commission agent">Commission agent</option>                         
+                          </select>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                       
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table  id="customerTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Name</th>
+                                                <th>Quotations</th>
+                                                <th>Source</th>
+                                                <th>Type</th>
+                                                <th>Created By</th>
+                                                <th>Dealt By</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Branch</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- payments modal -->
+<div class="modal fade " id="invoice-customermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content payments-table-modal customer-invoice-table">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Quotations</h5>
+        <button type="button"  id="btnClose" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <table id="customerInvoiceTable" class="table table-success table-striped">
+              <thead>
+                  <th>Quotation created date</th>
+                  <th>Quotation No</th>
+                  <th>Invoice No</th>
+                  <th>Amount</th>
+                  <th>Balance Amount</th>
+                  <th>Created user</th>
+                  <th>Status</th>
+                  <!-- <th>Update Bill Amount</th> -->
+              </thead>
+              <tbody>
+                 
+              </tbody>
+            </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"  id="btnClose" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  -->
+
+ <!-- pending payments modal -->
+
+<div class="modal fade " id="invoice-pendingmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content payments-table-modal invoice-pending-table">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pendingInvoicesContent">Invoices</h5>
+        <button type="button"  id="btnClose" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <table id="invoicePendingTable" class="table table-success table-striped">
+              <thead>
+                  <th>Invoice No</th>
+                  <th>Branch</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Recieved Amount</th>
+                  <th>Balance Amount</th>
+                  <th>Created user</th>
+                  <th>Update Bill Amount</th>
+              </thead>
+              <tbody>
+                 
+              </tbody>
+            </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"  id="btnClose" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <!--  -->
+ <!-- invoice modal -->
+
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Invoice Update:<span id=""></span></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div class="modal-body">
+              <form id="invoiceUpdateForm">
+                  {% csrf_token %}             
+                  <div class="row" >
+                      <input type="number" name="quotation" id="quotationno" hidden>
+                      <div class="col-lg-6 select-box-pad">
+                          <label for="" class="label-text-3">Recieved Cash:</label>
+                          <input type="number" name="amount" id="recievedCash" min="1" max=""  class="form-control form-input">
+                      </div>
+                      <div class="col-lg-6 select-box-pad" id="paymentTypeDiv">
+                          <label for="" class="label-text-3">Payment:</label>
+                          <select name="type" id="paymentType" class="form-control form-input">
+                              <option selected disabled>--select--</option>
+                              <option value="cash">Cash</option>
+                              <option value="bank">Bank</option>
+                              </select>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-lg-7 select-box-pad" id="bankDiv">
+                          <label for="" class="label-text-3">Bank:</label>
+                          <select name="bank" id="bank"  class="form-control form-input">
+                              <option selected disabled>--select--</option>
+                              </select>
+                      </div>
+                  </div>
+                  <div class="row p-3">
+                      <div class="col-lg-7 select-box-pad">
+                          <label for="" class="label-text-3">Total Bill Amount:<span id="billBalance">0</span></label>
+                         
+                      </div>
+                      <div class="col-lg-4 select-box-pad">
+                          <label for="" class="label-text-3">Balance Amount:<span id="balanceBillAmount">0</span></label>
+                      </div>
+                      <p class="error" id="error1"></p>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" id="" class="btn btn-primary">Update</button>
+                  </div>
+              </form>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- =================modal section end ============ -->
+{% endblock %}
+{% block javascript %}
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="{% static 'web/js/chart.js' %}"></script>
+<script src="{% static 'web/vendors/chart.js/Chart.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+<script src="{% static 'web/js/off-canvas.js' %}"></script>
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/customer.js' %}"></script>
+
+{% endblock %}

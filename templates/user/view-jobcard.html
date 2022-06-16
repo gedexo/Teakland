@@ -1,0 +1,214 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'user/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <!-- ========================responsive design start================ -->
+
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="row">
+                        <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                            <h3 class="font-weight-bold"> </h3>
+                        </div>
+                        <div class="col-6 col-xl-4">
+                            <div class="justify-content-end d-flex">
+                                <div class="dropdown previous-btn-div flex-md-grow-1 flex-xl-grow-0">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-design">
+               
+                <div class="card">
+                    <h2 id="jobCardNumber"></h2>
+                    <div class="card-body pt-5" id="quotationRemark" >
+                       
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div class="table-responsive p-3 " id="windowTableDiv">
+                                    <h3>Window</h3>
+                                    <table id="windowQuotatiionTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Box</th>
+                                                <th>Shutter</th>
+                                                <th>Design</th>
+                                                <th>Height</th>
+                                                <th>Width</th>
+                                                <th>Quantity</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Sqft</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+
+                                                <!-- <th>Edit</th>
+                                                <th>Delete</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        
+                                    </table>
+                                </div>
+
+                                <div class="table-responsive p-3 " id="doorTableDiv">
+                                    <h3>Door</h3>
+                                    <table id="doorsQuotationTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Joint</th>
+                                                <th>Height</th>
+                                                <th>Width</th>
+                                                <th>Quantity</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Sqft</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+
+                                                <!-- <th>Edit</th>
+                                                <th>Delete</th> -->
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="table-responsive p-3 " id="kattlaTableDiv">
+                                    <h3>Kattla</h3>
+                                    <table id="kattlaQuotatiionTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Thickness_x</th>
+                                                <th>Thickness_y</th>
+                                                <th>Height</th>
+                                                <th>Width</th>
+                                                <th>Quantity</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Qubic</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+
+
+                                                <!-- <th>Edit</th>
+                                                <th>Delete</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="doorTbody">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="table-responsive p-3 " id="customKattlaTableDiv">
+                                    <h3>Sizes</h3>
+                                    <table id="customKattlaQuotatiionTable" class="table table-striped">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Length</th>
+                                                <th>Thickness_x</th>
+                                                <th>Thickness_y</th>
+                                                <th>Rawmaterial</th>
+                                                <th>Quantity</th>
+                                                <th>Qubic</th>
+                                                <th>Status</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- =======tax section start ======== -->
+                       
+                        <!-- =======tax section end======== -->
+
+                        <!-- ================ tax and subtotal section start=======  -->
+                        
+                        <!-- ================ tax and subtotal section end=======  -->
+
+                        <!-- =============Total section start======== -->
+                        
+                        <!-- =============Total section end======== -->
+
+                        <div class="row add-job-card-pad" id="printDiv">
+                            
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+<!-- imagemodal -->
+
+<div class="modal fade" id="ImageModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i
+          class="fa-solid fa-xmark"></i></button>
+    </div>
+    <img id="quotationImage1" class="cr-img"  src="">
+    <div class="modal-body">
+      <div class="owl-carousel owl-theme">
+        <div class="item">
+          <div class="card">
+            <img id="quotationImage" class="cr-img" alt="">
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+</div>
+<!-- end section -->
+    </div>
+     
+</div>
+{% endblock %}
+{% block js %}
+<script src="{% static 'user/js/helper.js' %}"></script>
+<script src="{% static 'user/js/view-jobcard.js' %}"></script>
+{% endblock %}

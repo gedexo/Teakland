@@ -1,0 +1,122 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div onclick="showDropdown()" class="text-right" style="padding-top: 2rem;
+                padding-right: 2rem;">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+            <div class="bg-design">
+                <div class="card" id="expenceDiv">
+                    <div class="card-body">                      
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table  id="incomeTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Quotation No</th>
+                                                <th>Invoice No</th>
+                                                <th>Branch</th>
+                                                <th>Collected User</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                      
+                                        </tbody>
+                                        <tr>
+                                            <td colspan="5"><b>Total:</b></td>
+                                            <td id="incomeTotal"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="card" id="incomeDiv">
+                    <div class="card-body">                      
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table  id="incomeTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Branch</th>
+                                                <th>Cash/Bank</th>
+                                                <th>Description</th>
+                                                <th>Recieved user</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                      
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        
+            </div>
+        </div>
+    </div>
+   <!-- filter modal -->
+
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><span id=""></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="expenceFilterForm">
+                    {% csrf_token %}             
+                    <div class="row">
+                        <div class="col-lg-6 select-box-pad" id="bankDiv">
+                            <label for="" class="label-text-3">Start date:</label>
+                            <input type="date" name="startdate" id="startDate"  class="form-control form-input">
+                        </div>
+                        <div class="col-lg-6 select-box-pad" id="bankDiv">
+                            <label for="" class="label-text-3">End date:</label>
+                            <input type="date" name="enddate" id="endDate"  class="form-control form-input">
+                        </div>
+                        <div class="col-lg-6 select-box-pad" id="bankDiv">
+                            <label for="" class="label-text-3">Branch:</label>
+                            <select name="skills" name="branch" multiple class="form-control" id="branch">
+                            </select>                        
+                        </div>
+                    </div>
+                    <div class="mdl-ftr">
+                        <button type="submit" id="" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =================modal section end ============ -->
+</div>
+
+       
+
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/income.js' %}"></script>
+{% endblock %}

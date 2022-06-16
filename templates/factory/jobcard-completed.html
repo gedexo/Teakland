@@ -1,0 +1,55 @@
+{% extends 'factory/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+  <!-- partial:partials/_sidebar.html -->
+  {% include 'factory/partials/sidebar.html' %}
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-md-12 grid-margin">
+          <div class="row">
+          
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table id="jobCardTable" class="table">
+                  <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Jobcard Number</th>
+                          <th>Quotation Number</th>
+                          <th>Branch</th>
+                          <th>Completed Date</th>
+                          <!-- <th>Delivered User</th> -->
+                          <th>Status</th>
+                          <th>View</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'factory/js/helper.js' %}"></script>
+<script src="{% static 'factory/js/jobcard-delivered.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'user/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="row">
+                        <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                            <h3 class="font-weight-bold">Invoice</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-design">
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="invoiceTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Invoice Number</th>
+                                                <th>Quotation Number</th>
+                                                <th>Created User</th>
+                                                <th>Total Amount</th>
+                                                <th>Recieved Cash</th>
+                                                <th>Balance</th>
+                                                <th>Print</th>
+                                                <th>Edit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- invoice modal -->
+
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Invoice Update:<span id=""></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="invoiceUpdateForm">
+                    {% csrf_token %}             
+                    <div class="row" >
+                        <input type="number" name="quotation" id="quotationno" hidden>
+                        <div class="col-lg-6 select-box-pad">
+                            <label for="" class="label-text-3">Recieved Cash:</label>
+                            <input type="number" name="amount" id="recievedCash" min="1" max=""  class="form-control form-input">
+                        </div>
+                        <div class="col-lg-6 select-box-pad" id="paymentTypeDiv">
+                            <label for="" class="label-text-3">Payment:</label>
+                            <select name="type" id="paymentType" class="form-control form-input">
+                                <option selected disabled>--select--</option>
+                                <option value="cash">Cash</option>
+                                <option value="bank">Bank</option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-7 select-box-pad" id="bankDiv">
+                            <label for="" class="label-text-3">Bank:</label>
+                            <select name="bank" id="bank"  class="form-control form-input">
+                                <option selected disabled>--select--</option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="row p-3">
+                        <div class="col-lg-7 select-box-pad">
+                            <label for="" class="label-text-3">Total Bill Amount:<span id="billBalance">0</span></label>
+                           
+                        </div>
+                        <div class="col-lg-4 select-box-pad">
+                            <label for="" class="label-text-3">Balance Amount:<span id="balanceBillAmount">0</span></label>
+                        </div>
+                        <p class="error" id="error1"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =================modal section end ============ -->
+
+<!-- payments modal -->
+<div class="modal fade" id="paymentsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content payments-table-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+          <button type="button"  id="btnClose" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table id="paymentsTable" class="table table-success table-striped">
+                <thead>
+                    <th>Date</th>
+                    <th>Payment Type</th>
+                    <th>Amount</th>
+                    <th>Recieved User</th>
+
+                </thead>
+                <tbody>
+                   
+                </tbody>
+              </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"  id="btnClose" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--  -->
+</div>
+
+
+
+
+{% endblock %}
+{% block js %}
+
+<script src="{% static 'user/js/helper.js' %}"></script>
+<script src="{% static 'user/js/invoice.js' %}"></script>
+<script src="{% static 'user/js/payments.js' %}"></script>
+
+{% endblock %}
