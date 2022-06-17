@@ -148,8 +148,9 @@ function editUser(data){
             200: function (response) {
                $("#userForm").trigger("reset")
                swal("Oops! Updated Successfully!", {
-                icon: "success",
-            });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+                icon: "success",               
+            });                 
+            $("#btnSubmit").html('Add')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             var rows = localStorage.getItem("rowNumber")
             var table = $('#userTable').DataTable()
             table.cell({row:parseInt(rows),column:1}).data(response['name']);
@@ -210,23 +211,39 @@ $(document).on('click', '#btnDelete', function () {
 });
 
 $(document).on('click', '.edit-edit', function () {
+    $("#btnSubmit").html('Update')
     var row = $(this).closest("tr").index();
     localStorage.setItem("rowNumber",row)
     checkUser()
     var id = $(this).attr('id')
-    var name = $(this).closest('tr').find("td:eq(1)").html();
-    var place = $(this).closest('tr').find("td:eq(2)").html();
-    var branchKey = $(this).closest('tr').find("td:eq(3)").html();
-    var phone = $(this).closest('tr').find("td:eq(4)").html();
-    var email = $(this).closest('tr').find("td:eq(5)").html();
-    var address = $(this).closest('tr').find("td:eq(6)").html();
-    $("#editId").val(id);
-    $("input[name=name]").val(name)
-    $("input[name=place]").val(place)
-    $("input[name=branch_key]").val(branchKey)
-    $("input[name=phonenumber]").val(phone)
-    $("input[name=email]").val(email)
-    $("textarea[name=address]").val(address)
+    $.ajax({
+        url: "/officialapi/router/users/"+id+"/",
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("adminaccesstoken")
+            );
+        },
+        statusCode: {
+            200: function (response) {
+                $("#editId").val(response['id']);
+                $("input[name=name]").val(response['name'])
+                $("input[name=place]").val(response['place'])
+                $("input[name=branch_key]").val(response['branch_key'])
+                $("input[name=phonenumber]").val(response['phonenumber'])
+                $("input[name=email]").val(response['email'])
+                $("textarea[name=address]").val(response['address'])
+            }
+        }
+    });
+    // var name = $(this).closest('tr').find("td:eq(1)").html();
+    // var place = $(this).closest('tr').find("td:eq(2)").html();
+    // var branchKey = $(this).closest('tr').find("td:eq(3)").html();
+    // var phone = $(this).closest('tr').find("td:eq(4)").html();
+    // var email = $(this).closest('tr').find("td:eq(5)").html();
+    // var address = $(this).closest('tr').find("td:eq(6)").html();
+    
 });
 
 

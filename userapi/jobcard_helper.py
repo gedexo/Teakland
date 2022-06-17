@@ -48,3 +48,19 @@ def recievedCash(quotationno):
     return int(recieved)
     
 
+def quotationno(branchkey,qtno):
+    quotationNumber = ''
+    a = qtno
+    x = a.split('0')
+    if x[0] == branchkey:
+        q = qtno.split(branchkey)
+        a = q[0]+1
+        quotationNumber = str(branchkey)+str(a)
+    else:
+        try:
+            w = a.split(branchkey)
+            c = int(w[1])+1
+            quotationNumber = str(branchkey)+str(c)
+        except:
+                quotationNumber = str(branchkey)+str(1)
+    return quotationNumber

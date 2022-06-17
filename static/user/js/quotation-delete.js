@@ -36,6 +36,9 @@ function deleteWindowQuotation(deleteId,rowIndex){
                                 icon: "error",
                             });
                         },
+                        403: function (response) {
+                            swal("You don't have permission for this action");
+                        }
                     },
                 })
 
@@ -84,6 +87,9 @@ $(document).on('click', '#btnDeleteKattla', function () {
                                 icon: "error",
                             });
                         },
+                        403: function (response) {
+                            swal("You don't have permission for this action");
+                        }
                     },
                 })
 
@@ -131,6 +137,9 @@ function deleteDoorQuotation(deleteId,rowIndex){
                                 icon: "error",
                             });
                         },
+                        403: function (response) {
+                            swal("You don't have permission for this action");
+                        }
                     },
                 })
 
@@ -178,6 +187,9 @@ function deleteCustomKattlaQuotation(deleteId,rowIndex){
                                 icon: "error",
                             });
                         },
+                        403: function (response) {
+                            swal("You don't have permission for this action");
+                        }
                     },
                 })
 
@@ -226,6 +238,9 @@ function deleteOtherProductQuotation(deleteId,rowIndex){
                                 icon: "error",
                             });
                         },
+                        403: function (response) {
+                            swal("You don't have permission for this action");
+                        }
                     },
                 })
 
