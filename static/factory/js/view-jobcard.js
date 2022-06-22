@@ -20,9 +20,8 @@ if (quotationNumber != null) {
 var qtNo;
 function quotatationDetails() {
     $.ajax({
-        url: "/userapi/router/quotation/" + quotationNumber + "/",
+        url: "/userapi/router/quotation/"+quotationNumber+"/?factory=True",
         type: "GET",
-        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",

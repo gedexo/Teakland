@@ -4,6 +4,7 @@ $(document).ready(function(){
     $("#kattlaTableDiv").hide();
     $("#customKattlaTableDiv").hide();
     $("#qoutationTaxDiv").hide();
+    $("#otherProductTableDiv").hide();
 });
 
 kattlaQty = []
@@ -14,17 +15,19 @@ doorSqft = []
 windowSqft = []
 kattlaQubic = []
 sizesQubic = []
+othersQty = []
 
 var searchParams = new URLSearchParams(window.location.search)
 var quotationNumber = searchParams.get('quotation_number')
 if (quotationNumber != null) {
     quotatationDetails()
 }
-function total(doorTotal,kattlaTotal,windowTotal,customKattlaTotal,tax) {
+function total(doorTotal,kattlaTotal,windowTotal,customKattlaTotal,othersubtotal,tax) {
     var door
     var kattla
     var window
     var customkattla
+    var others
 
     if(doorTotal != null){
         door = doorTotal
@@ -50,9 +53,15 @@ function total(doorTotal,kattlaTotal,windowTotal,customKattlaTotal,tax) {
     else{
         customkattla = 0
     }
+    if(othersubtotal != null){
+        others = othersubtotal
+    }
+    else{
+        others = 0
+    }
 
 
-    var a = parseInt(door) + parseInt(kattla) + parseInt(window) + parseInt(customkattla)
+    var a = parseInt(door) + parseInt(kattla) + parseInt(window) + parseInt(customkattla) + parseInt(others)
     if (tax != 0 && tax != null){
         taxAmount = tax/100*a
         total = a + taxAmount
@@ -79,7 +88,7 @@ function quotatationDetails() {
         },
         statusCode: {
             200: function (response) {
-                t = total(response[0].doorsubtotal[0]['total'],response[0].kattlasubtotal[0]['total'],response[0].windowsubtotal[0]['total'],response[0].customkattlasubtotal[0]['total'],response[0].tax)
+                t = total(response[0].doorsubtotal[0]['total'],response[0].kattlasubtotal[0]['total'],response[0].windowsubtotal[0]['total'],response[0].customkattlasubtotal[0]['total'],response[0].othersubtotal[0]['total'],response[0].tax)
                 qtNo = response[0].id
                 var date =  response[0]['date']
                 var dateQt = date.split(' ')[0];
@@ -109,6 +118,7 @@ function quotatationDetails() {
                 kattlaQuotationExists(response[0].kattlasubtotal[0]['total'])
                 windowQuotationExists(response[0].windowsubtotal[0]['total'])
                 customKattlaQuotationExists(response[0].customkattlasubtotal[0]['total'])
+                otherQuotationExists(response[0].othersubtotal[0]['total'])
             },
             400: function () {
                 window.location.href = "/quotations/"
@@ -340,6 +350,57 @@ function customKattlaQuotationExists(total) {
         }
     });
 }
+
+function otherQuotationExists(total) {
+    $.ajax({
+        url: "/userapi/router/other-product-quotation/?quotation_no=" + qtNo,
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("useraccesstoken")
+            );
+        },
+        statusCode: {
+            200: function (response) {
+                var count = 1
+                $("#otherProductTotal").html(total)
+                if(response.length > 0){
+                    $("#otherProductTableDiv").show();
+                }
+                drawTable(response);
+                function drawTable(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        drawRow(data[i]);
+                    }
+                }
+                function drawRow(rowData) {
+                    othersQty.push(rowData["quantity"])
+                    var row = $("<tr />")
+                    $("#otherQuotationTable").append(row);
+                    row.append($("<td>" + count + "</td>"));
+                    row.append($("<td>" + rowData["name"] + "</td>"));
+                    row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
+                    row.append($("<td>" + rowData['quantity'] + "</td>"));
+                    row.append($("<td>" + rowData["price"] + "</td>"));
+                    row.append($("<td>" + rowData["aggregate"] + "</td>"));
+                    count =+ count + 1
+                }
+                var qty = othersQty.reduce(function(a, b){
+                    return a + b;
+                }, 0);
+                $("#otherProductQty").html(qty)
+                // var qubicTotal = sizesQubic.reduce(function(a, b){
+                //     return a + b;
+                // }, 0);
+                // a = qubicTotal.toFixed(2);
+                // $("#sizesQubic").html(a)
+
+            }
+        }
+    });
+}
+
 
 
 $("#btnPrint").click(function(){

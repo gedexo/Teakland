@@ -40,5 +40,4 @@ urlpatterns = [
     path('jobcard-create/',views.JobCardAndInvoice.as_view()), 
     path('jobcard-count/',dashboard.JobcardCount.as_view()),   
     path('dashboard/',dashboard.DashboardData.as_view()),
-    # path('incomeandexpences/',views.IncomeAndExpence.as_view()),
 ]

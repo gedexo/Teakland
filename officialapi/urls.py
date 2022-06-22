@@ -50,4 +50,7 @@ urlpatterns = [
     path('logout/',views.Logout.as_view()),
     path('customer-count/',views.CustomerCounts.as_view()),
     path('filter-customer-data/<str:pk>/',views.FilterCustomersData.as_view()),
+    path('get-branch-details/',views.GetBranchQuotationDetails.as_view()),
+    path('check-passowrd/',views.CheckPassword.as_view()),
+    # path('date-based-filter/',views.GetBranchQuotationDetailsDividedByDate.as_view()),
 ]

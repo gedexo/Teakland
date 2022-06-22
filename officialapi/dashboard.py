@@ -46,7 +46,7 @@ class DashboardJobcardCount(APIView):
     permission_classes = (IsAuthenticated,IsAdminUser)
     def get(self,request,format=None):
     
-        branch = users.objects.all().select_related('jobcard__set').annotate(open=Count('pk',filter=Q(jobcard__status="open")),onprocess=Count('pk',filter=Q(jobcard__status="onprocess")),pending=Count('pk',filter=Q(jobcard__status="pending")),completed=Count('pk',filter=Q(jobcard__status="completed")),delivered=Count('pk',filter=Q(jobcard__status="delivered"))).values('name','open','onprocess','pending','completed','delivered')
+        branch = users.objects.all().select_related('jobcard__set').annotate(open=Count('pk',filter=Q(jobcard__status="open")),onprocess=Count('pk',filter=Q(jobcard__status="onprocess")),pending=Count('pk',filter=Q(jobcard__status="pending")),completed=Count('pk',filter=Q(jobcard__status="completed")),delivered=Count('pk',filter=Q(jobcard__status="delivered"))).values('id','name','open','onprocess','pending','completed','delivered')
         data = {
             'branch':branch,
         }

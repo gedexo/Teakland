@@ -45,16 +45,17 @@ class UserManager(BaseUserManager):
         
 class User(AbstractBaseUser, PermissionsMixin):
     """"Custom Model"""
-    date       = models.DateField(auto_now_add=True,null=True)
-    email      = models.EmailField(max_length=225, unique=True)
-    first_name = models.CharField(max_length=225)
-    last_name  = models.CharField(max_length=100,null=True,blank=True)
-    is_active  = models.BooleanField(default=True)
-    is_staff   = models.BooleanField(default=False)
-    phone      = PhoneField(unique=False,null=True,blank=True)
-    user       = models.ForeignKey(users, on_delete = models.CASCADE,null=True,blank=True)
-    factory    = models.ForeignKey(factory, on_delete = models.CASCADE,null=True,blank=True)
-    objects    = UserManager()
+    date         = models.DateField(auto_now_add=True,null=True)
+    email        = models.EmailField(max_length=225, unique=True)
+    first_name   = models.CharField(max_length=225)
+    last_name    = models.CharField(max_length=100,null=True,blank=True)
+    is_active    = models.BooleanField(default=True)
+    is_staff     = models.BooleanField(default=False)
+    phone        = PhoneField(unique=False,null=True,blank=True)
+    user         = models.ForeignKey(users, on_delete = models.CASCADE,null=True,blank=True)
+    factory      = models.ForeignKey(factory, on_delete = models.CASCADE,null=True,blank=True)
+    is_branchhead= models.BooleanField(default=False)
+    objects      = UserManager()
     USERNAME_FIELD = 'email'
 
     def __str__(self):

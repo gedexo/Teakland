@@ -19,6 +19,7 @@ function jobcards(status){
         },
         statusCode: {
             200: function (response) {
+                console.log(response)
                 table = $("#jobCardTable").DataTable();
                 table.clear()
                 table.draw()
@@ -29,6 +30,7 @@ function jobcards(status){
                     }
                 }
                 function drawRow(rowData) {
+                    
                     var jobcard
                     if(rowData.is_seen != false){
                         jobcard = rowData['jobcardno']

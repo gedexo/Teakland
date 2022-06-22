@@ -177,6 +177,10 @@ function payments(data){
                     icon: "error",
                 });
             },
+            403: function(){
+                $("#invoiceModal").modal('hide')
+                swal("You don't have permission for this action"); 
+            },
             201: function (response) {
                 $("#invoiceUpdateForm").trigger("reset")
                 $("#invoiceModal").modal('hide')
