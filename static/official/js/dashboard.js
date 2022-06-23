@@ -1,9 +1,6 @@
 $(window).on('load', function () {
     countQuotation()
     jobcardStatus()
-    setTimeout(function () {
-        swingData()
-    }, 100);
 });
 
 
@@ -11,6 +8,7 @@ function countQuotation() {
     $.ajax({
         url: "/officialapi/dashboard/",
         type: "GET",
+        async:false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -33,6 +31,7 @@ function countQuotation() {
             }
         }
     });
+    swingData()
 }
 
 function jobcardStatus() {

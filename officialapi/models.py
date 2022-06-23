@@ -6,13 +6,15 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from phone_field import PhoneField
+from phonenumber_field.modelfields import PhoneNumberField
+
 # Create your models here.
 
 class users(models.Model):
     date        = models.DateField(auto_now_add=True)
     name        = models.CharField(max_length=100)
     place       = models.CharField(max_length=100)
-    phonenumber = PhoneField(null=True,blank=True)
+    phonenumber = PhoneNumberField(null=True,blank=True)
     email       = models.EmailField(unique=True)
     branch_key  = models.CharField(max_length=20,null=True)
     address     = models.TextField(max_length=250)
@@ -21,7 +23,7 @@ class factory(models.Model):
     date      =models.DateField(auto_now_add=True,null=True)
     place     = models.CharField(max_length=100)
     address   = models.TextField()
-    contactno = PhoneField()
+    contactno = PhoneNumberField()
     
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -51,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name    = models.CharField(max_length=100,null=True,blank=True)
     is_active    = models.BooleanField(default=True)
     is_staff     = models.BooleanField(default=False)
-    phone        = PhoneField(unique=False,null=True,blank=True)
+    phone        = PhoneNumberField(unique=False,null=True,blank=True)
     user         = models.ForeignKey(users, on_delete = models.CASCADE,null=True,blank=True)
     factory      = models.ForeignKey(factory, on_delete = models.CASCADE,null=True,blank=True)
     is_branchhead= models.BooleanField(default=False)
@@ -74,7 +76,7 @@ class salesman(models.Model):
     name    = models.CharField(max_length=150)
     place   = models.CharField(max_length=150,null=True,blank=True)
     email   = models.EmailField()
-    phone   = PhoneField()
+    phone   = PhoneNumberField()
     address = models.TextField()
     class Meta:
         unique_together = ('user','name','phone')
@@ -85,7 +87,7 @@ class customer(models.Model):
     created_by  = models.ForeignKey(salesman,on_delete=models.CASCADE,related_name='created_by')
     dealt_by    = models.ForeignKey(salesman,on_delete=models.CASCADE,related_name='dealt_by')
     name        = models.CharField(max_length=150)
-    contact_no  = PhoneField()
+    contact_no  = PhoneNumberField(region="IN")
     type        = models.CharField(null=True,blank=True,max_length=70)
     source      = models.CharField(null=True,blank=True,max_length=70)
     address     = models.TextField()
@@ -119,6 +121,7 @@ class quotation(models.Model):
     tax            = models.FloatField(null=True,blank=True)
     remark         = models.TextField(null=True)
     is_seen        = models.BooleanField(default=False)
+    
     class Meta:
        ordering = ['status']
        

@@ -182,6 +182,7 @@ body {
 /* ----table-dashboard----- */
 .table-box {
   padding: 17px 0;
+  /* overflow: scroll; */
 }
 .dashboard-table-bg {
     background: linear-gradient(135deg, #EDEDED 0%, #FFFFFF 100%);
@@ -335,5 +336,27 @@ table.dataTable td {
         position: relative;
         left: 5px;
     }
+    .table-box {
+        padding: 17px 0;
+        overflow: scroll;
+      }
 
+      .table-box1 {
+        padding: 0px 0;
+        overflow: scroll;
+      }
+      
+
+}
+
+@media only screen and  (min-width: 300px) and (max-width: 700px){
+    .table-box {
+        padding: 17px 0;
+        overflow: scroll;
+      }
+
+      .table-box1 {
+        padding: 0px 0;
+        overflow: scroll;
+      }
 }

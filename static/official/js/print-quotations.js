@@ -159,7 +159,7 @@ function doorQuotationExists(total) {
                     }
                 }
                 function drawRow(rowData) {
-                    var sqft = rowData["quantity"] * rowData["squarfeet"]
+                    var sqft = rowData["quantity"] * rowData["squarfeet"].toFixed(2);
                     doorSqft.push(sqft)
                     var row = $("<tr />")
                     $("#doorTable").append(row);
@@ -214,7 +214,7 @@ function kattlaQuotationExists(total) {
                     }
                 }
                 function drawRow(rowData) {
-                    var qubic = rowData["quantity"] * rowData["qubic"]
+                    var qubic = rowData["quantity"] * rowData["qubic"].toFixed(2);
                     kattlaQubic.push(qubic)
                     kattlaQty.push(rowData['quantity'])
                     var row = $("<tr />")
@@ -268,7 +268,7 @@ function windowQuotationExists(total) {
                     }
                 }
                 function drawRow(rowData) {
-                    var sqft = rowData["quantity"] * rowData["squarfeet"] 
+                    var sqft = rowData["quantity"] * rowData["squarfeet"].toFixed(2); 
                     windowSqft.push(sqft)
                     windowQty.push(rowData['quantity'])
                     var row = $("<tr />")
@@ -324,7 +324,7 @@ function customKattlaQuotationExists(total) {
                     }
                 }
                 function drawRow(rowData) {
-                    var qubic = rowData["quantity"] * rowData["qubic"]
+                    var qubic = rowData["quantity"] * rowData["qubic"].toFixed(2);
                     sizesQubic.push(qubic)
                     customKattlaQty.push(rowData["quantity"])
                     var row = $("<tr />")
