@@ -198,7 +198,7 @@ function doorQuotationExists() {
                     else{
                         remark = 'No remark'
                     }
-                    var sqft = rowData["quantity"] * rowData["squarfeet"]
+                    var sqft = rowData["quantity"] * rowData["squarfeet"].toFixed(2);
                     var status = '<label class="badge badge-info">open</label>'
                     if (rowData.status == 'open') {
 
@@ -314,7 +314,7 @@ function kattlaQuotationExists() {
                     var url 
                     var remark 
                     var factory
-                    var qubic = rowData['quantity'] * rowData['qubic']
+                    var qubic = rowData['quantity'] * rowData['qubic'].toFixed(2);
                     if(rowData.image['medium_square_crop'] != undefined){
                         url = rowData.image['medium_square_crop']
                     } 
@@ -472,7 +472,7 @@ function windowQuotationExists() {
                     else{
                         remark = 'No remark'
                     }
-                    var sqft = rowData['quantity'] * rowData['squarfeet']
+                    var sqft = rowData['quantity'] * rowData['squarfeet'].toFixed(2);
                     var status = '<label class="badge badge-info">open</label>'
                     if (rowData.status == 'open') {
 
@@ -626,7 +626,7 @@ function customKattlaQuotationExists() {
                     else{
                         remark = 'No remark'
                     }
-                    var qubic = rowData['quantity'] * rowData['qubic']
+                    var qubic = rowData['quantity'] * rowData['qubic'].toFixed(2);
                     var status = '<label class="badge badge-info">open</label>'
                     if (rowData.status == 'open') {
 

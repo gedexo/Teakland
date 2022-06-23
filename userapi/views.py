@@ -1,3 +1,4 @@
+from asyncio import trsock
 from datetime import datetime
 from email.errors import NoBoundaryInMultipartDefect
 from email.policy import HTTP
@@ -5,6 +6,7 @@ import imp
 import json
 from mmap import PROT_READ
 from pickle import TRUE
+from posixpath import split
 from statistics import quantiles
 from traceback import print_tb
 from django import views
@@ -27,10 +29,10 @@ from .serializer import CategorySerializer, ExpenceSerializer,ViewCategorySerial
                         JobCardAndInvoieHelperSerializer,JobCardSerializer,InvoiceSerializer,PaymentSerializer,ViewJobCardSerializer,ViewInvoiceSerializer,GetPaymentSerializer,GetExpencesSerializer,\
                             OtherProductsQuotationSeralizer,GetOtherProductsQuotationSeralizer
                                                                                                                                                                                                 
-from . permissions import FeedBackPermission,JobCardPermission,BasicUserPermission
+from . permissions import FeedBackPermission,JobCardPermission,BasicUserPermission,QuotationPermissions
 from rest_framework.exceptions import ValidationError
 from . unit_price import doorunitprice, kattlaunitprice,windowunitprice,customkattlarunitprice
-from . jobcard_helper import recievedCash, validatecash
+from . jobcard_helper import recievedCash, validatecash,quotationno
 import datetime 
 from django.utils import timezone
 import itertools
@@ -98,6 +100,10 @@ class SalesMan(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
+        branch = self.request.query_params.get('branch')
+        if branch != None:
+            print(branch)
+            return self.queryset.filter(user = branch)
         return self.queryset.filter(user = self.request.user.user)
     
     def perform_create(self, serializer):
@@ -309,7 +315,7 @@ class GetOtherSaleAmount(APIView):
         return Response(status.HTTP_404_NOT_FOUND)
 
 class JointType(viewsets.ModelViewSet):
-    '''Endpoint to create and list rowmaterials'''
+    '''Endpoint to create and list jointtype'''
     queryset = joint_type.objects.all()
     serialier_class = JointTypeSerializer
     permission_classes = (IsAuthenticated,)
@@ -373,20 +379,24 @@ class GetQuatationNumber(APIView):
     permission_classes = (IsAuthenticated,)
     
     def get(self,request):
-        if quotation.objects.all().exists():
-            quotationId = quotation.objects.latest('pk').pk+1    
+        if quotation.objects.filter(user=self.request.user.user).exists():
+            quotationId = quotation.objects.filter(user=self.request.user.user).latest('pk')
+            quotataionNumber = quotationno(self.request.user.user.branch_key,quotationId.quoation_number)
+            return Response({'quatation_number':quotataionNumber})
         else:
-            quotationId = 1
-        quotationNumber = str('TK0')+str(quotationId)
-        return Response({'quatation_number':quotationNumber})
+            quotataionNumber = quotationno(self.request.user.user.branch_key,0)
+            return Response({'quatation_number':quotataionNumber})
     
 class user_create_quotation(viewsets.ModelViewSet):
     queryset = quotation.objects.all()
     serializer_class = quotationSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [BasicUserPermission,]
     
     def get_queryset(self):
         quotation = self.request.query_params.get('quotation_number')
+        factory = self.request.query_params.get('factory')
+        print(factory)
+        
         if quotation != None:
             if self.queryset.filter(quoation_number=quotation).exists():
                 return self.queryset.filter(quoation_number=quotation)
@@ -394,17 +404,19 @@ class user_create_quotation(viewsets.ModelViewSet):
                 res = ValidationError({'message':'There is no qoutaion in this qoutationnumber'})
                 res.status_code = 400
                 raise res
+        elif factory != None:
+            return self.queryset.all() 
         else:
             return self.queryset.filter(user = self.request.user.user).order_by('-id')
     
     def perform_create(self, serializer):
         if serializer.is_valid:
-            if quotation.objects.all().exists():
-                quotationId = quotation.objects.latest('pk').pk+1
+            if quotation.objects.filter(user=self.request.user.user).exists():
+                quotationId = quotation.objects.filter(user=self.request.user.user).latest('pk')
+                quotataionNumber = quotationno(self.request.user.user.branch_key,quotationId.quoation_number)
             else:
-                quotationId = 1
-            quotationNumber = str('TK0')+str(quotationId)
-            serializer.save(user=self.request.user.user,quoation_number=quotationNumber,created_by=self.request.user)
+                quotataionNumber = quotationno(self.request.user.user.branch_key,0)
+            serializer.save(user=self.request.user.user,quoation_number=quotataionNumber,created_by=self.request.user)
     
     def perform_update(self, serializer):
         return super().perform_update(serializer)
@@ -420,7 +432,8 @@ class user_create_quotation(viewsets.ModelViewSet):
 class CreateQuotationForDoor(viewsets.ModelViewSet):
     queryset = quotation_door_item.objects.all()
     serializer_class = CreateQuatationDoorSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [QuotationPermissions]
+    
     def perform_create(self, serializer):
         if serializer.is_valid():
             joint = joint_type.objects.get(id=self.request.POST['joint'])
@@ -436,9 +449,10 @@ class CreateQuotationForDoor(viewsets.ModelViewSet):
             return self.queryset.filter(quotation = quotationNo)
         else:
             return self.queryset.all()
+        
     def perform_update(self, serializer):
-        print(self.request.POST)
-        return super().perform_update(serializer)   
+        return super().perform_update(serializer)
+       
     def destroy(self, request, *args, **kwargs):
         quotationId = self.queryset.get(id=self.kwargs['pk'])
         if jobcard.objects.filter(quotation=quotationId.quotation).exists():
@@ -456,7 +470,7 @@ class CreateQuotationForDoor(viewsets.ModelViewSet):
 class CreateQuotationForKattla(viewsets.ModelViewSet):
     queryset = quotation_kattla_item.objects.all()
     serializer_class = CreateQuatationKattlaSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [QuotationPermissions]
     def get_queryset(self):
         quotationNo = self.request.query_params.get('quotation_no')
         factory = self.request.query_params.get('factory')
@@ -484,7 +498,7 @@ class CreateQuotationForKattla(viewsets.ModelViewSet):
 class CreateQuotationForWindow(viewsets.ModelViewSet):
     queryset = quotation_window_item.objects.all()
     serializer_class = CreateQuatationWindowSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [QuotationPermissions]
     
     def get_queryset(self):
         quotationNo = self.request.query_params.get('quotation_no')
@@ -513,7 +527,7 @@ class CreateQuotationForWindow(viewsets.ModelViewSet):
 class CreateQuotationForCustomKattla(viewsets.ModelViewSet):
     queryset = quotation_customkattla_item.objects.all()
     serializer_class = CreateQuatationCustomKattlaSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [QuotationPermissions]
     
     def get_queryset(self):
         quotationNo = self.request.query_params.get('quotation_no')
@@ -543,7 +557,7 @@ class CreateQuotationForCustomKattla(viewsets.ModelViewSet):
 class CreateQuotationForOtherProducts(viewsets.ModelViewSet):
     queryset = other_products_item.objects.all()
     serializer_class = OtherProductsQuotationSeralizer
-    permission_classes = [BasicUserPermission,]
+    permission_classes = [QuotationPermissions]
     
     def get_queryset(self):
         quotationNo = self.request.query_params.get('quotation_no')
@@ -608,6 +622,7 @@ class JobCardAndInvoice(APIView):
     serializer_class=JobCardAndInvoieHelperSerializer
 
     def post(self, request, format=None):
+                    
         serializer = JobCardAndInvoieHelperSerializer(data=request.data)
         if serializer.is_valid():
             quotationno=serializer.data['quotationno']
@@ -620,41 +635,42 @@ class JobCardAndInvoice(APIView):
             jobcardno = ''
             invoiceno = ''
             quotationObj = quotation.objects.get(id=quotationno)
+            if quotationObj.created_by == self.request.user or self.request.user.is_superuser == True or self.request.user.is_branchhead == True:
+                if a > 0 and recievedcash > 0:
+                    quotatationNo = quotation.objects.get(id=quotationno)
+                    jobcardno = quotatationNo.quoation_number
+                
+                    jobcard_serializer= JobCardSerializer(data=request.data)
+                    if jobcard_serializer.is_valid():
+                        jobcard_serializer.save(created_date=datetime.datetime.now(tz=timezone.utc),estimation_amount=estimationAmount,user = users,jobcardno=jobcardno,quotation=quotationObj,expected_delivery=excepted_delivery,created_user=createduser)
 
-            if a > 0 and recievedcash > 0:
-                quotatationNo = quotation.objects.get(id=quotationno)
-                jobcardno = quotatationNo.quoation_number
-               
-                jobcard_serializer= JobCardSerializer(data=request.data)
-                if jobcard_serializer.is_valid():
-                    jobcard_serializer.save(created_date=datetime.datetime.now(tz=timezone.utc),estimation_amount=estimationAmount,user = users,jobcardno=jobcardno,quotation=quotationObj,expected_delivery=excepted_delivery,created_user=createduser)
+                    if invoice.objects.all().exists():
+                        invoiceId = invoice.objects.latest('pk').pk+1
+                        invoiceno = str('TKIN0')+str(invoiceId)
+                    else:
+                        invoiceId = 1
+                        invoiceno = str('TKIN0')+str(invoiceId)
+                    Invoice_serializer= InvoiceSerializer(data=request.data)
+                    if Invoice_serializer.is_valid():
+                        Invoice_serializer.save(user = users,invoiceno=invoiceno,quotation=quotationObj,created_user=createduser)
 
-                if invoice.objects.all().exists():
-                    invoiceId = invoice.objects.latest('pk').pk+1
-                    invoiceno = str('TKIN0')+str(invoiceId)
+                    quotationStatus = quotation.objects.get(id=quotationno)
+                    quotationStatus.status = 'onprocess'
+                    quotationStatus.save()
+                    return Response({'jobcard':jobcardno,'invoice':invoiceno},status.HTTP_201_CREATED)
+                elif recievedcash > a :
+                    return Response({'recieved cash greater than total amount':'msg'},status.HTTP_409_CONFLICT)
                 else:
-                    invoiceId = 1
-                    invoiceno = str('TKIN0')+str(invoiceId)
-                Invoice_serializer= InvoiceSerializer(data=request.data)
-                if Invoice_serializer.is_valid():
-                    Invoice_serializer.save(user = users,invoiceno=invoiceno,quotation=quotationObj,created_user=createduser)
-
-                quotationStatus = quotation.objects.get(id=quotationno)
-                quotationStatus.status = 'onprocess'
-                quotationStatus.save()
-                return Response({'jobcard':jobcardno,'invoice':invoiceno},status.HTTP_201_CREATED)
-            elif recievedcash > a :
-                return Response({'recieved cash greater than total amount':'msg'},status.HTTP_409_CONFLICT)
+                    return Response({'recieved amount less than 1':'msg'},status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'recieved amount less than 1':'msg'},status.HTTP_400_BAD_REQUEST)
-
+                return Response({'msg':'You dont have permission for this action'},status.HTTP_403_FORBIDDEN)
         else:
             return Response({'msg':serializer.errors},status.HTTP_406_NOT_ACCEPTABLE)
 
 class Payments(viewsets.ModelViewSet):
     queryset = payments.objects.all()
     serialier_class = PaymentSerializer
-    permission_classes = [JobCardPermission]  
+    permission_classes = [QuotationPermissions]  
     
     def get_queryset(self):
         quotation = self.request.query_params.get('quotation_number')

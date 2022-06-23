@@ -1,6 +1,4 @@
-import re
 from django.shortcuts import render
-
 
 def log_in(request):
     return render (request,'official/login.html')
@@ -94,3 +92,6 @@ def expense_category(request):
 
 def income(request):
     return render(request, 'official/income.html')
+
+def branch_details(request):
+    return render(request,'official/branch-details.html')

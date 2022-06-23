@@ -2,7 +2,6 @@ from cgitb import reset
 from nis import cat
 import re
 from sqlite3 import apilevel
-from stat import FILE_ATTRIBUTE_ARCHIVE
 from traceback import print_tb
 from django import views
 import json
@@ -21,8 +20,8 @@ from . serializer import UserSerializer,DoorSerializer,CustUserSerializer,GetDoo
         CustomKattlaSerializer,GetCustomKattlaSerializer,GetQuatationCustomKattlaSerializer,GalleryDoorSerializer,GalleryKattlaSerializer,GalleryWindowSerializer,\
             GalleryCustomKattlaSerializer,FactorySerializer,BankSerializer,CreateFactorySerailizer,CreateQuotationSerializer,FilterQoutationSerializer,UpdateJobCardSerializer,AdminUser,\
                 OtherProductSerializer,GetOtherProductSerializer,ExpenceCategorySerializer,PaymentSerializer
-from . models import payments, users,window,kattla,door,row_materials,joint_type,customer,quotation,quotation_door_item,quotation_window_item,quotation_kattla_item,custom_kattla,\
-    quotation_customkattla_item,feedback,factory,bank,jobcard,invoice,qoutation_feedback,others,other_products_item,expence_category,payments
+from . models import expences, payments, users,window,kattla,door,row_materials,joint_type,customer,quotation,quotation_door_item,quotation_window_item,quotation_kattla_item,custom_kattla,\
+    quotation_customkattla_item,feedback,factory,bank,jobcard,invoice,qoutation_feedback,others,other_products_item,expence_category,payments,salesman
 from userapi .serializer import InvoiceSerializer, ViewJobCardSerializer,ViewInvoiceSerializer
 from django.contrib.auth import get_user_model,authenticate
 from rest_framework.exceptions import ValidationError
@@ -33,6 +32,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from datetime import datetime, timedelta
 from userapi. jobcard_helper import validatecash, recievedCash
 from django.db.models import Sum
+from django.contrib.auth.hashers import check_password
+
 # Create your views here.
 
 class CreateAdminUserView(generics.CreateAPIView):
@@ -303,7 +304,6 @@ class OthersProducts(viewsets.ModelViewSet):
         return self.queryset.all().order_by('rowmaterial')
     
     def get_serializer_class(self):
-        print(self.action)
         if self.action == 'list' or self.action == 'retrieve':
             return GetOtherProductSerializer
         return OtherProductSerializer 
@@ -350,6 +350,7 @@ class Quotations(viewsets.ModelViewSet):
     
     def get_queryset(self):
         quotation = self.request.query_params.get('quotation_number')
+        branch =  self.request.query_params.get('branch')
         status = self.request.query_params.get('status')
         if quotation != None:
             if self.queryset.filter(quoation_number=quotation).exists():
@@ -360,6 +361,8 @@ class Quotations(viewsets.ModelViewSet):
                 raise res
         elif status != None:
             return self.queryset.filter(status = status)
+        elif branch != None:
+            return self.queryset.filter(user=branch)
         else:
             return self.queryset.order_by('-id')
 
@@ -373,9 +376,11 @@ class Quotations(viewsets.ModelViewSet):
 class UserPermission(APIView):
     permission_classes = (IsAuthenticated,IsAdminUser)
     def put(self, request, format=None):
+        print(request.POST)
         user = get_user_model()
         changeStatus = user.objects.get(id = self.request.POST['id'])
         changeStatus.is_active = self.request.POST['status']
+        changeStatus.is_branchhead = self.request.POST['is_branchhead']
         changeStatus.save()
         return Response({},status.HTTP_200_OK)
     
@@ -570,21 +575,19 @@ class GetUser(APIView):
     def get(self,request,format=None):
         branchName = ''
         if self.request.user.is_superuser == False and self.request.user.user != None:
-            print('11')
             branchName = self.request.user.user.name
         elif self.request.user.is_superuser == True and self.request.user.user != None:
-            print('222')
             branchName = self.request.user.user.name
         elif self.request.user.factory != None and self.request.user.is_superuser == True:
-            print('333')
             branchName = self.request.user.factory.place
         elif self.request.user.factory != None:
-            print('444')
             branchName = self.request.user.factory.place
         user = request.user.email
         userSplit = user.split('@')
         data = userSplit[0]
-        return Response({'user':data,'email':user,'branch':branchName})
+        adminUser = self.request.user.is_superuser
+        isBranchhead = self.request.user.is_branchhead
+        return Response({'user':data,'email':user,'branch':branchName,'is_admin':adminUser,'is_branchhead':isBranchhead})
 
 class Logout(APIView):
     permission_classes = [BasicUserPermission,]
@@ -661,7 +664,6 @@ class Income(viewsets.ModelViewSet):
         endDate = self.request.query_params.get('enddate')
         branch = self.request.query_params.get('branch')
         if startDate != None:
-            print('1111')
             branches = json.loads(branch)
             return self.queryset.filter(date__gte=startDate,date__lte=endDate,quotation__user__in=branches)
         return self.queryset.all()
@@ -673,7 +675,6 @@ class Income(viewsets.ModelViewSet):
 class UpdateUser(APIView):
     permission_classes = (IsAuthenticated,IsAdminUser)
     def get(self,request,pk,category,format=None):
-        print(pk,category)
         updateUser = get_user_model().objects.get(id=self.request.user.id)
         if category == 'branch':
             branch = users.objects.get(id=pk)
@@ -686,3 +687,159 @@ class UpdateUser(APIView):
             updateUser.user = None
             updateUser.save()
         return Response(status.HTTP_200_OK)    
+    
+class GetBranchQuotationDetails(APIView):
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    
+    def get(self,request,format=None):
+        branch = self.request.query_params.get('branch_id')
+        startDate = self.request.query_params.get('startdate')
+        endDate = self.request.query_params.get('enddate')
+        salesmandata = []
+        salesman = []
+        lastMonth = datetime.today() - timedelta(days=30)
+        quotationApprovedstatus = ['onprocess','pending','completed','partiallycompleted','delivered']
+        totalQuotation = quotation.objects.filter(user=branch).count()
+        approvedQuotation = quotation.objects.filter(user=branch,status__in=quotationApprovedstatus).count()
+        totalIncome = payments.objects.filter(quotation__user=branch).aggregate(sum=Sum('amount'))
+        totalExpence = expences.objects.filter(user=branch).aggregate(sum=Sum('amount'))
+        totalIncomeLastMonth = payments.objects.filter(date__gte = lastMonth,quotation__user=branch).aggregate(sum=Sum('amount'))
+        totalExpenceLastMonth = expences.objects.filter(date__gte = lastMonth,user=branch).aggregate(sum=Sum('amount'))
+        
+        
+        quotationsProgress = quotation.objects.filter(user=branch).aggregate(
+            open=Count('pk',filter=Q(status="open")),
+            onprocess=Count('pk',filter=Q(status="onprocess")),
+            pending=Count('pk',filter=Q(status='pending')),
+            completed=Count('pk',filter=Q(status='completed')),
+            partilallycompleted=Count('pk',filter=Q(status='partiallycompleted')),
+            delivered=Count('pk',filter=Q(status='delivered'))
+            )
+        jobcardProgress = jobcard.objects.filter(user=branch).aggregate(
+            open=Count('pk',filter=Q(status="open")),
+            onprocess=Count('pk',filter=Q(status="onprocess")),
+            pending=Count('pk',filter=Q(status='pending')),
+            completed=Count('pk',filter=Q(status='completed')),
+            partilallycompleted=Count('pk',filter=Q(status='partiallycompleted')),
+            delivered=Count('pk',filter=Q(status='delivered'))
+            )
+        getSalesMan = quotation.objects.filter(user=branch)
+        for i in getSalesMan: 
+            salesman.append(i.created_by.id)
+        salesman  = get_user_model().objects.filter(id__in=salesman)
+        for i in salesman:
+            quotations = quotation.objects.filter(user=branch,created_by = i.id).count()
+            jobcards = jobcard.objects.filter(user=branch,quotation__created_by = i.id).count()
+            salesManTotalIncome = payments.objects.filter(quotation__created_by = i.id).aggregate(sum=Sum('amount'))
+            salesManTotalExpence = expences.objects.filter(created_user = i.id).aggregate(sum=Sum('amount'))
+            name = str(i.first_name) +' '+str(i.last_name)
+            if i.first_name == '':
+                name = i.email
+            data = {
+                'name':name,
+                'email':i.email,
+                'quotations':quotations,
+                'approved':jobcards,
+                'income':salesManTotalIncome,
+                'expence':salesManTotalExpence
+            }
+            salesmandata.append(data)
+        context = {
+            'totalquotations':totalQuotation,
+            'approved':approvedQuotation,
+            'totalincome':totalIncome,
+            'totalexpence':totalExpence,
+            'incomelastmont':totalIncomeLastMonth,
+            'expencelastmont':totalExpenceLastMonth,
+            'progress':quotationsProgress,
+            'jobcardProgress':jobcardProgress,
+            'salesman':salesmandata
+        }
+        return Response(context,status.HTTP_200_OK)
+    
+class GetBranchQuotationDetails(APIView):
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def get(self,request,format=None):
+        branch = self.request.query_params.get('branch_id')
+        branchName = users.objects.get(id=branch).name
+        startDate = self.request.query_params.get('startdate')
+        endDate = self.request.query_params.get('enddate')
+        if startDate == None:
+            startDate = '2021-11-22'
+        if endDate == None:
+            endDate = datetime.now()
+        salesmandata = []
+        salesman = []
+        lastMonth = datetime.today() - timedelta(days=30)
+        quotationApprovedstatus = ['onprocess','pending','completed','partiallycompleted','delivered']
+        totalQuotation = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).count()
+        approvedQuotation = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch,status__in=quotationApprovedstatus).count()
+        totalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__user=branch).aggregate(sum=Sum('amount'))
+        totalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).aggregate(sum=Sum('amount'))
+        totalIncomeLastMonth = payments.objects.filter(date__gte = lastMonth,quotation__user=branch).aggregate(sum=Sum('amount'))
+        totalExpenceLastMonth = expences.objects.filter(date__gte = lastMonth,user=branch).aggregate(sum=Sum('amount'))
+        
+        
+        quotationsProgress = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).aggregate(
+            open=Count('pk',filter=Q(status="open")),
+            onprocess=Count('pk',filter=Q(status="onprocess")),
+            pending=Count('pk',filter=Q(status='pending')),
+            completed=Count('pk',filter=Q(status='completed')),
+            partilallycompleted=Count('pk',filter=Q(status='partiallycompleted')),
+            delivered=Count('pk',filter=Q(status='delivered'))
+            )
+        jobcardProgress = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch).aggregate(
+            open=Count('pk',filter=Q(status="open")),
+            onprocess=Count('pk',filter=Q(status="onprocess")),
+            pending=Count('pk',filter=Q(status='pending')),
+            completed=Count('pk',filter=Q(status='completed')),
+            partilallycompleted=Count('pk',filter=Q(status='partiallycompleted')),
+            delivered=Count('pk',filter=Q(status='delivered'))
+            )
+        getSalesMan = quotation.objects.filter(user=branch)
+        for i in getSalesMan: 
+            salesman.append(i.created_by.id)
+        salesman  = get_user_model().objects.filter(id__in=salesman)
+        for i in salesman:
+            quotations = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch,created_by = i.id).count()
+            jobcards = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch,quotation__created_by = i.id).count()
+            salesManTotalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__created_by = i.id).aggregate(sum=Sum('amount'))
+            salesManTotalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,created_user = i.id).aggregate(sum=Sum('amount'))
+            name = str(i.first_name) +' '+str(i.last_name)
+            if i.first_name == '':
+                name = i.email
+            data = {
+                'name':name,
+                'email':i.email,
+                'quotations':quotations,
+                'approved':jobcards,
+                'income':salesManTotalIncome,
+                'expence':salesManTotalExpence
+            }
+            salesmandata.append(data)
+        context = {
+            'branchname':branchName,
+            'totalquotations':totalQuotation,
+            'approved':approvedQuotation,
+            'totalincome':totalIncome,
+            'totalexpence':totalExpence,
+            'incomelastmont':totalIncomeLastMonth,
+            'expencelastmont':totalExpenceLastMonth,
+            'progress':quotationsProgress,
+            'jobcardProgress':jobcardProgress,
+            'salesman':salesmandata
+        }
+        return Response(context,status.HTTP_200_OK)
+    
+    
+class CheckPassword(APIView):
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    def post(self,request,format=None):
+        user = self.request.query_params.get('userid')
+        changePassword = get_user_model().objects.get(id=user)
+        print(request.POST['password'])
+        changePassword.set_password(request.POST['password'])
+        changePassword.save()
+        return Response({'msg':'password updated successfully'})
+
+        

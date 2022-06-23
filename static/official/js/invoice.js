@@ -5,6 +5,7 @@ $(document).ready(function () {
         url: "/officialapi/router/invoice/",
         type: "GET",
         beforeSend: function (xhr) {
+            $("#invoiceTable").addClass('table-loader');
             xhr.setRequestHeader(
                 "Authorization",
                 "Bearer " + localStorage.getItem("adminaccesstoken")
@@ -40,6 +41,8 @@ $(document).ready(function () {
             }
         }
     });
+    $("#invoiceTable").removeClass('table-loader');
+
 });
 
 

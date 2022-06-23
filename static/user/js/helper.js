@@ -143,9 +143,14 @@ function loggedUser(){
             );
         },
         statusCode: {
-            200: function (response) {              
+            200: function (response) {        
+                
                $("#userName").html(response['user'])
                $("#branchName").html(response['branch'])
+               if (response.is_admin == false && response.is_branchhead == false){
+                   $("#incomeViewDiv").hide();
+                   $("#expenceViewDiv").hide();
+               }
             }
         }
     })

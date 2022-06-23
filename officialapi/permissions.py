@@ -31,12 +31,13 @@ class BasicUserPermission(permissions.BasePermission):
 
 class OthersProductPermission(permissions.BasePermission):
       def has_permission(self, request, view):
+        print('#'*10)
         if request.method in ['POST']  or request.method in ['DELETE'] or request.method in['UPDATE']:
             if request.user.is_superuser:
                 return True
         else:
             if request.user.is_authenticated or request.user.is_superuser:
                 return True
-        
+            
 
         

@@ -1,9 +1,6 @@
 $(window).on('load', function () {
     countQuotation()
     jobcardStatus()
-    setTimeout(function () {
-        swingData()
-    }, 100);
 });
 
 
@@ -11,6 +8,7 @@ function countQuotation() {
     $.ajax({
         url: "/officialapi/dashboard/",
         type: "GET",
+        async:false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -19,7 +17,6 @@ function countQuotation() {
         },
         statusCode: {
             200: function (response) {
-                console.log(response)
                 $("#totalQuotation").html(response['quotation'])
                 $("[id=quotationLastMonth").html(response.countstatus['lastmonth'])
                 $("[id=qtOpen]").html(response.countstatus['open'])
@@ -34,6 +31,7 @@ function countQuotation() {
             }
         }
     });
+    swingData()
 }
 
 function jobcardStatus() {
@@ -55,9 +53,10 @@ function jobcardStatus() {
                     }
                 }
                 function drawRow(rowData) {
+                    var name = '<a href="/official/branch-details/?branch_id='+rowData['id']+'">'+rowData['name']+'</a>'
                     var row = $("<tr />")
                     $("#jobCardStatusTable").append(row);
-                    row.append($("<td>" + rowData["name"] + "</td>"));
+                    row.append($("<td>" + name + "</td>"));
                     row.append($("<td>" + rowData["open"] + "</td>"));
                     row.append($("<td>" + rowData["onprocess"] + "</td>"));
                     row.append($("<td>" + rowData["pending"] + "</td>"));
@@ -65,8 +64,6 @@ function jobcardStatus() {
                     row.append($("<td>" + rowData["delivered"] + "</td>"));
 
                 }
-
-
             }
         }
     });
