@@ -796,15 +796,18 @@ class GetBranchQuotationDetails(APIView):
             partilallycompleted=Count('pk',filter=Q(status='partiallycompleted')),
             delivered=Count('pk',filter=Q(status='delivered'))
             )
-        getSalesMan = quotation.objects.filter(user=branch)
+        getSalesMan = get_user_model().objects.filter(user=branch)
+        adminuser = get_user_model().objects.filter(is_superuser=True)
+        for j in adminuser:
+            salesman.append(j.id)
         for i in getSalesMan: 
-            salesman.append(i.created_by.id)
+            salesman.append(i.id)
         salesman  = get_user_model().objects.filter(id__in=salesman)
         for i in salesman:
             quotations = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch,created_by = i.id).count()
             jobcards = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch,quotation__created_by = i.id).count()
-            salesManTotalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__created_by = i.id).aggregate(sum=Sum('amount'))
-            salesManTotalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,created_user = i.id).aggregate(sum=Sum('amount'))
+            salesManTotalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__created_by = i.id,quotation__user=branch).aggregate(sum=Sum('amount'))
+            salesManTotalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,created_user = i.id,user=branch).aggregate(sum=Sum('amount'))
             name = str(i.first_name) +' '+str(i.last_name)
             if i.first_name == '':
                 name = i.email

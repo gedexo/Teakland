@@ -755,8 +755,8 @@ class Expences(viewsets.ModelViewSet):
         endDate = self.request.query_params.get('enddate')
         category = self.request.query_params.get('category')
         branch = self.request.query_params.get('branch')
-        
-        if self.request.user.is_superuser == True:
+        status = self.request.query_params.get('status')
+        if self.request.user.is_superuser == True and status == None:
             if startDate != None:
                 categorys = json.loads(category)
                 branches = json.loads(branch)
@@ -764,7 +764,9 @@ class Expences(viewsets.ModelViewSet):
             return self.queryset.all()
         elif startDate != None and endDate != None:
             return self.queryset.filter(date__gte = startDate, date__lte = endDate,user=self.request.user.user)
-        return self.queryset.filter(user=self.request.user.user)
+        elif status == 'branch':
+            print(self.request.user.user.name)
+            return self.queryset.filter(user=self.request.user.user)
     
     def perform_create(self, serializer):
         serializer.save(user = self.request.user.user, created_user= self.request.user)

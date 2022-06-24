@@ -20,6 +20,8 @@ $(document).ready(function () {
                     }
                 }
                 function drawRow(rowData) {
+                    console.log(rowData.created_user['first_name'])
+
                     var tableData = [];
                     var billBalance 
                     balance  = rowData['totalAmount'] - rowData['recievedAmount']
@@ -30,7 +32,14 @@ $(document).ready(function () {
                         billBalance = balance
 
                     }
-                    createdBy = rowData.created_user['first_name'] +' ' +rowData.created_user['last_name']
+                    var createdBy
+                    if(rowData.created_user['first_name'] != '')
+                    {
+                        createdBy = rowData.created_user['first_name']  +' ' +rowData.created_user['last_name'] 
+                    }
+                    else{
+                        createdBy=rowData.created_user['email'] ;
+                    }
                     var recievedCash = '<a href="#" onmouseover="payments_recieved('+rowData.quotation['id']+')"  class="recieved-amount" id="recievedAmounts">'+rowData['recievedAmount']+'</a>'
                     balance  = rowData['totalAmount'] - rowData['recievedAmount']
                     table = $("#invoiceTable").DataTable();

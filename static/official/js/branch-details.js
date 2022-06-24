@@ -20,7 +20,6 @@ function branchCounts(urls) {
             swal({
                 title:"", 
                 text:"Loading...",
-                icon: "https://www.boasnotas.com/img/loading2.gif",
                 buttons: false,      
                 closeOnClickOutside: false,
             });

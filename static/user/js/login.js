@@ -1,5 +1,44 @@
 var accessToken;
 var refreshToken;
+
+
+$(document).ready(function () {
+    if (localStorage.getItem("useraccesstoken") != null) {
+        if (localStorage.getItem("userrefreshtoken") != null) {
+            checkUserlgn()
+        }
+        else {
+            
+        }
+    }
+    else {
+        
+    }
+});
+
+function checkUserlgn() {
+    $.ajax({
+        url: "/userapi/check-user/",
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("useraccesstoken")
+            );
+        },
+        statusCode: {
+            200: function () {
+                window.location = "/dashboard/"
+
+            },
+            400: function () {
+            },
+            401: function (response) {
+            }
+        }
+    })
+}
+
 $("#loginForm").validate({
     rules: {
         email: {

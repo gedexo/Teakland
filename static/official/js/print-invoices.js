@@ -102,7 +102,14 @@ function quotatationDetails() {
                 $("#qoutationDate").html('Date: '+dateQt)
                 $("#qoutationUser").html('Branch: '+response[0].user['name'])
                 $("#qoutationRemark").html(response[0]['remark'])
-                salesman = response[0].created_by['first_name']+' '+ response[0].created_by['last_name']
+                var salesman
+                if(response[0].created_by['first_name'] != '')
+                {
+                    salesman = response[0].created_by['first_name']  +' ' +response[0].created_by['last_name'] 
+                }
+                else{
+                    salesman=response[0].created_by['email'] ;
+                }
                 $("#qoutationSalesman").html(salesman)
                 if (response[0].user['phonenumber'] != null){
                     $("#qoutationSalesmanContact").html(response[0].user['phonenumber'])

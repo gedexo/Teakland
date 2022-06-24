@@ -1,5 +1,19 @@
+$("#quatationsTable").DataTable({
+    "columnDefs": [
+        { "orderable": false, "targets": 0 },
+        { "orderable": false, "targets": 1 },
+        { "orderable": false, "targets": 2 },
+        { "orderable": false, "targets": 3 },
+        { "orderable": false, "targets": 4 },
+        { "orderable": false, "targets": 5 },
+        { "orderable": false, "targets": 6 },
+        { "orderable": false, "targets": 7 },
+        { "orderable": false, "targets": 8 },
+        { "orderable": false, "targets": 9 },
+        { "orderable": false, "targets": 10 },
 
-$("#quatationsTable").DataTable();                                                             
+      ]
+});                                                             
 var searchParams = new URLSearchParams(window.location.search)
 var statusFromUrl = searchParams.get('status')
 function total(doorTotal,kattlaTotal,windowTotal,customKattlaTotal,othersTotal,tax) {
@@ -80,6 +94,7 @@ $(document).ready(function () {
                     }
                 }
                 function drawRow(rowData) {
+                    console.log(rowData['quoation_number']) 
                     var tableData = [];
                     var status =  '<label class="badge badge-info">open</label>'
                     var invoice 

@@ -1,6 +1,42 @@
 var accessToken;
 var refreshToken;
 checkUser()
+
+$(document).ready(function () {
+    if (localStorage.getItem("factoryaccesstoken") != null) {
+        if (localStorage.getItem("factoryrefreshtoken") != null) {
+            checkUserlgn()
+        }
+        else {
+        }
+    }
+    else {
+    }
+});
+
+function checkUserlgn() {
+    $.ajax({
+        url: "/factoryapi/check-user/",
+        type: "GET",
+        cache:false,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("factoryaccesstoken")
+            );
+        },
+        statusCode: {
+            200: function () {
+                window.location='/factory/jobcard/'
+            },
+            400: function () {
+            },
+            401: function (response) {
+            }
+        }
+    })
+}
+
 $("#loginForm").validate({
     rules: {
         email: {

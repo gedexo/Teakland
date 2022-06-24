@@ -34,7 +34,6 @@ function invoices(){
                     }
                 }
                 function drawRow(rowData) {
-
                     var tableData = [];
                     var billBalance 
                     var edit 

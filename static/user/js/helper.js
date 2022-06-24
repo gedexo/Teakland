@@ -1,6 +1,7 @@
 countDatas()
 loggedUser()
-
+$("#incomeViewDiv").hide();
+$("#expenceViewDiv").hide();
 $(document).ready(function () {
     if (localStorage.getItem("useraccesstoken") != null) {
         if (localStorage.getItem("userrefreshtoken") != null) {
@@ -144,12 +145,12 @@ function loggedUser(){
         },
         statusCode: {
             200: function (response) {        
-                
+                console.log(response)
                $("#userName").html(response['user'])
                $("#branchName").html(response['branch'])
-               if (response.is_admin == false && response.is_branchhead == false){
-                   $("#incomeViewDiv").hide();
-                   $("#expenceViewDiv").hide();
+               if (response.is_admin == true || response.is_branchhead == true){
+                   $("#incomeViewDiv").show();
+                   $("#expenceViewDiv").show();
                }
             }
         }
