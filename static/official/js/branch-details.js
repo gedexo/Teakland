@@ -37,7 +37,9 @@ function branchCounts(urls) {
                 $("#totalExpense").html(response.totalexpence['sum'])
                 $("#totalIncomeLastMonth").html(response.incomelastmont['sum'])
                 $("#totalExpenseLastMonth").html(response.expencelastmont['sum'])
-               
+                $("#pendingAmount").html(response['pendingamount'])
+                $("#pendingAmountLastMonth").html(response['pendingamountlastmonth'])
+
                 var row = $("<tr />")
                 $("#progressTable").append(row);
                 row.append($("<td>quotations progress</td>"));
@@ -73,6 +75,8 @@ function branchCounts(urls) {
                     row.append($("<td>" + response.salesman[i]["approved"] + "</td>"));
                     row.append($("<td>" + income + "</td>"));
                     row.append($("<td>" + expense+ "</td>"));
+                    row.append($("<td>" + response.salesman[i]["pendingamount"]+ "</td>"));
+
                 }
             
                 swal.close()

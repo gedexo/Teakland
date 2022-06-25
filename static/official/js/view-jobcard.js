@@ -215,7 +215,7 @@ function doorQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#doorJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#doorJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="Card image cap" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -342,7 +342,7 @@ function kattlaQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#kattlaJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#kattlaJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -486,7 +486,7 @@ function windowQuotationExists() {
                     else {
                         design = 'No'
                     }
-                    $("#windowJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#windowJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -616,7 +616,7 @@ function customKattlaQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#sizesJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#sizesJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -730,7 +730,7 @@ function othersQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#othersJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#othersJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <div class="card-body">\
                         <h5 class="card-title">Factory: <span id="othersFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\

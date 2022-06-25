@@ -778,7 +778,29 @@ class GetBranchQuotationDetails(APIView):
         totalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).aggregate(sum=Sum('amount'))
         totalIncomeLastMonth = payments.objects.filter(date__gte = lastMonth,quotation__user=branch).aggregate(sum=Sum('amount'))
         totalExpenceLastMonth = expences.objects.filter(date__gte = lastMonth,user=branch).aggregate(sum=Sum('amount'))
+        quotationCheck = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch)
+        quotationCheckLastMont = quotation.objects.filter(date__gte = lastMonth,user=branch)
         
+        quotationAmountTotal = []
+        quotationRecievedAmountTotal = []
+        quotationAmountLastMontTotal = []
+        quotationRecievedAmountLastMonthTotal = []
+        salesmanQuotationAmt = []
+        salesmanQuotationPendingAmt = []
+        
+        for i in quotationCheck:
+            a = validatecash(i.id)
+            quotationAmountTotal.append(a)
+            b = recievedCash(i.id)
+            quotationRecievedAmountTotal.append(b)
+        c = sum(quotationAmountTotal) - sum(quotationRecievedAmountTotal)
+        
+        for j in quotationCheckLastMont:
+            a = validatecash(j.id)
+            quotationAmountLastMontTotal.append(a)
+            b = recievedCash(j.id)
+            quotationRecievedAmountLastMonthTotal.append(b)
+        d = sum(quotationAmountLastMontTotal) - sum(quotationRecievedAmountLastMonthTotal)
         
         quotationsProgress = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).aggregate(
             open=Count('pk',filter=Q(status="open")),
@@ -802,22 +824,35 @@ class GetBranchQuotationDetails(APIView):
             salesman.append(j.id)
         for i in getSalesMan: 
             salesman.append(i.id)
+            
         salesman  = get_user_model().objects.filter(id__in=salesman)
+        
         for i in salesman:
+            salesmanQuotationAmt = []
+            salesmanQuotationPendingAmt = []
             quotations = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch,created_by = i.id).count()
+            quotationsTotal = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch,created_by = i.id)
             jobcards = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch,quotation__created_by = i.id).count()
             salesManTotalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__created_by = i.id,quotation__user=branch).aggregate(sum=Sum('amount'))
             salesManTotalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,created_user = i.id,user=branch).aggregate(sum=Sum('amount'))
             name = str(i.first_name) +' '+str(i.last_name)
+            email = i.email
             if i.first_name == '':
                 name = i.email
+            for x in quotationsTotal:
+                f = validatecash(x.id)
+                salesmanQuotationAmt.append(f)
+                g = recievedCash(x.id)
+                salesmanQuotationPendingAmt.append(g)
+            salesmanPendingAmt = sum(salesmanQuotationAmt)- sum(salesmanQuotationPendingAmt)
             data = {
                 'name':name,
-                'email':i.email,
+                'email':email,
                 'quotations':quotations,
                 'approved':jobcards,
                 'income':salesManTotalIncome,
-                'expence':salesManTotalExpence
+                'expence':salesManTotalExpence,
+                'pendingamount':salesmanPendingAmt
             }
             salesmandata.append(data)
         context = {
@@ -826,6 +861,8 @@ class GetBranchQuotationDetails(APIView):
             'approved':approvedQuotation,
             'totalincome':totalIncome,
             'totalexpence':totalExpence,
+            'pendingamount':c,
+            'pendingamountlastmonth':d,
             'incomelastmont':totalIncomeLastMonth,
             'expencelastmont':totalExpenceLastMonth,
             'progress':quotationsProgress,
