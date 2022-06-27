@@ -26,6 +26,7 @@ router.register('jobcard',views.JobCards)
 router.register('invoice',views.Invoices)
 router.register('payments',views.Payments)
 router.register('expences',views.Expences)
+router.register('issues',views.Issuses)
 
 urlpatterns = [
     path('router/',(include(router.urls))),

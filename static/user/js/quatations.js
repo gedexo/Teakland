@@ -81,7 +81,6 @@ function quotations(){
         },
         statusCode: {
             200: function (response) {
-                console.log(response)
                 table = $("#quatationsTable").DataTable();
                 table.clear()
                 table.draw()

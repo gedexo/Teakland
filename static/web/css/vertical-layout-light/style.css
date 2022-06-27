@@ -37038,7 +37038,7 @@ div.desc {
   left: -220px;
 }
 .invoice-pending-table{
-  left: -240px;
+  left: -329px;
 }
 
 .exportExcel{
@@ -37226,3 +37226,4 @@ div.desc {
 }
 
 
+.modal { overflow: auto !important; }

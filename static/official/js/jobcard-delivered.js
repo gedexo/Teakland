@@ -1,6 +1,6 @@
 $(document).ready(function () {
         $.ajax({
-        url: "/factoryapi/router/delivered-jobcard/",
+        url: "/factoryapi/router/delivered-jobcard/?is_admin=True",
         type: "GET",
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
@@ -10,6 +10,7 @@ $(document).ready(function () {
         },
         statusCode: {
             200: function (response) {
+                console.log(response)
                 drawTable(response);
                 function drawTable(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -33,11 +34,11 @@ $(document).ready(function () {
                         delivered_user =  rowData.delivered_user['first_name'] + rowData.delivered_user['last_name']
                     }
                     else{
-                        delivered_user = 'Anonymous'
+                        delivered_user =  'Anonymous'
                     }
                     table = $("#jobCardTable").DataTable();
                     var viewJobCard = '<a href="/official/view-job-card/?quotation_number='+rowData.quotation['id']+'&jobcard_number='+rowData['jobcardno']+'" id=' + rowData['id'] + ' onClick=getEditData('+rowData['id']+',this) class=""><i class="icofont-eye"></i></a>'
-                    tableData.push([rowData['created_date'],jobcard,rowData.quotation['quoation_number'],rowData.user['name'],rowData['completed_date'],delivered_user,status,viewJobCard])
+                    tableData.push([rowData['created_date'],jobcard,rowData.quotation['quoation_number'],rowData.user['name'],rowData['completed_date'],status,viewJobCard])
                     table.rows.add(tableData).draw();
                 }
             }

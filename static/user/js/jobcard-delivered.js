@@ -30,15 +30,16 @@ $(document).ready(function () {
                     var tableData = [];
 
                     var delivered_user 
-                    if (rowData.delivered_user != null){
-                        delivered_user =  rowData.delivered_user['first_name'] + rowData.delivered_user['last_name']
-                    }
-                    else{
-                        delivered_user = 'Anonymous'
-                    }
+                    // if (rowData.delivered_user != null){
+                    //     delivered_user =  rowData.delivered_user['first_name'] + rowData.delivered_user['last_name']
+                    // }
+                    // else{
+                    //     delivered_user = rowData.delivered_user['first_name']
+                    // }
                     table = $("#jobCardTable").DataTable();
+
                     var viewJobCard = '<a href="/jobcard-create/?quotation_number='+rowData.quotation['id']+'" id=' + rowData['id'] + ' onClick=getEditData('+rowData['id']+',this) class=""><i class="icofont-eye"></i></a>'
-                    tableData.push([rowData['created_date'],jobcard,rowData.quotation['quoation_number'],rowData.user['name'],rowData['completed_date'],delivered_user,status,view])
+                    tableData.push([rowData['created_date'],jobcard,rowData.quotation['quoation_number'],rowData.user['name'],rowData['completed_date'],status,viewJobCard])
                     table.rows.add(tableData).draw();
                 }
             }

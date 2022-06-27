@@ -95,3 +95,6 @@ def income(request):
 
 def branch_details(request):
     return render(request,'official/branch-details.html')
+
+def issues(request):
+    return render(request, 'official/issues.html')

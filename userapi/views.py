@@ -19,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, viewsets
 from rest_framework.response import Response 
 from officialapi.models import category, expences, kattla, others, payments,row_materials,quotation,joint_type,door,window,quotation_door_item,quotation_window_item,quotation_kattla_item ,salesman,customer,\
-    custom_kattla,quotation_customkattla_item,feedback,qoutation_feedback,jobcard,invoice,factory,expences,other_products_item
+    custom_kattla,quotation_customkattla_item,feedback,qoutation_feedback,jobcard,invoice,factory,expences,other_products_item,issues
 from .serializer import CategorySerializer, ExpenceSerializer,ViewCategorySerializer,SalesManSerializer,\
     CustomerSerializer,ViewCustomerSerializer,RowMaterialSerializer,DoorUnitPriceSerializer,quotationSerializer,JointTypeSerializer,DoorSerializer,\
         GetDoorsSerializer,WindowSerializer,GetWindowSerializer,KattlaSerializer,GetKattlaSerializer,KattlaUnitPriceSerializer,\
@@ -27,8 +27,7 @@ from .serializer import CategorySerializer, ExpenceSerializer,ViewCategorySerial
                 GetQuatation,GetQuatationDoorSerializer,GetQuatationKattlaSerializer,GetQuatationWindowSerializer,GetCustomKattlaSerializer,CustomKattlaUnitPriceSerializer,\
                     CreateQuatationCustomKattlaSerializer,GetQuatationCustomKattlaSerializer,FeedBackSerializer,GetFeedBackSerializer,QuotationFeedBackSerializer,GetQuotationFeedBackSerializer,\
                         JobCardAndInvoieHelperSerializer,JobCardSerializer,InvoiceSerializer,PaymentSerializer,ViewJobCardSerializer,ViewInvoiceSerializer,GetPaymentSerializer,GetExpencesSerializer,\
-                            OtherProductsQuotationSeralizer,GetOtherProductsQuotationSeralizer
-                                                                                                                                                                                                
+                            OtherProductsQuotationSeralizer,GetOtherProductsQuotationSeralizer,IssueSerializer,GetIssueSerrializer                                                                                                                                                                                               
 from . permissions import FeedBackPermission,JobCardPermission,BasicUserPermission,QuotationPermissions
 from rest_framework.exceptions import ValidationError
 from . unit_price import doorunitprice, kattlaunitprice,windowunitprice,customkattlarunitprice
@@ -714,7 +713,6 @@ class JobCards(viewsets.ModelViewSet):
                 statusLIst.append('partiallycompleted')
             else:
                 statusLIst.append(status)
-            print(statusLIst)
             return self.queryset.filter(status__in=statusLIst,user=self.request.user.user)
         elif jobcardNo != None:
             return self.queryset.filter(jobcardno=jobcardNo)
@@ -765,7 +763,6 @@ class Expences(viewsets.ModelViewSet):
         elif startDate != None and endDate != None:
             return self.queryset.filter(date__gte = startDate, date__lte = endDate,user=self.request.user.user)
         elif status == 'branch':
-            print(self.request.user.user.name)
             return self.queryset.filter(user=self.request.user.user)
     
     def perform_create(self, serializer):
@@ -776,23 +773,27 @@ class Expences(viewsets.ModelViewSet):
             return GetExpencesSerializer
         return ExpenceSerializer
     
-# class IncomeAndExpence(APIView):
-#     permission_classes = [BasicUserPermission]
+class Issuses(viewsets.ModelViewSet):
+    serialier_class = IssueSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = issues.objects.all()
     
-#     def get(self,request,format=None):
-#         expence = expences.objects.all()
-#         income  = payments.objects.all()
-#         expenceSerializer = GetExpencesSerializer(expence, many=True)
-#         incomeSerializer  = GetPaymentSerializer(income, many=True)
-#         incomeList = list(incomeSerializer.data) 
-#         expenceList = list(expenceSerializer.data)
-#         final_list=list(itertools.chain(incomeList, expenceList))        
-#         print(final_list)
-#         sorted_list = sorted(final_list,key=lambda x:x['date'],reverse=False)
-#         print(sorted_list) 
-#         context = {
-#             'data':sorted_list
-#         }
-#         return JsonResponse(context)
+    def get_queryset(self):
+        quotationId = self.request.query_params.get('quotationid')
+        if quotationId != None:
+            return self.queryset.filter(quotationno=quotationId)
+        else:
+            issues.objects.filter(is_seen=False).update(is_seen=True)
+            return self.queryset.all()
+    
+    def perform_create(self, serializer):
+        serializer.save(created_user = self.request.user)
+    
+    def get_serializer_class(self):
+        print(self.action)
+        if self.action == 'Get' or self.action == 'list':
+            return GetIssueSerrializer
+        return IssueSerializer
+    
     
     

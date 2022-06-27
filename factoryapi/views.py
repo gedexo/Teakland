@@ -151,6 +151,7 @@ class DeliveredJobCards(viewsets.ModelViewSet):
         jobcardId = []
         status = ['completed','delivered']
         factory = self.request.query_params.get('factory')
+        isAdmin = self.request.query_params.get('is_admin')
         if factory != None:
             
             jobcards = jobcard.objects.all()
@@ -170,6 +171,8 @@ class DeliveredJobCards(viewsets.ModelViewSet):
                     pass                    
             return self.queryset.filter(id__in = jobcardId,status__in=status)
         
+        if isAdmin != None:
+            return self.queryset.filter(status='delivered')
         else:
             return self.queryset.filter(user=self.request.user.user,status='delivered')
 

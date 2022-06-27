@@ -3,12 +3,12 @@ $(document).ready(function () {
     $("#doorTableDiv").hide();
     $("#kattlaTableDiv").hide();
     $("#customKattlaTableDiv").hide();
-    
+
 });
 factory();
 var searchParams = new URLSearchParams(window.location.search)
 var quotationNumber = searchParams.get('quotation_number')
-var jobCardNo 
+var jobCardNo
 var invoiceNo
 var categoryId
 var jobCardId
@@ -20,9 +20,9 @@ if (quotationNumber != null) {
 var qtNo;
 function quotatationDetails() {
     $.ajax({
-        url: "/userapi/router/quotation/"+quotationNumber+"/",
+        url: "/userapi/router/quotation/" + quotationNumber + "/",
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -57,15 +57,15 @@ function quotatationDetails() {
             500: function () {
                 window.location.href = "/jobcard/"
             },
-            
+
         }
     });
 }
 
-function jobcardDeails(){
-    
+function jobcardDeails() {
+
     $.ajax({
-        url: "/userapi/router/jobcard/?jobcard_number="+jobCardNo,
+        url: "/userapi/router/jobcard/?jobcard_number=" + jobCardNo,
         type: "GET",
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
@@ -77,26 +77,27 @@ function jobcardDeails(){
             200: function (response) {
                 var status
                 jobCardId = response[0].id
-                if(response[0].status == 'open'){                      
+                if (response[0].status == 'open') {
                     status = '<label class="badge badge-info">open</label>'
                 }
-                else if(response[0].status == 'onprocess'){
+                else if (response[0].status == 'onprocess') {
                     status = '<label class="badge badge-warning">onprocess</label>'
                 }
-                else if(response[0].status == 'pending'){
+                else if (response[0].status == 'pending') {
                     status = '<label class="badge badge-danger">pending</label>'
                 }
-                else if(response[0].status == 'partiallycompleted'){
+                else if (response[0].status == 'partiallycompleted') {
                     status = '<label class="badge badge-primary">partiallycompleted</label>'
-                   
+
                 }
-                else if(response[0].status == 'completed'){
+                else if (response[0].status == 'completed') {
                     status = '<label class="badge badge-primary">completed</label>'
                     $('[id=btn-factoryps]').hide();
                     $("#deliveredCheckBoxDiv").append('<label>Delivered</label>\
-                    <input id="deliveredCheckBox" type="checkbox">')
+                    <input id="deliveredCheckBox" type="checkbox"><label class="p-1">CreateIssue</label>\
+                    <span class="btn-factory"><button id="" onclick="issuesCreate('+ qtNo + ')" class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></span>')
                 }
-                else if(response[0].status == 'delivered'){
+                else if (response[0].status == 'delivered') {
                     status = '<label class="badge badge-success">delivered</label>'
                     $('[id=btn-factoryps]').hide();
                     var edit = ''
@@ -111,17 +112,17 @@ function jobcardDeails(){
             500: function () {
                 window.location.href = "/jobcard/"
             },
-            
+
         }
     });
 }
 
 
-function invoiceDetails(){
+function invoiceDetails() {
     $.ajax({
-        url: "/userapi/router/invoice/?invoice_number="+invoiceNo,
+        url: "/userapi/router/invoice/?invoice_number=" + invoiceNo,
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -130,11 +131,11 @@ function invoiceDetails(){
         },
         statusCode: {
             200: function (response) {
-                var balance 
-                if(response[0].totalAmount == response[0].recievedAmount){
+                var balance
+                if (response[0].totalAmount == response[0].recievedAmount) {
                     balance = '<label class="badge badge-success">completed</label>'
                 }
-                else{
+                else {
                     balance = '<label class="badge badge-warning">Balance due</label>'
                 }
                 $("#paymentStatus").html(balance)
@@ -145,7 +146,7 @@ function invoiceDetails(){
             500: function () {
                 window.location.href = "/jobcard/"
             },
-            
+
         }
     });
 }
@@ -153,7 +154,7 @@ function doorQuotationExists() {
     $.ajax({
         url: "/userapi/router/door-quotatation/?quotation_no=" + quotationNumber,
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -166,7 +167,7 @@ function doorQuotationExists() {
                     $("#doorTableDiv").show();
                     $("#doorTitle").html('Doors');
                 }
-                else{
+                else {
                     $("#doorTitleDiv").hide();
                 }
                 drawTable(response);
@@ -177,25 +178,25 @@ function doorQuotationExists() {
                 }
                 function drawRow(rowData) {
                     var category = 1
-                    var remark 
+                    var remark
                     var factory
-                    var url 
-                    if(rowData.image['medium_square_crop'] != undefined){
+                    var url
+                    if (rowData.image['medium_square_crop'] != undefined) {
                         url = rowData.image['medium_square_crop']
-                    } 
-                    else{
+                    }
+                    else {
                         url = '#'
                     }
-                    if(rowData.factory != null){
+                    if (rowData.factory != null) {
                         factory = rowData.factory['place']
                     }
-                    else{
+                    else {
                         factory = '<p class="error">Not Assigned</p>'
                     }
-                    if(rowData['remark'] != null){
+                    if (rowData['remark'] != null) {
                         remark = rowData['remark']
                     }
-                    else{
+                    else {
                         remark = 'No remark'
                     }
                     var sqft = rowData["quantity"] * rowData["squarfeet"].toFixed(2);
@@ -215,47 +216,47 @@ function doorQuotationExists() {
                     }
                     $("#doorJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
-                        <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="Card image cap" style="border-radius:20px"></a>\
+                        <a href="'+ url + '"><img class="card-img-top jbc-img" src="' + rowData.image['medium_square_crop'] + '" alt="Card image cap" style="border-radius:20px"></a>\
                         <div class="card-body">\
-                           <h5 class="card-title">Factory: <span id="doorFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
+                           <h5 class="card-title">Factory: <span id="doorFactory'+ rowData['id'] + '">' + factory + '</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate(' + rowData['id'] + ',' + category + ')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
                            <div class="row">\
                                <div class="col-6">\
-                                   <p><b class="jb-b">Name:</b> <span id="doorName">'+rowData["name"]+'</span></p>\
+                                   <p><b class="jb-b">Name:</b> <span id="doorName">'+ rowData["name"] + '</span></p>\
                                </div>\
                                <div class="col-6">\
-                                <p><b class="jb-b">Type:</b> <span id="doorType">'+rowData["type"]+'</span></p>\
+                                <p><b class="jb-b">Type:</b> <span id="doorType">'+ rowData["type"] + '</span></p>\
                                </div>\
                            </div> \
                            <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Rawmaterial:</b> <span id="doorRawMaterial">'+rowData.raw_material['name']+'</span></p>\
+                                <p><b class="jb-b">Rawmaterial:</b> <span id="doorRawMaterial">'+ rowData.raw_material['name'] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Joint:</b> <span id="doorJoint">'+rowData["joint"]+'</span></p>\
-                            </div>\
-                        </div>\
-                        <div class="row">\
-                            <div class="col-6">\
-                                <p><b class="jb-b">Height:</b> <span id="doorHeight">'+rowData["dimention_height"]+'</span></p>\
-                            </div>\
-                            <div class="col-6">\
-                             <p><b class="jb-b">Width:</b> <span id="doorWidth">'+rowData["dimention_width"]+'</span></p>\
+                             <p><b class="jb-b">Joint:</b> <span id="doorJoint">'+ rowData["joint"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Quantity:</b> <span id="doorQty">'+rowData["quantity"] +'</span></p>\
+                                <p><b class="jb-b">Height:</b> <span id="doorHeight">'+ rowData["dimention_height"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+sqft+'</span></p>\
+                             <p><b class="jb-b">Width:</b> <span id="doorWidth">'+ rowData["dimention_width"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Status:</b> <span id="doorStatus">'+status+'</span></p>\
+                                <p><b class="jb-b">Quantity:</b> <span id="doorQty">'+ rowData["quantity"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Remark:</b> <span id="doorRemark">'+remark+'</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+parseFloat(sqft).toFixed(2)+ '</span></p>\
+                            </div>\
+                        </div>\
+                        <div class="row">\
+                            <div class="col-6">\
+                                <p><b class="jb-b">Status:</b> <span id="doorStatus">'+ status + '</span></p>\
+                            </div>\
+                            <div class="col-6">\
+                             <p><b class="jb-b">Remark:</b> <span id="doorRemark">'+ remark + '</span></p>\
                             </div>\
                         </div>\
                         </div>\
@@ -286,7 +287,7 @@ function kattlaQuotationExists() {
     $.ajax({
         url: "/userapi/router/kattla-quotatation/?quotation_no=" + qtNo,
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -299,7 +300,7 @@ function kattlaQuotationExists() {
                     $("#kattlaTableDiv").show()
                     $("#kattlaTitle").html('Kattla');
                 }
-                else{
+                else {
                     $("#kattlaTitleDiv").hide();
 
                 }
@@ -310,27 +311,27 @@ function kattlaQuotationExists() {
                     }
                 }
                 function drawRow(rowData) {
-                    category = 2 
-                    var url 
-                    var remark 
+                    category = 2
+                    var url
+                    var remark
                     var factory
                     var qubic = rowData['quantity'] * rowData['qubic'].toFixed(2);
-                    if(rowData.image['medium_square_crop'] != undefined){
+                    if (rowData.image['medium_square_crop'] != undefined) {
                         url = rowData.image['medium_square_crop']
-                    } 
-                    else{
+                    }
+                    else {
                         url = '#'
                     }
-                    if(rowData.factory != null){
+                    if (rowData.factory != null) {
                         factory = rowData.factory['place']
                     }
-                    else{
+                    else {
                         factory = '<p class="error">Not Assigned</p>'
                     }
-                    if(rowData['remark'] != null){
+                    if (rowData['remark'] != null) {
                         remark = rowData['remark']
                     }
-                    else{
+                    else {
                         remark = 'No remark'
                     }
                     var status = '<label class="badge badge-info">open</label>'
@@ -349,52 +350,52 @@ function kattlaQuotationExists() {
                     }
                     $("#kattlaJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
-                        <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
+                        <a href="'+ url + '"><img class="card-img-top jbc-img" src="' + rowData.image['medium_square_crop'] + '" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
-                        <h5 class="card-title">Factory: <span id="kattlaFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
+                        <h5 class="card-title">Factory: <span id="kattlaFactory'+ rowData['id'] + '">' + factory + '</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate(' + rowData['id'] + ',' + category + ')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
                         <div class="row">\
                                <div class="col-6">\
-                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+rowData["name"]+'</span></p>\
+                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+ rowData["name"] + '</span></p>\
                                </div>\
                                <div class="col-6">\
-                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+rowData.raw_material['name']+'</span></p>\
+                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+ rowData.raw_material['name'] + '</span></p>\
                                </div>\
                            </div> \
                            <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Height:</b> <span id="windowHeight">'+rowData["dimention_height"] +'</span></p>\
+                                <p><b class="jb-b">Height:</b> <span id="windowHeight">'+ rowData["dimention_height"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Width:</b> <span id="windowWidth">'+rowData["dimention_width"] +'</span></p>\
-                            </div>\
-                        </div>\
-                        <div class="row">\
-                            <div class="col-6">\
-                                <p><b class="jb-b">Type:</b> <span id="windowShutter">'+rowData["type"]+'</span></p>\
-                            </div>\
-                            <div class="col-6">\
-                             <p><b class="jb-b">Quantity:</b> <span id="windowDesign">'+ rowData["quantity"]+'</span></p>\
+                             <p><b class="jb-b">Width:</b> <span id="windowWidth">'+ rowData["dimention_width"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Thicknex_x:</b> <span id="windowQty">'+rowData["thickness_x"]+'</span></p>\
+                                <p><b class="jb-b">Type:</b> <span id="windowShutter">'+ rowData["type"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Thicknex_y:</b> <span id="windowBox">'+rowData["thickness_y"] +'</span></p>\
+                             <p><b class="jb-b">Quantity:</b> <span id="windowDesign">'+ rowData["quantity"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
+                                <p><b class="jb-b">Thicknex_x:</b> <span id="windowQty">'+ rowData["thickness_x"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+qubic+'</span></p>\
+                             <p><b class="jb-b">Thicknex_y:</b> <span id="windowBox">'+ rowData["thickness_y"] + '</span></p>\
+                            </div>\
+                        </div>\
+                        <div class="row">\
+                            <div class="col-6">\
+                                <p><b class="jb-b">Status:</b> <span id="windowStatus">'+ status + '</span></p>\
+                            </div>\
+                            <div class="col-6">\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+parseFloat(qubic).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                         <div class="col-12">\
-                         <p><b class="jb-b">Remark:</b> <span id="windowReamrk">'+remark+'</span></p>\
+                         <p><b class="jb-b">Remark:</b> <span id="windowReamrk">'+ remark + '</span></p>\
                         </div>\
                     </div>\
                         </div>\
@@ -427,7 +428,7 @@ function windowQuotationExists() {
     $.ajax({
         url: "/userapi/router/window-quotatation/?quotation_no=" + qtNo,
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -440,7 +441,7 @@ function windowQuotationExists() {
                     $("#windowTableDiv").show();
                     $("#windowTitle").html('Window')
                 }
-                else{
+                else {
                     $("#windowTitleDiv").hide();
                 }
                 drawTable(response);
@@ -451,25 +452,25 @@ function windowQuotationExists() {
                 }
                 function drawRow(rowData) {
                     var factory
-                    var url 
-                    var remark 
+                    var url
+                    var remark
                     var category = 3
-                    if(rowData.factory != null){
+                    if (rowData.factory != null) {
                         factory = rowData.factory['place']
                     }
-                    else{
+                    else {
                         factory = '<p class="error">Not Assigned</p>'
                     }
-                    if(rowData.image['medium_square_crop'] != undefined){
+                    if (rowData.image['medium_square_crop'] != undefined) {
                         url = rowData.image['medium_square_crop']
-                    } 
-                    else{
+                    }
+                    else {
                         url = '#'
                     }
-                    if(rowData['remark'] != null){
+                    if (rowData['remark'] != null) {
                         remark = rowData['remark']
                     }
-                    else{
+                    else {
                         remark = 'No remark'
                     }
                     var sqft = rowData['quantity'] * rowData['squarfeet'].toFixed(2);
@@ -503,52 +504,52 @@ function windowQuotationExists() {
                     }
                     $("#windowJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
-                        <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
+                        <a href="'+ url + '"><img class="card-img-top jbc-img" src="' + rowData.image['medium_square_crop'] + '" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
-                        <h5 class="card-title">Factory: <span id="windowFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
+                        <h5 class="card-title">Factory: <span id="windowFactory'+ rowData['id'] + '">' + factory + '</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate(' + rowData['id'] + ',' + category + ')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
                         <div class="row">\
                                <div class="col-6">\
-                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+rowData["name"]+'</span></p>\
+                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+ rowData["name"] + '</span></p>\
                                </div>\
                                <div class="col-6">\
-                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+rowData.raw_material['name']+'</span></p>\
+                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+ rowData.raw_material['name'] + '</span></p>\
                                </div>\
                            </div> \
                            <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Height:</b> <span id="windowHeight">'+rowData["dimention_height"] +'</span></p>\
+                                <p><b class="jb-b">Height:</b> <span id="windowHeight">'+ rowData["dimention_height"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Width:</b> <span id="windowWidth">'+rowData["dimention_width"] +'</span></p>\
-                            </div>\
-                        </div>\
-                        <div class="row">\
-                            <div class="col-6">\
-                                <p><b class="jb-b">Shutter:</b> <span id="windowShutter">'+shutter+'</span></p>\
-                            </div>\
-                            <div class="col-6">\
-                             <p><b class="jb-b">Design:</b> <span id="windowDesign">'+design+'</span></p>\
+                             <p><b class="jb-b">Width:</b> <span id="windowWidth">'+ rowData["dimention_width"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Quantity:</b> <span id="windowQty">'+rowData["quantity"] +'</span></p>\
+                                <p><b class="jb-b">Shutter:</b> <span id="windowShutter">'+ shutter + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Box:</b> <span id="windowBox">'+rowData["box"]+'</span></p>\
+                             <p><b class="jb-b">Design:</b> <span id="windowDesign">'+ design + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
+                                <p><b class="jb-b">Quantity:</b> <span id="windowQty">'+ rowData["quantity"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+sqft+'</span></p>\
+                             <p><b class="jb-b">Box:</b> <span id="windowBox">'+ rowData["box"] + '</span></p>\
+                            </div>\
+                        </div>\
+                        <div class="row">\
+                            <div class="col-6">\
+                                <p><b class="jb-b">Status:</b> <span id="windowStatus">'+ status + '</span></p>\
+                            </div>\
+                            <div class="col-6">\
+                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+parseFloat(sqft).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                         <div class="col-12">\
-                         <p><b class="jb-b">Remark:</b> <span id="windowReamrk">'+remark+'</span></p>\
+                         <p><b class="jb-b">Remark:</b> <span id="windowReamrk">'+ remark + '</span></p>\
                         </div>\
                     </div>\
                         </div>\
@@ -582,7 +583,7 @@ function customKattlaQuotationExists() {
     $.ajax({
         url: "/userapi/router/custom-kattla-quotatation/?quotation_no=" + qtNo,
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -595,7 +596,7 @@ function customKattlaQuotationExists() {
                     $("#customKattlaTableDiv").show();
                     $("#sizesTitle").html('sizes')
                 }
-                else{
+                else {
                     $("#sizesTitleDiv").hide();
                 }
                 drawTable(response);
@@ -605,25 +606,25 @@ function customKattlaQuotationExists() {
                     }
                 }
                 function drawRow(rowData) {
-                    var url 
-                    var remark 
+                    var url
+                    var remark
                     var category = 4
-                    if(rowData.image['medium_square_crop'] != undefined){
+                    if (rowData.image['medium_square_crop'] != undefined) {
                         url = rowData.image['medium_square_crop']
-                    } 
-                    else{
+                    }
+                    else {
                         url = '#'
                     }
-                    if(rowData.factory != null){
+                    if (rowData.factory != null) {
                         factory = rowData.factory['place']
                     }
-                    else{
+                    else {
                         factory = '<p class="error">Not Assigned</p>'
                     }
-                    if(rowData['remark'] != null){
+                    if (rowData['remark'] != null) {
                         remark = rowData['remark']
                     }
-                    else{
+                    else {
                         remark = 'No remark'
                     }
                     var qubic = rowData['quantity'] * rowData['qubic'].toFixed(2);
@@ -643,44 +644,44 @@ function customKattlaQuotationExists() {
                     }
                     $("#sizesJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
-                        <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
+                        <a href="'+ url + '"><img class="card-img-top jbc-img" src="' + rowData.image['medium_square_crop'] + '" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
-                        <h5 class="card-title">Factory: <span id="sizesFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
+                        <h5 class="card-title">Factory: <span id="sizesFactory'+ rowData['id'] + '">' + factory + '</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate(' + rowData['id'] + ',' + category + ')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
                            <div class="row">\
                                <div class="col-6">\
-                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+rowData["name"]+'</span></p>\
+                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+ rowData["name"] + '</span></p>\
                                </div>\
                                <div class="col-6">\
-                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+rowData.raw_material['name']+'</span></p>\
+                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+ rowData.raw_material['name'] + '</span></p>\
                                </div>\
                            </div> \
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Length:</b> <span id="windowShutter">'+rowData["length"]+'</span></p>\
+                                <p><b class="jb-b">Length:</b> <span id="windowShutter">'+ rowData["length"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Quantity:</b> <span id="windowDesign">'+ rowData["quantity"]+'</span></p>\
-                            </div>\
-                        </div>\
-                        <div class="row">\
-                            <div class="col-6">\
-                                <p><b class="jb-b">Thicknex_x:</b> <span id="windowQty">'+rowData["thickness_x"]+'</span></p>\
-                            </div>\
-                            <div class="col-6">\
-                             <p><b class="jb-b">Thicknex_y:</b> <span id="windowBox">'+rowData["thickness_y"] +'</span></p>\
+                             <p><b class="jb-b">Quantity:</b> <span id="windowDesign">'+ rowData["quantity"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
+                                <p><b class="jb-b">Thicknex_x:</b> <span id="windowQty">'+ rowData["thickness_x"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+qubic+'</span></p>\
+                             <p><b class="jb-b">Thicknex_y:</b> <span id="windowBox">'+ rowData["thickness_y"] + '</span></p>\
+                            </div>\
+                        </div>\
+                        <div class="row">\
+                            <div class="col-6">\
+                                <p><b class="jb-b">Status:</b> <span id="windowStatus">'+ status + '</span></p>\
+                            </div>\
+                            <div class="col-6">\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+parseFloat(qubic).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                         <div class="col-12">\
-                         <p><b class="jb-b">Remark:</b> <span id="windowReamrk">'+remark+'</span></p>\
+                         <p><b class="jb-b">Remark:</b> <span id="windowReamrk">'+ remark + '</span></p>\
                         </div>\
                     </div>\
                         </div>\
@@ -712,7 +713,7 @@ function othersQuotationExists() {
     $.ajax({
         url: "/userapi/router/other-product-quotation/?quotation_no=" + qtNo,
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -725,7 +726,7 @@ function othersQuotationExists() {
                     $("#othersJobCardDiv").show();
                     $("#othersTitle").html('Other products')
                 }
-                else{
+                else {
                     $("#othersTitleDiv").hide();
                 }
                 drawTable(response);
@@ -738,16 +739,16 @@ function othersQuotationExists() {
                     var factory
                     var remark
                     var category = 5
-                    if(rowData.factory != null){
+                    if (rowData.factory != null) {
                         factory = rowData.factory['place']
                     }
-                    else{
+                    else {
                         factory = '<p class="error">Not Assigned</p>'
                     }
-                    if(rowData['remark'] != null){
+                    if (rowData['remark'] != null) {
                         remark = rowData['remark']
                     }
-                    else{
+                    else {
                         remark = 'No remark'
                     }
                     var status = '<label class="badge badge-info">open</label>'
@@ -767,29 +768,29 @@ function othersQuotationExists() {
                     $("#othersJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <div class="card-body">\
-                        <h5 class="card-title">Factory: <span id="othersFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
+                        <h5 class="card-title">Factory: <span id="othersFactory'+ rowData['id'] + '">' + factory + '</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate(' + rowData['id'] + ',' + category + ')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\
                            <div class="row">\
                                <div class="col-6">\
-                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+rowData["name"]+'</span></p>\
+                                   <p><b class="jb-b">Name:</b> <span id="windowName">'+ rowData["name"] + '</span></p>\
                                </div>\
                                <div class="col-6">\
-                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+rowData.raw_material['name']+'</span></p>\
+                                <p><b class="jb-b">Rawmaterial:</b> <span id="windowRawmaterial">'+ rowData.raw_material['name'] + '</span></p>\
                                </div>\
                            </div> \
                         <div class="row">\
                             <div class="col-6">\
-                                <p><b class="jb-b">Type:</b> <span id="windowShutter">'+rowData["type"]+'</span></p>\
+                                <p><b class="jb-b">Type:</b> <span id="windowShutter">'+ rowData["type"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Quantity:</b> <span id="windowDesign">'+ rowData["quantity"]+'</span></p>\
+                             <p><b class="jb-b">Quantity:</b> <span id="windowDesign">'+ rowData["quantity"] + '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
                         <div class="col-6">\
-                            <p><b class="jb-b">Status:</b> <span id="windowShutter">'+status+'</span></p>\
+                            <p><b class="jb-b">Status:</b> <span id="windowShutter">'+ status + '</span></p>\
                         </div>\
                         <div class="col-6">\
-                         <p><b class="jb-b">Remark:</b> <span id="windowDesign">'+remark+'</span></p>\
+                         <p><b class="jb-b">Remark:</b> <span id="windowDesign">'+ remark + '</span></p>\
                         </div>\
                     </div>\
                         </div>\
@@ -820,7 +821,7 @@ function factory() {
     $.ajax({
         url: "/officialapi/router/factory/",
         type: "GET",
-        async:false,
+        async: false,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -843,39 +844,39 @@ function factory() {
     });
 }
 
-function JobcardUpdate(id,category){
+function JobcardUpdate(id, category) {
     $("#jobCardModal").modal('show');
     $("#jobcardId").val(id)
     categoryId = category
 }
 
-$("#jobCardForm").submit(function(){
+$("#jobCardForm").submit(function () {
     data = $("#jobCardForm").serializeArray();
-    if(categoryId == 1){
+    if (categoryId == 1) {
         doorJobCardUpdate(data)
     }
-    else if(categoryId == 2){
+    else if (categoryId == 2) {
         kattlaJobCardUpdate(data)
     }
-    else if(categoryId == 3){
+    else if (categoryId == 3) {
         windowJobCardUpdate(data)
     }
-    else if(categoryId == 4){
+    else if (categoryId == 4) {
         sizesJobCardUpdate(data)
     }
-    else if(categoryId == 5){
+    else if (categoryId == 5) {
         othersJobCardUpdate(data)
     }
     return false;
 });
 
-function doorJobCardUpdate(data){
-    var factory =  $("#factory option:selected").text();
+function doorJobCardUpdate(data) {
+    var factory = $("#factory option:selected").text();
     var id = $("#jobcardId").val();
     $.ajax({
-        url: "/userapi/router/door-quotatation/"+id+"/",
+        url: "/userapi/router/door-quotatation/" + id + "/",
         type: "patch",
-        data:data,
+        data: data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -885,7 +886,7 @@ function doorJobCardUpdate(data){
         statusCode: {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
-                $("#doorFactory"+id).html(factory)
+                $("#doorFactory" + id).html(factory)
             }
         }
 
@@ -893,13 +894,13 @@ function doorJobCardUpdate(data){
 }
 
 
-function kattlaJobCardUpdate(data){
-    var factory =  $("#factory option:selected").text();
+function kattlaJobCardUpdate(data) {
+    var factory = $("#factory option:selected").text();
     var id = $("#jobcardId").val();
     $.ajax({
-        url: "/userapi/router/kattla-quotatation/"+id+"/",
+        url: "/userapi/router/kattla-quotatation/" + id + "/",
         type: "patch",
-        data:data,
+        data: data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -909,20 +910,20 @@ function kattlaJobCardUpdate(data){
         statusCode: {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
-                $("#kattlaFactory"+id).html(factory)
+                $("#kattlaFactory" + id).html(factory)
             }
         }
 
     });
 }
 
-function windowJobCardUpdate(data){
-    var factory =  $("#factory option:selected").text();
+function windowJobCardUpdate(data) {
+    var factory = $("#factory option:selected").text();
     var id = $("#jobcardId").val();
     $.ajax({
-        url: "/userapi/router/window-quotatation/"+id+"/",
+        url: "/userapi/router/window-quotatation/" + id + "/",
         type: "patch",
-        data:data,
+        data: data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -932,20 +933,20 @@ function windowJobCardUpdate(data){
         statusCode: {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
-                $("#windowFactory"+id).html(factory)
+                $("#windowFactory" + id).html(factory)
             }
         }
 
     });
 }
 
-function sizesJobCardUpdate(data){
-    var factory =  $("#factory option:selected").text();
+function sizesJobCardUpdate(data) {
+    var factory = $("#factory option:selected").text();
     var id = $("#jobcardId").val();
     $.ajax({
-        url: "/userapi/router/custom-kattla-quotatation/"+id+"/",
+        url: "/userapi/router/custom-kattla-quotatation/" + id + "/",
         type: "patch",
-        data:data,
+        data: data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -955,20 +956,20 @@ function sizesJobCardUpdate(data){
         statusCode: {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
-                $("#sizesFactory"+id).html(factory)
+                $("#sizesFactory" + id).html(factory)
             }
         }
 
     });
 }
 
-function othersJobCardUpdate(data){
-    var factory =  $("#factory option:selected").text();
+function othersJobCardUpdate(data) {
+    var factory = $("#factory option:selected").text();
     var id = $("#jobcardId").val();
     $.ajax({
-        url: "/userapi/router/other-product-quotation/"+id+"/",
+        url: "/userapi/router/other-product-quotation/" + id + "/",
         type: "patch",
-        data:data,
+        data: data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -978,7 +979,7 @@ function othersJobCardUpdate(data){
         statusCode: {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
-                $("#othersFactory"+id).html(factory)
+                $("#othersFactory" + id).html(factory)
             }
         }
 
@@ -986,7 +987,7 @@ function othersJobCardUpdate(data){
 }
 
 
-$(document).on('change', '#deliveredCheckBox', function() {
+$(document).on('change', '#deliveredCheckBox', function () {
     data = {
         'status': 'delivered',
     }
@@ -1019,3 +1020,60 @@ $(document).on('change', '#deliveredCheckBox', function() {
         }
     })
 });
+
+function issuesCreate(quotationid) {
+    $("#issuesModal").modal('show');
+    $.ajax({
+        url: "/userapi/router/issues/?quotationid=" + quotationid,
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("useraccesstoken")
+            );
+        },
+        statusCode: {
+            200: function (response) {
+                if (response.length != 0) {
+                    $("textarea[name=issue]").val(response[0]['issue']);
+                    $("#issueId").val(response[0]['id']);
+                    $("#type").val(1);
+                }
+                $("#quotationno").val(quotationid);
+
+            }
+        }
+    })
+}
+
+$("#issuesForm").submit(function () {
+    var data = $("#issuesForm").serializeArray();
+    var action = 'put'
+    var url = "/userapi/router/issues/"
+    if ($("#issueId").val() != 0) {
+        url = "/userapi/router/issues/" + $("#issueId").val() + "/"
+    }
+    if ($("#type").val() == 0) {
+        action = 'POST'
+    }
+    $.ajax({
+        url: url,
+        type: action,
+        data: data,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("useraccesstoken")
+            );
+        },
+        statusCode: {
+            200: function (response) {
+                $("#issuesModal").modal('hide');
+                swal('Issue created successfully');
+            }
+        }
+    });
+
+    return false;
+});
+

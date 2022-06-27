@@ -33,5 +33,6 @@ urlpatterns = [
     path('others/',views.others_products),
     path('expense-category/',views.expense_category),
     path('income/',views.income),
-    path('branch-details/',views.branch_details)
+    path('branch-details/',views.branch_details),
+    path('issues/',views.issues)
 ]

@@ -92,13 +92,13 @@ function jobcardDeails(){
                 }
                 else if(response[0].status == 'completed'){
                     status = '<label class="badge badge-primary">completed</label>'
-                    // $('[id=btn-factoryps]').hide();
+                    $('[id=btn-factoryps]').hide();
                     $("#deliveredCheckBoxDiv").append('<label>Delivered</label>\
                     <input id="deliveredCheckBox" type="checkbox">')
                 }
                 else if(response[0].status == 'delivered'){
                     status = '<label class="badge badge-success">delivered</label>'
-                    // $('[id=btn-factoryps]').hide();
+                    $('[id=btn-factoryps]').hide();
                     var edit = ''
                 }
                 $("#createdDate").html(response[0]['created_date'])
@@ -200,7 +200,6 @@ function doorQuotationExists() {
                         remark = 'No remark'
                     }
                     var sqft = rowData["quantity"] * rowData["squarfeet"].toFixed(2);
-                    console.log(sqft)
                     var status = '<label class="badge badge-info">open</label>'
                     if (rowData.status == 'open') {
 
@@ -249,7 +248,7 @@ function doorQuotationExists() {
                                 <p><b class="jb-b">Quantity:</b> <span id="doorQty">'+rowData["quantity"] +'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+sqft+'</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+parseFloat(sqft).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -384,7 +383,7 @@ function kattlaQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+qubic+'</span></p>\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+parseFloat(qubic).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -528,7 +527,7 @@ function windowQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+sqft+'</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+parseFloat(sqft).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -650,7 +649,7 @@ function customKattlaQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+qubic+'</span></p>\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+ parseFloat(qubic).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\

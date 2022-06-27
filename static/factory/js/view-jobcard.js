@@ -284,7 +284,7 @@ function doorQuotationExists() {
                                 <p><b class="jb-b">Quantity:</b> <span id="doorQty">'+ rowData["quantity"] + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+ sqft + '</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+parseFloat(sqft).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -419,7 +419,7 @@ function kattlaQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="updateKattlaStatus'+rowData['id']+'">'+ status + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+ qubic + '</span></p>\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+parseFloat(qubic).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -564,7 +564,7 @@ function windowQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="updateWindowStatus'+rowData['id']+'">'+ status + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+ sqft + '</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+parseFloat(sqft).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -687,7 +687,7 @@ function customKattlaQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="updateSizesStatus'+rowData['id']+'">'+ status + '</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+ qubic + '</span></p>\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+parseFloat(qubic).toFixed(2)+ '</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
