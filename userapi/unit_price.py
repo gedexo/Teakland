@@ -1,3 +1,4 @@
+from telnetlib import PRAGMA_HEARTBEAT
 from this import d
 
 
@@ -50,8 +51,9 @@ class kattlaunitprice:
         c = float(a) + float(b) + extra
         thk = float(self.thicknes_x) * float(self.thicknes_y)
         x = c * thk / 144
-        unitAmount = (round(x, 2) * float(self.kattlaprice)+int(self.labourcharge))*self.noofboxes
-        factoryunitAmount = (round(x, 2) * float(self.factoryprice))*self.noofboxes
+        labourcharge = (self.noofboxes) * self.labourcharge 
+        unitAmount = (round(x, 2) * float(self.kattlaprice)+int(labourcharge))
+        factoryunitAmount = (round(x, 2) * float(self.factoryprice))
         return (round(x ,2),round(unitAmount, 1),round(factoryunitAmount, 1))
     
 class windowunitprice:

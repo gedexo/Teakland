@@ -715,9 +715,16 @@ class JobCards(viewsets.ModelViewSet):
                 statusLIst.append(status)
             return self.queryset.filter(status__in=statusLIst,user=self.request.user.user)
         elif jobcardNo != None:
-            return self.queryset.filter(jobcardno=jobcardNo)
+            return self.queryset.filter(jobcardno=jobcardNo)            
         return self.queryset.filter(user=self.request.user.user).exclude(status='delivered')
-        
+
+    def partial_update(self, request, *args, **kwargs):
+        quotationId = jobcard.objects.get(id=self.kwargs['pk'])
+        updateQuotation = quotation.objects.get(id=quotationId.quotation.id)
+        updateQuotation.status = request.POST['status']
+        updateQuotation.save()
+        return super().partial_update(request, *args, **kwargs)
+    
     def get_serializer_class(self):
         return ViewJobCardSerializer
 
@@ -790,7 +797,6 @@ class Issuses(viewsets.ModelViewSet):
         serializer.save(created_user = self.request.user)
     
     def get_serializer_class(self):
-        print(self.action)
         if self.action == 'Get' or self.action == 'list':
             return GetIssueSerrializer
         return IssueSerializer

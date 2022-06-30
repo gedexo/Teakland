@@ -3,6 +3,7 @@ from pickle import NONE
 import stat
 from time import pthread_getcpuclockid
 from traceback import print_tb
+from urllib import request
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -91,8 +92,7 @@ class JobCards(viewsets.ModelViewSet):
             totalCountFactory.append((doorsF,windowF,kattlaF,customkattlaF,othersF))
             sumTotalCount = sum(list(map(sum, list(totalcount))))
             sumFactoryCount = sum(list(map(sum, list(totalCountFactory))))
-            print('total:',sumTotalCount)
-            print('factorycount:',sumFactoryCount)
+
             if self.request.POST['status'] == 'completed':
                 if sumFactoryCount != 0:
                     res = ValidationError({'message':'please update all quotation status'})

@@ -15,7 +15,11 @@ $("#quatationsTable").DataTable({
       ]
 });                                                             
 var searchParams = new URLSearchParams(window.location.search)
+
 var statusFromUrl = searchParams.get('status')
+var branch = searchParams.get('branch')
+var salesmanId = searchParams.get('salesman')
+
 function total(doorTotal,kattlaTotal,windowTotal,customKattlaTotal,othersTotal,tax) {
     var door
     var kattla
@@ -70,11 +74,12 @@ function total(doorTotal,kattlaTotal,windowTotal,customKattlaTotal,othersTotal,t
 $(document).ready(function () {
     var url
     if(statusFromUrl != null){
-        url = "/officialapi/router/qoutations/?status="+statusFromUrl
+        url = "/officialapi/router/filter-quotations/?branch="+branch+"&salesman="+salesmanId+"&status=True"
     }
     else{
-        url = "/officialapi/router/qoutations/"
+        url = "/officialapi/router/filter-quotations/?branch="+branch+"&salesman="+salesmanId
     }
+    console.log(url)
     $.ajax({
         url: url,
         type: "GET",
@@ -87,6 +92,7 @@ $(document).ready(function () {
         },
         statusCode: {
             200: function (response) {
+                console.log(response)
                 drawTable(response);
                 function drawTable(data) {
                     for (var i = 0; i < data.length; i++) {

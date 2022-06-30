@@ -34,5 +34,9 @@ urlpatterns = [
     path('expense-category/',views.expense_category),
     path('income/',views.income),
     path('branch-details/',views.branch_details),
-    path('issues/',views.issues)
+    path('issues/',views.issues),
+    path('salesman-quotations/',views.filter_quotations),
+    path('salesman-income/',views.filter_income),
+    path('salesman-expenses/',views.filter_expence),
+    path('salesman-pendingamount/',views.filter_salesman_pendingamount),
 ]

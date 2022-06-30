@@ -1,5 +1,6 @@
 from cgitb import reset
 from nis import cat
+from os import stat
 import re
 from sqlite3 import apilevel
 from traceback import print_tb
@@ -22,7 +23,7 @@ from . serializer import UserSerializer,DoorSerializer,CustUserSerializer,GetDoo
                 OtherProductSerializer,GetOtherProductSerializer,ExpenceCategorySerializer,PaymentSerializer
 from . models import expences, payments, users,window,kattla,door,row_materials,joint_type,customer,quotation,quotation_door_item,quotation_window_item,quotation_kattla_item,custom_kattla,\
     quotation_customkattla_item,feedback,factory,bank,jobcard,invoice,qoutation_feedback,others,other_products_item,expence_category,payments,salesman,issues
-from userapi .serializer import InvoiceSerializer, ViewJobCardSerializer,ViewInvoiceSerializer
+from userapi .serializer import InvoiceSerializer, ViewJobCardSerializer,ViewInvoiceSerializer,ExpenceSerializer,GetExpencesSerializer
 from django.contrib.auth import get_user_model,authenticate
 from rest_framework.exceptions import ValidationError
 from .permissions import ProductGalleryPermission,FactoryPermission,BankPermission,BasicUserPermission,OthersProductPermission
@@ -551,9 +552,14 @@ class JobCards(viewsets.ModelViewSet):
             return self.queryset.filter(id__in = jobcardId)
         return self.queryset.all().exclude(status='delivered')
     
+    def partial_update(self, request, *args, **kwargs):
+        quotationId = jobcard.objects.get(id=self.kwargs['pk'])
+        updateQuotation = quotation.objects.get(id=quotationId.quotation.id)
+        updateQuotation.status = request.POST['status']
+        updateQuotation.save()
+        return super().partial_update(request, *args, **kwargs)
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action == 'partial_update':
             return UpdateJobCardSerializer
         return ViewJobCardSerializer
@@ -829,7 +835,7 @@ class GetBranchQuotationDetails(APIView):
             salesman.append(i.id)
             
         salesman  = get_user_model().objects.filter(id__in=salesman)
-        
+    
         for i in salesman:
             salesmanQuotationAmt = []
             salesmanQuotationPendingAmt = []
@@ -849,6 +855,8 @@ class GetBranchQuotationDetails(APIView):
                 salesmanQuotationPendingAmt.append(g)
             salesmanPendingAmt = sum(salesmanQuotationAmt)- sum(salesmanQuotationPendingAmt)
             data = {
+                'salesmanid':i.id,
+                'branch':branch,
                 'name':name,
                 'email':email,
                 'quotations':quotations,
@@ -874,13 +882,62 @@ class GetBranchQuotationDetails(APIView):
         }
         return Response(context,status.HTTP_200_OK)
     
+class FilterQuotations(viewsets.ModelViewSet):
+    queryset = quotation.objects.all()
+    serializer_class = ViewQoutationSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
     
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesmanId = self.request.query_params.get('salesman') 
+        status = self.request.query_params.get('status') 
+        statusChoices = ['onprocess','pending','completed','partiallycompleted','delivered']
+        if status != None:
+            return self.queryset.filter(status__in=statusChoices,user=branch,created_by=salesmanId)
+        return self.queryset.filter(user=branch,created_by=salesmanId)
+   
+class SalesManIncome(viewsets.ModelViewSet):
+    queryset = payments.objects.all()
+    serialier_class = PaymentSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)   
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesmanId = self.request.query_params.get('salesman') 
+        return self.queryset.filter(quotation__user = branch,quotation__created_by=salesmanId)
+    
+    def get_serializer_class(self):
+        return PaymentSerializer
+    
+class SalesManExpences(viewsets.ModelViewSet):
+    queryset = expences.objects.all()
+    serialier_class = GetExpencesSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)   
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesmanId = self.request.query_params.get('salesman') 
+        return self.queryset.filter(user = branch,created_user=salesmanId)
+    
+    def get_serializer_class(self):
+        return GetExpencesSerializer
+    
+class SalesManPendingAmount(viewsets.ModelViewSet):
+    queryset = invoice.objects.all()
+    serializer_class = ViewInvoiceSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesman = self.request.query_params.get('salesman')
+        return self.queryset.filter(quotation__user=branch,quotation__created_by=salesman)
+        
+        
 class CheckPassword(APIView):
     permission_classes = (IsAuthenticated,IsAdminUser)
     def post(self,request,format=None):
         user = self.request.query_params.get('userid')
         changePassword = get_user_model().objects.get(id=user)
-        print(request.POST['password'])
         changePassword.set_password(request.POST['password'])
         changePassword.save()
         return Response({'msg':'password updated successfully'})

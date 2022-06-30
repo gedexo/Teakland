@@ -101,6 +101,9 @@ function jobcardDeails() {
                     status = '<label class="badge badge-success">delivered</label>'
                     $('[id=btn-factoryps]').hide();
                     var edit = ''
+                    $("#deliveredCheckBoxDiv").append('\
+                    <label class="p-1">CreateIssue</label>\
+                    <span class="btn-factory"><button id="" onclick="issuesCreate('+ qtNo + ')" class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></span>')
                 }
                 $("#createdDate").html(response[0]['created_date'])
                 $("#expectedDate").html(response[0]['expected_delivery'])
@@ -887,6 +890,9 @@ function doorJobCardUpdate(data) {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
                 $("#doorFactory" + id).html(factory)
+            },
+            403:function(response){
+                swal('You dont have permission for this action')
             }
         }
 
@@ -911,6 +917,9 @@ function kattlaJobCardUpdate(data) {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
                 $("#kattlaFactory" + id).html(factory)
+            },
+            403:function(response){
+                swal('You dont have permission for this action')
             }
         }
 
@@ -934,6 +943,9 @@ function windowJobCardUpdate(data) {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
                 $("#windowFactory" + id).html(factory)
+            },
+            403:function(response){
+                swal('You dont have permission for this action')
             }
         }
 
@@ -957,6 +969,9 @@ function sizesJobCardUpdate(data) {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
                 $("#sizesFactory" + id).html(factory)
+            },
+            403:function(response){
+                swal('You dont have permission for this action')
             }
         }
 
@@ -980,6 +995,9 @@ function othersJobCardUpdate(data) {
             200: function (response) {
                 $("#jobCardModal").modal('hide');
                 $("#othersFactory" + id).html(factory)
+            },
+            403:function(response){
+                swal('You dont have permission for this action')
             }
         }
 
@@ -1006,6 +1024,9 @@ $(document).on('change', '#deliveredCheckBox', function () {
                 swal("Success! Delivered Successfully!", {
                     icon: "success",
                 });
+                var status = '<label class="badge badge-success">delivered</label>'
+                $("#status").html(status)
+
             },
             406: function (response) {
                 swal("Oops!Bill Amount is due!", {
