@@ -895,7 +895,9 @@ class FilterQuotations(viewsets.ModelViewSet):
         if status != None:
             return self.queryset.filter(status__in=statusChoices,user=branch,created_by=salesmanId)
         return self.queryset.filter(user=branch,created_by=salesmanId)
-   
+    
+    http_method_names = ['get', 'list',]
+
 class SalesManIncome(viewsets.ModelViewSet):
     queryset = payments.objects.all()
     serialier_class = PaymentSerializer
@@ -909,6 +911,8 @@ class SalesManIncome(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return PaymentSerializer
     
+    http_method_names = ['get', 'list',]
+
 class SalesManExpences(viewsets.ModelViewSet):
     queryset = expences.objects.all()
     serialier_class = GetExpencesSerializer
@@ -921,7 +925,9 @@ class SalesManExpences(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         return GetExpencesSerializer
+    http_method_names = ['get', 'list',]
     
+
 class SalesManPendingAmount(viewsets.ModelViewSet):
     queryset = invoice.objects.all()
     serializer_class = ViewInvoiceSerializer
@@ -932,7 +938,8 @@ class SalesManPendingAmount(viewsets.ModelViewSet):
         salesman = self.request.query_params.get('salesman')
         return self.queryset.filter(quotation__user=branch,quotation__created_by=salesman)
         
-        
+    http_method_names = ['get', 'list',]
+    
 class CheckPassword(APIView):
     permission_classes = (IsAuthenticated,IsAdminUser)
     def post(self,request,format=None):

@@ -1,6 +1,6 @@
 from telnetlib import PRAGMA_HEARTBEAT
 from this import d
-
+import math
 
 class kattlaunitprice:
     def __init__(self, **kwargs ):
@@ -51,10 +51,21 @@ class kattlaunitprice:
         c = float(a) + float(b) + extra
         thk = float(self.thicknes_x) * float(self.thicknes_y)
         x = c * thk / 144
+        frac= math.modf(round(x, 2))
+        y = 0
+        if frac[0] < 0.25 and frac[0] > 0.01:
+            y = 0.25 - frac[0]
+        if frac[0] < 0.50 and frac[0] > 0.25:
+            y = 0.50 - frac[0]
+        if frac[0] < 0.75 and frac[0] > 0.50:
+            y = 0.75 - frac[0]
+        if frac[0] < 0.99 and frac[0] > 0.75:
+            y = (0.99 - frac[0]) +0.01
+        qubic = x + y
         labourcharge = (self.noofboxes) * self.labourcharge 
-        unitAmount = (round(x, 2) * float(self.kattlaprice)+int(labourcharge))
-        factoryunitAmount = (round(x, 2) * float(self.factoryprice))
-        return (round(x ,2),round(unitAmount, 1),round(factoryunitAmount, 1))
+        unitAmount = (round(qubic, 2) * float(self.kattlaprice)+int(labourcharge))
+        factoryunitAmount = (round(qubic, 2) * float(self.factoryprice))
+        return (round(qubic ,2),round(unitAmount, 1),round(factoryunitAmount, 1))
     
 class windowunitprice:
     def __init__(self, **kwargs ):
@@ -117,8 +128,19 @@ class customkattlarunitprice:
             else:
                 length_int+=1
             
-        a = (float(self.thicknes_x) * float(self.thicknes_y)) * self.length / 144 
-        b = round(a, 2) * float(self.kattlaprice)
+        a = (float(self.thicknes_x) * float(self.thicknes_y)) * self.length / 144
+        frac= math.modf(round(a, 2))
+        y = 0
+        if frac[0] < 0.25 and frac[0] > 0.01:
+            y = 0.25 - frac[0]
+        if frac[0] < 0.50 and frac[0] > 0.25:
+            y = 0.50 - frac[0]
+        if frac[0] < 0.75 and frac[0] > 0.50:
+            y = 0.75 - frac[0]
+        if frac[0] < 0.99 and frac[0] > 0.75:
+            y = (0.99 - frac[0]) +0.01
+        qubic = a + y
+        b = round(qubic, 2) * float(self.kattlaprice)
         unitAmount = float(b)+ int(labourCharge)
-        factoryUnitAmount = round(a, 2) * float(self.factoryprice)
-        return (round(a ,2),round(unitAmount, 1),round(factoryUnitAmount, 1))
+        factoryUnitAmount = round(qubic, 2) * float(self.factoryprice)
+        return (round(qubic ,2),round(unitAmount, 1),round(factoryUnitAmount, 1))

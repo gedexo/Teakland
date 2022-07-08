@@ -208,3 +208,8 @@ $("#logout").click(function () {
 //         return false;
 //     }
 // }
+
+
+$('.btn-back').click(function () {
+    history.back();
+});

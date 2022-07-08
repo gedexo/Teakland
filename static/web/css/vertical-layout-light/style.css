@@ -37225,5 +37225,9 @@ div.desc {
   100% { transform: scale(1); }  
 }
 
-
 .modal { overflow: auto !important; }
+
+.back-button{
+  background: #ffff;
+  height: 26px;
+}
