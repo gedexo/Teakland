@@ -10,7 +10,7 @@ function expences(id,startDate,endDate){
         url = "/userapi/router/expences/?startdate="+startDate+"&enddate="+endDate
     }
     else{
-        url = "/userapi/router/expences/"
+        url = "/userapi/router/expences/?status=branch"
     }
     $.ajax({
         url: url,
@@ -24,6 +24,7 @@ function expences(id,startDate,endDate){
         },
         statusCode: {
             200: function (response) {
+                console.log(response)
                 expenceTotal = []
                 if(response.length == 0){
                     swal("Oops! There are no expences in this period!", {
@@ -59,12 +60,12 @@ function expences(id,startDate,endDate){
                             category = 'Not defined'
                         }
                         var createdUser 
-                        if(rowData.created_user['first_name'] != '' || rowData.created_user['first_name'] != null)
+                        if(rowData.created_user['first_name'] == '')
                         {
-                            createdUser = rowData.created_user['first_name']  +' ' +rowData.created_user['last_name'] 
+                            createdUser = rowData.created_user['email'] ;
                         }
                         else{
-                            createdUser = rowData.created_user['email'] ;
+                            createdUser = rowData.created_user['first_name']  +' ' +rowData.created_user['last_name'] 
                         }
                        var tableData = [];
                        tableData.push([rowData['date'],category ,rowData['description'],createdUser,rowData['amount']])

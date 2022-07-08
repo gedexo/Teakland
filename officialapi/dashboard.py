@@ -50,5 +50,6 @@ class DashboardJobcardCount(APIView):
         data = {
             'branch':branch,
         }
+        print(branch)
         return Response(branch,status.HTTP_200_OK)
     

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from officialapi.models import User, category, factory, joint_type, kattla, quotation_customkattla_item,salesman,customer,row_materials,joint_type,door,window,quotation,\
             kattla,quotation_door_item,quotation_kattla_item,quotation_window_item,custom_kattla,feedback,qoutation_feedback,jobcard,invoice,payments,expences,\
-                other_products_item
+                other_products_item,issues
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
@@ -482,3 +482,17 @@ class GetOtherProductsQuotationSeralizer(serializers.ModelSerializer):
         model = other_products_item
         fields = '__all__'
         
+        
+class IssueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = issues
+        fields = '__all__'
+        read_only_fields = ('created_user',)
+        
+class GetIssueSerrializer(serializers.ModelSerializer):
+    date = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
+    quotationno = quotationSerializerForInvoice(read_only = True)
+    created_user = CustUserSerializer(read_only=True)
+    class Meta:
+        model = issues
+        fields = '__all__'

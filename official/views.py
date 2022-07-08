@@ -95,3 +95,18 @@ def income(request):
 
 def branch_details(request):
     return render(request,'official/branch-details.html')
+
+def issues(request):
+    return render(request, 'official/issues.html')
+
+def filter_quotations(request):
+    return render(request, 'official/filter-user-quotations.html')
+
+def filter_income(request):
+    return render(request, 'official/filter-salesman-income.html')
+
+def filter_expence(request):
+    return render(request, 'official/filter-salesman-expence.html')
+
+def filter_salesman_pendingamount(request):
+    return render(request, 'official/filter-salesman-pendingamount.html')

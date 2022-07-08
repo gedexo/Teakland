@@ -1,8 +1,9 @@
 $('#userTable').DataTable();
 var searchParams = new URLSearchParams(window.location.search)
 var user = searchParams.get('user_id')
-
-$(document).ready(function () {
+var editId
+officialUsers();
+function officialUsers() {
     $.ajax({
         url: "/officialapi/router/user-login-details/?is_admin=True",
         type: "GET",
@@ -14,6 +15,9 @@ $(document).ready(function () {
         },
         statusCode: {
             200: function (response) {
+                table = $("#userTable").DataTable();
+                table.clear()
+                table.draw()
                 drawTable(response);
                 function drawTable(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -31,14 +35,15 @@ $(document).ready(function () {
                     var tableData = [];
                     table = $("#userTable").DataTable();
                     var fullName = rowData['first_name'] + ' ' + rowData['last_name']
+                    var edit = '<a href="#" id=' + rowData['id'] + ' onClick=getEditData(' + rowData['id'] + ') class="edit-edit icon-button"><i class="icofont-ui-edit"></i></a>'
                     var deleteUser = '<button type="button" id="btnDelete" value=' + rowData['id'] + ' class="delete-delete icon-button"><i class="icofont-ui-delete"></i></button>'
-                    tableData.push([rowData['date'], fullName, rowData['email'], deleteUser])
+                    tableData.push([rowData['date'], fullName, rowData['email'], edit, deleteUser])
                     table.rows.add(tableData).draw();
                 }
             }
         }
     });
-});
+};
 
 $("#userForm").validate({
     rules: {
@@ -85,6 +90,7 @@ function saveUser(data) {
                 });
             },
             201: function (response) {
+                $("[id=passwordDiv]").show();
                 var status = '  <label class="switch"><input id=' + response['id'] + ' type="checkbox" onchange=updateStatus(' + response['id'] + ') id="activeChk"  checked/><div class="slider round"></div></label> '
                 var tableData = [];
                 $("#userForm").trigger("reset")
@@ -145,3 +151,62 @@ $(document).on('click', '#btnDelete', function () {
         });
 });
 
+
+function getEditData(id) {
+    $.ajax({
+        url: "/officialapi/router/user-login-details/" + id + "/?is_admin=True",
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("adminaccesstoken")
+            );
+        },
+        statusCode: {
+            200: function (response) {
+                editId = response['id']
+                $("#firstName").val(response['first_name'])
+                $("#lastName").val(response['last_name'])
+                $("#userEditModal").modal('show');
+            }
+        }
+    });
+}
+
+$("#userDetailsUpdate").validate({
+    rules: {
+        first_name: {
+            required: true,
+        },
+        last_name: {
+            required: true,
+        },
+    },
+    submitHandler: function (e) {
+        var data = $(e).serializeArray();
+        updateUser(data)
+        return false;
+    }
+});
+
+
+function updateUser(data) {
+    $.ajax({
+        url: "/officialapi/router/user-login-details/" + editId + "/?is_admin=True",
+        type: "PATCH",
+        data: data,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("adminaccesstoken")
+            );
+        },
+        statusCode: {
+            200: function (response) {
+                officialUsers()
+                $("#userEditModal").modal('hide');
+            }
+        }
+    });
+    return false;
+}

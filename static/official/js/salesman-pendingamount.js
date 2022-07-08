@@ -1,8 +1,11 @@
 
-
+var searchParams = new URLSearchParams(window.location.search)
+var branch = searchParams.get('branch')
+var salesmanId = searchParams.get('salesman')
+var pendingAmount = []
 $(document).ready(function () {
     $.ajax({
-        url: "/officialapi/router/invoice/",
+        url: "/officialapi/router/salesmanpendingamount/?branch="+branch+"&salesman="+salesmanId,
         type: "GET",
         beforeSend: function (xhr) {
             $("#invoiceTable").addClass('table-loader');
@@ -20,11 +23,10 @@ $(document).ready(function () {
                     }
                 }
                 function drawRow(rowData) {
-                    console.log(rowData.created_user['first_name'])
-
                     var tableData = [];
                     var billBalance 
                     balance  = rowData['totalAmount'] - rowData['recievedAmount']
+                    pendingAmount.push(balance)
                     if(~~balance <= 0){
                         billBalance = '<p class="text-success">Closed</p>'
                     }
@@ -47,11 +49,15 @@ $(document).ready(function () {
                     tableData.push([rowData['date'], rowData['invoiceno'],rowData.quotation['quoation_number'],createdBy,rowData['totalAmount'],recievedCash,billBalance,print])
                     table.rows.add(tableData).draw();
                 }
+                var pendingAmountTotal = pendingAmount.reduce(function(a, b){
+                    return a + b;
+                }, 0);
+                $("#pendingAmountTotal").html(pendingAmountTotal)
+                $("#invoiceTable").removeClass('table-loader');
             }
         }
+        
     });
-    $("#invoiceTable").removeClass('table-loader');
-
 });
 
 

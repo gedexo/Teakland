@@ -21,7 +21,7 @@
                        
                         <form id="userForm" class="forms-sample row">
                             {% csrf_token %}
-                            <input type="number" id="editId" hidden>
+                            <input type="number" id="editId" value="0" hidden>
                             <div class="form-group col-lg-4 col-12">
                                 <label for="">First Name</label>
                                 <input type="text" name="first_name" class="form-control form-input">
@@ -32,16 +32,16 @@
                                 <input type="text" name="last_name" class="form-control form-input" >
                             </div>
 
-                            <div class="form-group col-lg-4 col-12">
+                            <div class="form-group col-lg-4 col-12"  id="passwordDiv">
                                 <label for="">Email</label>
                                 <input type="email" name="email" class="form-control form-input">
                             </div>
 
-                            <div class="form-group col-lg-4 col-12">
+                            <div class="form-group col-lg-4 col-12" id="passwordDiv">
                                 <label for="">Password</label>
                                 <input type="text" name="password" id="password" class="form-control form-input">
                             </div>
-                            <div class="form-group col-lg-4 col-12">
+                            <div class="form-group col-lg-4 col-12" id="passwordDiv">
                                 <label for="">Confirm Password</label>
                                 <input type="password" name="confirmpassword" class="form-control form-input">
                             </div>
@@ -70,6 +70,7 @@
                                                 <th>Date</th>
                                                 <th>Full name</th>
                                                 <th>Email</th>
+                                                <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
                                         </thead>
@@ -83,7 +84,40 @@
                     </div>
                 </div>
             </div>
+<!-- modal -->
 
+<div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="userDetailsUpdate">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-12 select-box-pad">
+                            <label for="" class="label-text-3">First Name:</label>
+                            <input type="text" id="firstName" name="first_name" class="form-control form-input">
+                        </div>
+                        <div class="col-lg-12 select-box-pad">
+                            <label for="" class="label-text-3">Last Name:</label>
+                            <input type="text" id="lastName" name="last_name" class="form-control form-input">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end section -->
         </div>
 
     </div>

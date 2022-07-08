@@ -4,7 +4,8 @@ var customerId
 var rowIndex
 var searchParams = new URLSearchParams(window.location.search)
 var isEnquiry = searchParams.get('category')
-$(document).ready(function () {
+customer()
+function customer(){
     var url
     if(isEnquiry == 'enquiry'){
         url= "/userapi/router/customer/?is_enquiry=True"
@@ -18,6 +19,7 @@ $(document).ready(function () {
         url: url,
         type: "GET",
         beforeSend: function (xhr) {
+            $("#customerTable").addClass('table-loader')
             xhr.setRequestHeader(
                 "Authorization",
                 "Bearer " + localStorage.getItem("useraccesstoken")
@@ -25,6 +27,9 @@ $(document).ready(function () {
         },
         statusCode: {
             200: function (response) {
+                table = $("#customerTable").DataTable();
+                table.clear()
+                table.draw()
                 drawTable(response);
                 function drawTable(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -55,7 +60,8 @@ $(document).ready(function () {
             }
         }
     });
-});
+    $("#customerTable").removeClass('table-loader')
+}
 
 $("#customerAddForm").validate({
     rules: {
@@ -153,30 +159,22 @@ function updateCustmer(data) {
                 });
             },
             200: function (response) {
-                var created_by = $("select[name=created_by] option:selected").text();
-                var dealt_by = $("select[name=dealt_by] option:selected").text();
+
                 $("#customerAddForm").trigger("reset")
                 swal("Oops! Updated Successfully!", {
                     icon: "success",
                 });
-                var rows = localStorage.getItem("rowNumber")
-                var table = $('#customerTable').DataTable()
-                table.cell({ row: parseInt(rows), column: 1 }).data(response['name']);
-                table.cell({ row: parseInt(rows), column: 2 }).data(response['type']);
-                table.cell({ row: parseInt(rows), column: 3 }).data(response['source']);
-                table.cell({ row: parseInt(rows), column: 4 }).data(created_by);
-                table.cell({ row: parseInt(rows), column: 5 }).data(dealt_by);
-                table.cell({ row: parseInt(rows), column: 6 }).data(response['contact_no']);
-                table.cell({ row: parseInt(rows), column: 7 }).data(response['address']);
-                table.cell({ row: parseInt(rows), column: 8 }).data(response['remark']);
-
                 $("#btnSubmit").html('Add')
+                customer()
             },
             208: function (){
                 swal("Oops!Customer already exists!", {
                     icon: "error",
                 });
             },
+            400:function(){
+                swal('Phonenumber format is invalid')
+            }
         }
     });
 }

@@ -37038,7 +37038,7 @@ div.desc {
   left: -220px;
 }
 .invoice-pending-table{
-  left: -240px;
+  left: -329px;
 }
 
 .exportExcel{
@@ -37214,4 +37214,20 @@ div.desc {
   /* overflow: scroll; */
 }
 
+.jc-card{
+  animation: bouncy .5s linear forwards;
+}
 
+@keyframes bouncy {
+  0% { transform: scale(.1); opacity: 0 }  
+  80% { transform: scale(1.15); opacity: 1 }  
+  100% { transform: scale(.9); }  
+  100% { transform: scale(1); }  
+}
+
+.modal { overflow: auto !important; }
+
+.back-button{
+  background: #ffff;
+  height: 26px;
+}

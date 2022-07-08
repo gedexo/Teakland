@@ -12,7 +12,6 @@ function branchCounts(urls) {
     else{
         url = "/officialapi/get-branch-details/?branch_id=" + branchId
     }
-    // console.log(url)
     $.ajax({
         url: url,
         type: "GET",
@@ -20,7 +19,6 @@ function branchCounts(urls) {
             swal({
                 title:"", 
                 text:"Loading...",
-                icon: "https://www.boasnotas.com/img/loading2.gif",
                 buttons: false,      
                 closeOnClickOutside: false,
             });
@@ -31,6 +29,7 @@ function branchCounts(urls) {
         },
         statusCode: {
             200: function (response) {
+                console.log(response)
                 $("#branchDeatilname").html(response['branchname'])
                 $("#totalQuotations").html(response['totalquotations'])
                 $("#approvedQuotations").html(response['approved'])
@@ -38,7 +37,9 @@ function branchCounts(urls) {
                 $("#totalExpense").html(response.totalexpence['sum'])
                 $("#totalIncomeLastMonth").html(response.incomelastmont['sum'])
                 $("#totalExpenseLastMonth").html(response.expencelastmont['sum'])
-               
+                $("#pendingAmount").html(response['pendingamount'])
+                $("#pendingAmountLastMonth").html(response['pendingamountlastmonth'])
+
                 var row = $("<tr />")
                 $("#progressTable").append(row);
                 row.append($("<td>quotations progress</td>"));
@@ -67,13 +68,16 @@ function branchCounts(urls) {
                     if(response.salesman[i].expence["sum"] != null){
                         expense = response.salesman[i].expence["sum"]
                     }
+                    var totalSale = income + response.salesman[i]["pendingamount"]
                     var row = $("<tr />")
                     $("#salesManTable").append(row);
                     row.append($("<td>" +  response.salesman[i]["name"] + "</td>"));
-                    row.append($("<td>" + response.salesman[i]["quotations"] + "</td>"));
-                    row.append($("<td>" + response.salesman[i]["approved"] + "</td>"));
-                    row.append($("<td>" + income + "</td>"));
-                    row.append($("<td>" + expense+ "</td>"));
+                    row.append($("<td><a href=/official/salesman-quotations/?branch="+response.salesman[i]["branch"]+"&salesman="+response.salesman[i]["salesmanid"]+" >"+ response.salesman[i]["quotations"]+ "</a></td>"));
+                    row.append($("<td><a href=/official/salesman-quotations/?branch="+response.salesman[i]["branch"]+"&salesman="+response.salesman[i]["salesmanid"]+"&status=True>"+ response.salesman[i]["approved"]+ "</a></td>"));
+                    row.append($("<td><a href=/official/salesman-income/?branch="+response.salesman[i]["branch"]+"&salesman="+response.salesman[i]["salesmanid"]+">" + income + "</a></td>"));
+                    row.append($("<td><a href=/official/salesman-expenses/?branch="+response.salesman[i]["branch"]+"&salesman="+response.salesman[i]["salesmanid"]+">" + expense+ "</td>"));
+                    row.append($("<td><a href=/official/salesman-pendingamount/?branch="+response.salesman[i]["branch"]+"&salesman="+response.salesman[i]["salesmanid"]+">" + response.salesman[i]["pendingamount"]+ "</a></td>"));
+                    row.append($("<td>"+ totalSale +"</td>"));
                 }
             
                 swal.close()
@@ -98,7 +102,6 @@ function salesman() {
         },
         statusCode: {
             200: function (response) {
-                console.log(response)
                 drawTable(response);
                 function drawTable(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -137,7 +140,6 @@ $("#filterForm").validate({
         
     },
     submitHandler: function (e) {
-
         $(".swal-button").hide();
         $("#filterModal").modal('hide');
         var startDate = $("#startDate").val();
@@ -145,66 +147,6 @@ $("#filterForm").validate({
         var url = "/officialapi/get-branch-details/?branch_id=" + branchId+"&startdate="+startDate+"&enddate="+endDate
         branchCounts(url)
         $("#progressTable tbody").remove();
-        $("#salesManTable tbody").remove();
-        // $.ajax({
-        //     url: 
-        //     type: "GET",
-        //     beforeSend: function (xhr) {
-        //         xhr.setRequestHeader(
-        //             "Authorization",
-        //             "Bearer " + localStorage.getItem("adminaccesstoken")
-        //         );
-        //     },
-        //     statusCode: {
-        //         200: function (response) {
-        //             $("#progressTable tbody").remove();
-        //             $("#salesManTable tbody").remove();
-        //             $("#totalQuotations").html(response['totalquotations'])
-        //             $("#approvedQuotations").html(response['approved'])
-        //             $("#totalIncome").html(response.totalincome['sum'])
-        //             $("#totalExpense").html(response.totalexpence['sum'])
-        //             $("#totalIncomeLastMonth").html(response.incomelastmont['sum'])
-        //             $("#totalExpenseLastMonth").html(response.expencelastmont['sum'])
-                   
-        //             var row = $("<tr />")
-        //             $("#progressTable").append(row);
-        //             row.append($("<td>quotations progress</td>"));
-        //             row.append($("<td>" + response.progress["open"] + "</td>"));
-        //             row.append($("<td>" + response.progress["onprocess"] + "</td>"));
-        //             row.append($("<td>" + response.progress["pending"] + "</td>"));
-        //             row.append($("<td>" + response.progress["completed"] + "</td>"));
-        //             row.append($("<td>" + response.progress["partilallycompleted"] + "</td>"));
-        //             row.append($("<td>" + response.progress["delivered"] + "</td>"));
-    
-        //             var row = $("<tr />")
-        //             $("#progressTable").append(row);
-        //             row.append($("<td>jobcard progress</td>"));
-        //             row.append($("<td>" + response.jobcardProgress["open"] + "</td>"));
-        //             row.append($("<td>" + response.jobcardProgress["onprocess"] + "</td>"));
-        //             row.append($("<td>" + response.jobcardProgress["pending"] + "</td>"));
-        //             row.append($("<td>" + response.jobcardProgress["completed"] + "</td>"));
-        //             row.append($("<td>" + response.jobcardProgress["partilallycompleted"] + "</td>"));
-        //             row.append($("<td>" + response.jobcardProgress["delivered"] + "</td>"));
-        //             for (var i = 0;i<response.salesman.length; i++){
-        //                 var income = 0
-        //                 var expense = 0
-        //                 if(response.salesman[i].income["sum"] != null){
-        //                     income = response.salesman[i].income["sum"]
-        //                 }
-        //                 if(response.salesman[i].expence["sum"] != null){
-        //                     expense = response.salesman[i].expence["sum"]
-        //                 }
-        //                 var row = $("<tr />")
-        //                 $("#salesManTable").append(row);
-        //                 row.append($("<td>" +  response.salesman[i]["name"] + "</td>"));
-        //                 row.append($("<td>" + response.salesman[i]["quotations"] + "</td>"));
-        //                 row.append($("<td>" + response.salesman[i]["approved"] + "</td>"));
-        //                 row.append($("<td>" + income + "</td>"));
-        //                 row.append($("<td>" + expense+ "</td>"));
-        //             }
-                
-        //         }
-        //     }
-        // });       
+        $("#salesManTable tbody").remove();   
     }
 });

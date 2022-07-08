@@ -1,6 +1,7 @@
 countDatas()
 loggedUser()
-
+$("#incomeViewDiv").hide();
+$("#expenceViewDiv").hide();
 $(document).ready(function () {
     if (localStorage.getItem("useraccesstoken") != null) {
         if (localStorage.getItem("userrefreshtoken") != null) {
@@ -79,7 +80,7 @@ function updateToken() {
 }
 
 
-function recheck(){
+function recheck() {
     $.ajax({
         url: "/userapi/check-user/",
         type: "GET",
@@ -97,7 +98,7 @@ function recheck(){
                 window.location = '/'
             },
             401: function (response) {
-               window.location = '/'
+                window.location = '/'
             }
         }
     })
@@ -108,7 +109,7 @@ $('.btn-back').click(function () {
     history.back();
 });
 
-function countDatas(){
+function countDatas() {
     $.ajax({
         url: "/userapi/jobcard-count/",
         type: "GET",
@@ -132,7 +133,7 @@ function countDatas(){
 };
 
 
-function loggedUser(){
+function loggedUser() {
     $.ajax({
         url: "/officialapi/get-login-user/",
         type: "GET",
@@ -143,27 +144,27 @@ function loggedUser(){
             );
         },
         statusCode: {
-            200: function (response) {        
-                
-               $("#userName").html(response['user'])
-               $("#branchName").html(response['branch'])
-               if (response.is_admin == false && response.is_branchhead == false){
-                   $("#incomeViewDiv").hide();
-                   $("#expenceViewDiv").hide();
-               }
+            200: function (response) {
+                console.log(response)
+                $("#userName").html(response['user'])
+                $("#branchName").html(response['branch'])
+                if (response.is_admin == true || response.is_branchhead == true) {
+                    $("#incomeViewDiv").show();
+                    $("#expenceViewDiv").show();
+                }
             }
         }
     })
 }
 
-$("#logout").click(function(){
+$("#logout").click(function () {
     data = {
-        'refresh_token':localStorage.getItem("userrefreshtoken")
+        'refresh_token': localStorage.getItem("userrefreshtoken")
     }
     $.ajax({
         url: "/officialapi/logout/",
         type: "POST",
-        data:data,
+        data: data,
         beforeSend: function (xhr) {
             xhr.setRequestHeader(
                 "Authorization",
@@ -171,14 +172,38 @@ $("#logout").click(function(){
             );
         },
         statusCode: {
-            205: function (response) {              
-               localStorage.removeItem("useraccesstoken")
-               localStorage.removeItem("userrefreshtoken")
-               window.location.href="/"
+            205: function (response) {
+                localStorage.removeItem("useraccesstoken")
+                localStorage.removeItem("userrefreshtoken")
+                window.location.href = "/"
             },
-            405: function (response) {              
-                
+            405: function (response) {
+
             }
         }
     })
 });
+
+
+
+// document.addEventListener('contextmenu', function (e) {
+//     e.preventDefault();
+// });
+
+// document.onkeydown = function (e) {
+//     if (event.keyCode == 123) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//         return false;
+//     }
+//     if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//         return false;
+//     }
+// }

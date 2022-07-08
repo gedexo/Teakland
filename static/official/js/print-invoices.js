@@ -102,7 +102,14 @@ function quotatationDetails() {
                 $("#qoutationDate").html('Date: '+dateQt)
                 $("#qoutationUser").html('Branch: '+response[0].user['name'])
                 $("#qoutationRemark").html(response[0]['remark'])
-                salesman = response[0].created_by['first_name']+' '+ response[0].created_by['last_name']
+                var salesman
+                if(response[0].created_by['first_name'] != '')
+                {
+                    salesman = response[0].created_by['first_name']  +' ' +response[0].created_by['last_name'] 
+                }
+                else{
+                    salesman=response[0].created_by['email'] ;
+                }
                 $("#qoutationSalesman").html(salesman)
                 if (response[0].user['phonenumber'] != null){
                     $("#qoutationSalesmanContact").html(response[0].user['phonenumber'])
@@ -171,7 +178,7 @@ function doorQuotationExists(total) {
                     row.append($("<td>" + rowData["dimention_width"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + sqft + "</td>"));
+                    row.append($("<td>" + parseFloat(sqft).toFixed(2) + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1
@@ -227,7 +234,7 @@ function kattlaQuotationExists(total) {
                     row.append($("<td>" + rowData["dimention_width"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + qubic + "</td>"));
+                    row.append($("<td>" + parseFloat(qubic).toFixed(2)  + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1
@@ -282,7 +289,7 @@ function windowQuotationExists(total) {
                     row.append($("<td>" + rowData["dimention_width"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + sqft + "</td>"));
+                    row.append($("<td>" + parseFloat(sqft).toFixed(2) + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1
@@ -338,7 +345,7 @@ function customKattlaQuotationExists(total) {
                     row.append($("<td>" + rowData["length"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + qubic + "</td>"));
+                    row.append($("<td>" + parseFloat(qubic).toFixed(2)  + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1

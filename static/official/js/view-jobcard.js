@@ -92,13 +92,13 @@ function jobcardDeails(){
                 }
                 else if(response[0].status == 'completed'){
                     status = '<label class="badge badge-primary">completed</label>'
-                    // $('[id=btn-factoryps]').hide();
+                    $('[id=btn-factoryps]').hide();
                     $("#deliveredCheckBoxDiv").append('<label>Delivered</label>\
                     <input id="deliveredCheckBox" type="checkbox">')
                 }
                 else if(response[0].status == 'delivered'){
                     status = '<label class="badge badge-success">delivered</label>'
-                    // $('[id=btn-factoryps]').hide();
+                    $('[id=btn-factoryps]').hide();
                     var edit = ''
                 }
                 $("#createdDate").html(response[0]['created_date'])
@@ -200,7 +200,6 @@ function doorQuotationExists() {
                         remark = 'No remark'
                     }
                     var sqft = rowData["quantity"] * rowData["squarfeet"].toFixed(2);
-                    console.log(sqft)
                     var status = '<label class="badge badge-info">open</label>'
                     if (rowData.status == 'open') {
 
@@ -215,7 +214,7 @@ function doorQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#doorJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#doorJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="Card image cap" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -249,7 +248,7 @@ function doorQuotationExists() {
                                 <p><b class="jb-b">Quantity:</b> <span id="doorQty">'+rowData["quantity"] +'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+sqft+'</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="doorSqft">'+parseFloat(sqft).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -342,7 +341,7 @@ function kattlaQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#kattlaJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#kattlaJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -384,7 +383,7 @@ function kattlaQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+qubic+'</span></p>\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+parseFloat(qubic).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -486,7 +485,7 @@ function windowQuotationExists() {
                     else {
                         design = 'No'
                     }
-                    $("#windowJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#windowJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -528,7 +527,7 @@ function windowQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+sqft+'</span></p>\
+                             <p><b class="jb-b">Sqft:</b> <span id="windowSqft">'+parseFloat(sqft).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -616,7 +615,7 @@ function customKattlaQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#sizesJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#sizesJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <a href="'+url+'"><img class="card-img-top jbc-img" src="'+rowData.image['medium_square_crop']+'" alt="No image" style="border-radius:20px"></a>\
                         <div class="card-body">\
@@ -650,7 +649,7 @@ function customKattlaQuotationExists() {
                                 <p><b class="jb-b">Status:</b> <span id="windowStatus">'+status+'</span></p>\
                             </div>\
                             <div class="col-6">\
-                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+qubic+'</span></p>\
+                             <p><b class="jb-b">Qubic:</b> <span id="windowSqft">'+ parseFloat(qubic).toFixed(2)+'</span></p>\
                             </div>\
                         </div>\
                         <div class="row">\
@@ -730,7 +729,7 @@ function othersQuotationExists() {
                     else if (rowData.status == 'completed') {
                         status = '<label class="badge badge-success">completed</label>'
                     }
-                    $("#othersJobCardDiv").append(' <div class="col-lg-4">\
+                    $("#othersJobCardDiv").append(' <div class="col-lg-4 jc-card">\
                     <div class="card" style="border: 1px solid #e8e8e8; border-radius: none;margin: 5px;">\
                         <div class="card-body">\
                         <h5 class="card-title">Factory: <span id="othersFactory'+rowData['id']+'">'+factory+'</span><span class="btn-factory"><button id="btn-factoryps" onclick="JobcardUpdate('+rowData['id']+','+category+')"  class="btn-factory-add" ><i class="icofont-ui-add"></i></button><span></h5>\

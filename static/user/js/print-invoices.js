@@ -173,7 +173,7 @@ function doorQuotationExists(total) {
                     row.append($("<td>" + rowData["dimention_width"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + sqft + "</td>"));
+                    row.append($("<td>" + parseFloat(sqft).toFixed(2)  + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1
@@ -228,7 +228,7 @@ function kattlaQuotationExists(total) {
                     row.append($("<td>" + rowData["dimention_width"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + qubic + "</td>"));
+                    row.append($("<td>" + parseFloat(qubic).toFixed(2)  + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1
@@ -282,7 +282,7 @@ function windowQuotationExists(total) {
                     row.append($("<td>" + rowData["dimention_width"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + sqft + "</td>"));
+                    row.append($("<td>" + parseFloat(sqft).toFixed(2)  + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1
@@ -337,7 +337,7 @@ function customKattlaQuotationExists(total) {
                     row.append($("<td>" + rowData["length"] + "</td>"));
                     row.append($("<td>" + rowData["quantity"] + "</td>"));
                     row.append($("<td>" + rowData.raw_material['name'] + "</td>"));
-                    row.append($("<td>" + qubic + "</td>"));
+                    row.append($("<td>" + parseFloat(qubic).toFixed(2) + "</td>"));
                     row.append($("<td>" + rowData["unit_amount"] + "</td>"));
                     row.append($("<td>" + rowData["aggregate"] + "</td>"));
                     count =+ count + 1

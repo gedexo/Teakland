@@ -1,5 +1,6 @@
 from cgitb import reset
 from nis import cat
+from os import stat
 import re
 from sqlite3 import apilevel
 from traceback import print_tb
@@ -21,8 +22,8 @@ from . serializer import UserSerializer,DoorSerializer,CustUserSerializer,GetDoo
             GalleryCustomKattlaSerializer,FactorySerializer,BankSerializer,CreateFactorySerailizer,CreateQuotationSerializer,FilterQoutationSerializer,UpdateJobCardSerializer,AdminUser,\
                 OtherProductSerializer,GetOtherProductSerializer,ExpenceCategorySerializer,PaymentSerializer
 from . models import expences, payments, users,window,kattla,door,row_materials,joint_type,customer,quotation,quotation_door_item,quotation_window_item,quotation_kattla_item,custom_kattla,\
-    quotation_customkattla_item,feedback,factory,bank,jobcard,invoice,qoutation_feedback,others,other_products_item,expence_category,payments,salesman
-from userapi .serializer import InvoiceSerializer, ViewJobCardSerializer,ViewInvoiceSerializer
+    quotation_customkattla_item,feedback,factory,bank,jobcard,invoice,qoutation_feedback,others,other_products_item,expence_category,payments,salesman,issues
+from userapi .serializer import InvoiceSerializer, ViewJobCardSerializer,ViewInvoiceSerializer,ExpenceSerializer,GetExpencesSerializer
 from django.contrib.auth import get_user_model,authenticate
 from rest_framework.exceptions import ValidationError
 from .permissions import ProductGalleryPermission,FactoryPermission,BankPermission,BasicUserPermission,OthersProductPermission
@@ -516,6 +517,7 @@ class CountObjects(APIView):
         feedbackCount = feedback.objects.filter(is_seen= False).count()
         quotationDeleteRequests = qoutation_feedback.objects.filter(is_seen= False).count()
         quotationsCount  = quotation.objects.filter(is_seen = False).count()
+        issuescount = issues.objects.filter(is_seen = False).count()
         jobcardCount  = jobcard.objects.aggregate(
             open=Count('pk',filter=Q(status="open")),
             onprocess=Count('pk',filter=Q(status="onprocess")),
@@ -524,7 +526,7 @@ class CountObjects(APIView):
             delivered=Count('pk',filter=Q(status='delivered'))
             )
 
-        return Response({'feedback':feedbackCount,'quotation-delete-requests':quotationDeleteRequests,'jobcard':jobcardCount,'quotations':quotationsCount})
+        return Response({'feedback':feedbackCount,'quotation-delete-requests':quotationDeleteRequests,'jobcard':jobcardCount,'quotations':quotationsCount,'issues':issuescount})
 
 class JobCards(viewsets.ModelViewSet):
     queryset = jobcard.objects.all()
@@ -549,7 +551,14 @@ class JobCards(viewsets.ModelViewSet):
                     jobcardId.append(i.id)
             return self.queryset.filter(id__in = jobcardId)
         return self.queryset.all().exclude(status='delivered')
-        
+    
+    def partial_update(self, request, *args, **kwargs):
+        quotationId = jobcard.objects.get(id=self.kwargs['pk'])
+        updateQuotation = quotation.objects.get(id=quotationId.quotation.id)
+        updateQuotation.status = request.POST['status']
+        updateQuotation.save()
+        return super().partial_update(request, *args, **kwargs)
+
     def get_serializer_class(self):
         if self.action == 'partial_update':
             return UpdateJobCardSerializer
@@ -778,7 +787,29 @@ class GetBranchQuotationDetails(APIView):
         totalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).aggregate(sum=Sum('amount'))
         totalIncomeLastMonth = payments.objects.filter(date__gte = lastMonth,quotation__user=branch).aggregate(sum=Sum('amount'))
         totalExpenceLastMonth = expences.objects.filter(date__gte = lastMonth,user=branch).aggregate(sum=Sum('amount'))
+        quotationCheck = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch)
+        quotationCheckLastMont = jobcard.objects.filter(created_date__gte = lastMonth,user=branch)
         
+        quotationAmountTotal = []
+        quotationRecievedAmountTotal = []
+        quotationAmountLastMontTotal = []
+        quotationRecievedAmountLastMonthTotal = []
+        salesmanQuotationAmt = []
+        salesmanQuotationPendingAmt = []
+        
+        for i in quotationCheck:
+            a = validatecash(i.quotation.id)
+            quotationAmountTotal.append(a)
+            b = recievedCash(i.quotation.id)
+            quotationRecievedAmountTotal.append(b)
+        c = sum(quotationAmountTotal) - sum(quotationRecievedAmountTotal)
+        
+        for j in quotationCheckLastMont:
+            a = validatecash(j.quotation.id)
+            quotationAmountLastMontTotal.append(a)
+            b = recievedCash(j.quotation.id)
+            quotationRecievedAmountLastMonthTotal.append(b)
+        d = sum(quotationAmountLastMontTotal) - sum(quotationRecievedAmountLastMonthTotal)
         
         quotationsProgress = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch).aggregate(
             open=Count('pk',filter=Q(status="open")),
@@ -796,25 +827,43 @@ class GetBranchQuotationDetails(APIView):
             partilallycompleted=Count('pk',filter=Q(status='partiallycompleted')),
             delivered=Count('pk',filter=Q(status='delivered'))
             )
-        getSalesMan = quotation.objects.filter(user=branch)
+        getSalesMan = get_user_model().objects.filter(user=branch)
+        adminuser = get_user_model().objects.filter(is_superuser=True)
+        for j in adminuser:
+            salesman.append(j.id)
         for i in getSalesMan: 
-            salesman.append(i.created_by.id)
+            salesman.append(i.id)
+            
         salesman  = get_user_model().objects.filter(id__in=salesman)
+    
         for i in salesman:
+            salesmanQuotationAmt = []
+            salesmanQuotationPendingAmt = []
             quotations = quotation.objects.filter(date__gte = startDate,date__lte = endDate,user=branch,created_by = i.id).count()
+            quotationsTotal = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch,quotation__created_by = i.id)
             jobcards = jobcard.objects.filter(created_date__gte = startDate,created_date__lte = endDate,user=branch,quotation__created_by = i.id).count()
-            salesManTotalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__created_by = i.id).aggregate(sum=Sum('amount'))
-            salesManTotalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,created_user = i.id).aggregate(sum=Sum('amount'))
+            salesManTotalIncome = payments.objects.filter(date__gte = startDate,date__lte = endDate,quotation__created_by = i.id,quotation__user=branch).aggregate(sum=Sum('amount'))
+            salesManTotalExpence = expences.objects.filter(date__gte = startDate,date__lte = endDate,created_user = i.id,user=branch).aggregate(sum=Sum('amount'))
             name = str(i.first_name) +' '+str(i.last_name)
+            email = i.email
             if i.first_name == '':
                 name = i.email
+            for x in quotationsTotal:
+                f = validatecash(x.quotation.id)
+                salesmanQuotationAmt.append(f)
+                g = recievedCash(x.quotation.id)
+                salesmanQuotationPendingAmt.append(g)
+            salesmanPendingAmt = sum(salesmanQuotationAmt)- sum(salesmanQuotationPendingAmt)
             data = {
+                'salesmanid':i.id,
+                'branch':branch,
                 'name':name,
-                'email':i.email,
+                'email':email,
                 'quotations':quotations,
                 'approved':jobcards,
                 'income':salesManTotalIncome,
-                'expence':salesManTotalExpence
+                'expence':salesManTotalExpence,
+                'pendingamount':salesmanPendingAmt
             }
             salesmandata.append(data)
         context = {
@@ -823,6 +872,8 @@ class GetBranchQuotationDetails(APIView):
             'approved':approvedQuotation,
             'totalincome':totalIncome,
             'totalexpence':totalExpence,
+            'pendingamount':c,
+            'pendingamountlastmonth':d,
             'incomelastmont':totalIncomeLastMonth,
             'expencelastmont':totalExpenceLastMonth,
             'progress':quotationsProgress,
@@ -831,13 +882,69 @@ class GetBranchQuotationDetails(APIView):
         }
         return Response(context,status.HTTP_200_OK)
     
+class FilterQuotations(viewsets.ModelViewSet):
+    queryset = quotation.objects.all()
+    serializer_class = ViewQoutationSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesmanId = self.request.query_params.get('salesman') 
+        status = self.request.query_params.get('status') 
+        statusChoices = ['onprocess','pending','completed','partiallycompleted','delivered']
+        if status != None:
+            return self.queryset.filter(status__in=statusChoices,user=branch,created_by=salesmanId)
+        return self.queryset.filter(user=branch,created_by=salesmanId)
+    
+    http_method_names = ['get', 'list',]
+
+class SalesManIncome(viewsets.ModelViewSet):
+    queryset = payments.objects.all()
+    serialier_class = PaymentSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)   
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesmanId = self.request.query_params.get('salesman') 
+        return self.queryset.filter(quotation__user = branch,quotation__created_by=salesmanId)
+    
+    def get_serializer_class(self):
+        return PaymentSerializer
+    
+    http_method_names = ['get', 'list',]
+
+class SalesManExpences(viewsets.ModelViewSet):
+    queryset = expences.objects.all()
+    serialier_class = GetExpencesSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)   
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesmanId = self.request.query_params.get('salesman') 
+        return self.queryset.filter(user = branch,created_user=salesmanId)
+    
+    def get_serializer_class(self):
+        return GetExpencesSerializer
+    http_method_names = ['get', 'list',]
+    
+
+class SalesManPendingAmount(viewsets.ModelViewSet):
+    queryset = invoice.objects.all()
+    serializer_class = ViewInvoiceSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+    
+    def get_queryset(self):
+        branch =  self.request.query_params.get('branch')
+        salesman = self.request.query_params.get('salesman')
+        return self.queryset.filter(quotation__user=branch,quotation__created_by=salesman)
+        
+    http_method_names = ['get', 'list',]
     
 class CheckPassword(APIView):
     permission_classes = (IsAuthenticated,IsAdminUser)
     def post(self,request,format=None):
         user = self.request.query_params.get('userid')
         changePassword = get_user_model().objects.get(id=user)
-        print(request.POST['password'])
         changePassword.set_password(request.POST['password'])
         changePassword.save()
         return Response({'msg':'password updated successfully'})

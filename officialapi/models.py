@@ -352,3 +352,11 @@ class expences(models.Model):
     user        = models.ForeignKey(users, on_delete=models.CASCADE)
     created_user= models.ForeignKey(User, on_delete=models.CASCADE)
     amount      = models.BigIntegerField()
+
+
+class issues(models.Model):
+    date        = models.DateTimeField(auto_now_add=True,null=True)
+    quotationno = models.OneToOneField(quotation,on_delete=models.CASCADE)
+    created_user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    issue       = models.TextField()
+    is_seen     = models.BooleanField(default=False)

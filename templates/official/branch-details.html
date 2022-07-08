@@ -19,7 +19,7 @@
             </div>
 
             <div onclick="showDropdown()" class="text-right" style="padding-top: 2rem;
-            padding-right: 2rem;">
+            padding-right: 2rem;">Search
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </div>
 
@@ -28,7 +28,7 @@
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="row">
-            <div class="col-lg-4 col-sm-12  col-12 mt-1 mt-sm-2">
+            <div class="col-lg-3 col-sm-12  col-12 mt-1 mt-sm-2">
               <div class="quotation-box">
                 <div class="text-center">
                   <h5 class="qt-title">Quotation</h5>
@@ -41,7 +41,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-4 col-sm-12  col-12 mt-1 mt-sm-2">
+            <div class="col-lg-3 col-sm-12  col-12 mt-1 mt-sm-2">
               <div class="expense-box">
                 <div class="text-center">
                   <h5 class="qt-title">Income</h5>
@@ -55,7 +55,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-4 col-sm-12  col-12 mt-1 mt-sm-2">
+            <div class="col-lg-3 col-sm-12  col-12 mt-1 mt-sm-2">
               <div class="income-box">
                 <div class="text-center">
                   <h5 class="qt-title">Expense</h5>
@@ -66,6 +66,19 @@
                   <p class="month">Last 30 days</p>
                   <span class="day Single" id="totalExpenseLastMonth">0</span>
                 </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-12  col-12 mt-1 mt-sm-2">
+              <div class="png-amt-box">
+                <div class="text-center">
+                  <h5 class="qt-title">Pending Amount</h5>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Total</p>
+                  <span class="day Single" id="pendingAmount">0</span>
+                  <span class="underline mx-auto d-block"></span>
+                  <p class="month">Last 30 days</p>
+                  <span class="day Single" id="pendingAmountLastMonth">0</span>
+                  </div>
               </div>
             </div>
             <div class="col-sm-6"></div>
@@ -104,7 +117,9 @@
                     <th>Total Quotations</th>
                     <th>Approved</th>
                     <th>Income</th>
-                    <th>Expence</th>
+                    <th>Expense</th>
+                    <th>Pending Amount</th>
+                    <th>Total sale</th>
                   </tr>
                 </thead>
                 <tbody>

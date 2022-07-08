@@ -504,7 +504,7 @@ table tr:last-child td:last-child {
 
   .banner-color{
     width: 100% !important;
-    background: #fee298;
+    background: #fee298 !important;
     
   }
   .heading-quototation{
@@ -514,7 +514,7 @@ table tr:last-child td:last-child {
   }
   .heading-style{
     text-align: center;
-    color: #2C2420;
+    color: #2C2420 !important;
   }
   .contact-details{
     display: flex;
@@ -522,7 +522,7 @@ table tr:last-child td:last-child {
     padding-left: 45px;
   }
   .banner-contact-style{
-    color: #2C2420;
+    color: #2C2420 !important;
     font-size: 14px;
   }
   .under-banner-section{
@@ -562,8 +562,8 @@ table tr:last-child td:last-child {
   }
   .salesman-style{
     padding-top: 10px;
-    background-color:  #e6e5e5;
-    color: #2b2621;
+    background-color:  #e6e5e5 !important;
+    color: #2b2621 !important; 
     height: 50px;
     width: 100%;
     margin: 17px 0px;
@@ -575,7 +575,7 @@ table tr:last-child td:last-child {
     padding-left: 30px;
   }
   .name-padding{
-    padding-left: 19px;
+    padding-left: 0px;
   }
   .gst-column-align{
     text-align: end;
@@ -602,29 +602,29 @@ table tr:last-child td:last-child {
     padding-left: 39rem;
   }
   .total{
-    color: #3A2316;
+    color: #3A2316 !important;
     text-transform: capitalize !important;
   }
   .total-value{
     padding-left: 2rem;
     font-weight: 700;
-    color: #3A2316;
+    color: #3A2316 !important;
   }
   .form-label{
-    color: #3A2316;
+    color: #3A2316 !important;
   }
   .tax-details{
     display: flex;
     align-items: center;
     padding-left: 1px;
-    color: #3A2316;
+    color: #3A2316 !important;
   }
   .footer-pad{
     padding-top: 3rem;
   }
   .footer-section {
     display: block !important;
-    background: #D5B698;
+    background: #D5B698 !important;
     width: 51rem;
     height: 23.96px !important;
     margin: 0;
@@ -760,7 +760,11 @@ table tr:last-child td:last-child {
     border: none;
     outline: none;
 }
-
+.banner-color{
+  width: 100% !important;
+  background: #fee298 !important;
+  -webkit-print-color-adjust: exact;
+}
 .table>:not(:last-child)>:last-child>* {
   border-bottom-color: none !important;
 }
@@ -800,6 +804,15 @@ table tr:last-child td:last-child {
   {
     margin: 0mm 0mm 0mm 2mm;
   }
+  .salesman-style{
+    padding-top: 10px;
+    background-color:  #e6e5e5 !important;
+    color: #2b2621 !important; 
+    height: 50px;
+    width: 100%;
+    margin: 17px 0px;
+    -webkit-print-color-adjust: exact;
+  }
  }
 
 
@@ -811,4 +824,13 @@ table tr:last-child td:last-child {
   width:20px !important;
   height: 20px !important;
   padding:2px !important;
+}
+
+label, small, span {
+  font-family: auto;
+}
+
+.head-qtn{
+  position: relative;
+  top: 8px !important;
 }

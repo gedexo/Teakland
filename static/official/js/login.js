@@ -1,6 +1,76 @@
 
 var accessToken;
 var refreshToken;
+
+
+$(document).ready(function(){
+    if(localStorage.getItem("adminaccesstoken") != null){
+        if(localStorage.getItem("adminrefreshtoken") != null){
+            checkUserlgn()
+        }
+        else{
+            window.location = '/official/'
+        }
+    }
+    else{
+        
+    }
+});
+
+function checkUserlgn() {
+    $.ajax({
+        url: "/officialapi/check-user/",
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + localStorage.getItem("adminaccesstoken")
+            );
+        },
+        statusCode: {
+            200: function () {
+
+                window.location = "/official/dashboard/"
+            },
+            400: function(){
+                
+            },
+            403: function(){
+            },
+            401: function(){
+                data = {
+                    'refresh':localStorage.getItem("adminrefreshtoken")
+                }
+                $.ajax({
+                    url: "/officialapi/api/token/refresh/",
+                    type: "POST",
+                    data:data,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(
+                            "Authorization",
+                            "Bearer " + localStorage.getItem("adminaccesstoken")
+                        );
+                    },
+                    statusCode: {
+                        200: function (response) {
+                            localStorage.setItem("adminaccesstoken",response['access']);
+                            window.location = "/official/dashboard/"
+                        },
+                        401: function (response){
+                        }
+                    }
+                    });
+                $(".error").html("Invalid username or password")
+
+            }
+
+        }
+    });
+}
+
+
+
+
 $("#loginForm").validate({
     rules: {
         email: {

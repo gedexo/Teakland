@@ -1,0 +1,72 @@
+{% extends 'official/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="container-fluid page-body-wrapper">
+
+    <!-- partial:partials/_sidebar.html -->
+    {% include 'official/partials/sidebar.html' %}
+
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12 grid-margin">
+                    <div class="row">
+                        <div class="col-6 col-xl-8 mb-4 mb-xl-0">
+                            <h3 class="font-weight-bold"></h3>
+                        </div>
+                        <!-- <div class="col-6 col-xl-4">
+                            <div class="justify-content-end d-flex">
+                                <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                                    <a href="/add-quatation/" class="btn btn-sm btn-light bg-white create-btn"><i
+                                            class="fa-solid fa-plus"></i>
+                                        Create
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="bg-design">
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="issuesTable" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Quotation Number</th>
+                                                <th>Branch</th>
+                                                <th>Issue</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'official/js/helper.js' %}"></script>
+<script src="{% static 'official/js/issues.js' %}"></script>
+{% endblock %}
